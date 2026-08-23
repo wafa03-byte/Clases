@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ecuaciones lineales en una variable · Álgebra elemental</title>
+<!--
+  ═══════════════════════════════════════════════════════════════════════
+  ECUACIONES LINEALES EN UNA VARIABLE — lección-presentación (clase-slides)
+  Construida sobre assets/plantilla-slides-esqueleto.html (skill
+  temas-clase-html): <head>, CSS, cromo y motor v1.1 se conservan INTACTOS;
+  solo se rellenaron las secciones .diapositiva.
+
+  19 DIAPOSITIVAS · 9 SECCIONES (data-seccion, en este orden):
+    Inicio (2) · Repaso (2) · Solución (2) · Linealidad (2) · Despeje (4) ·
+    Cuidados (2) · Ejemplo 1 (2) · Cierre (1) · Práctica (2)
+  Arco: Introducción → Preliminares → Desarrollo → Cuidados → Ejemplos →
+  Cierre → Práctica (Preliminares y Desarrollo renombrados al tema).
+
+  NAVEGACIÓN: ← → cambian de diapositiva · ↑ ↓ revelan u ocultan los pasos
+  internos y, en #dp-hero, recorren las fases de la animación dejándolas en
+  bucle (C restaura el ciclo completo, P pausa) · espacio avanza todo en
+  orden · Inicio/Fin · F pantalla completa · hash #/n · el contador «n / N»
+  se toca para saltar a una diapositiva.
+
+  RECURSOS INTERACTIVOS: 1 animación hero (#dp-hero, la balanza, 5 fases) ·
+  afirmación·razón interactiva (#dp-afirmacion-razon, 6 pasos) · cierre
+  resumen (#dp-resumen, 5 hitos) · 4 exploradores: verificador de
+  candidatos (parámetros + deslizadores), grado aparente (parámetros),
+  balanza a·b·c (deslizadores) y signos al trasponer (parámetros).
+
+  CÓDIGO DE COLOR DIDÁCTICO — idéntico en TODAS las figuras:
+    azul    #1D4ED8  el término con la variable (ax, x) y el coeficiente a
+    teal    #0D9488  los términos independientes (b, c) y los datos; además
+                     el veredicto VERDADERO (siempre junto a la palabra)
+    violeta #6D28D9 / #7C3AED  el resultado del despeje y el conjunto
+                     solución S
+    rojo    #DC2626  el error, el paso ilegítimo, la advertencia y el
+                     veredicto FALSO (siempre junto a la palabra)
+    gris    #5B6472 / #6B688A  las razones y las propiedades invocadas
+    cuadrícula #EDE9FE · ejes #1C1B2E · proyecciones #B0ACCC
+  Accesibilidad: ningún color es el único portador de significado; todo
+  veredicto lleva escrito «sí es solución» / «no es solución».
+
+  Material general de estudio, sin marcas institucionales.
+  ═══════════════════════════════════════════════════════════════════════
+-->
+<meta name="author" content="W. Alexander Flórez">
+<meta name="description" content="Lección interactiva: ecuaciones lineales en una variable — solución y verificación, linealidad y grado real, despeje justificado paso a paso, el caso a = 0 y la clasificación, errores frecuentes, ejemplo resuelto y práctica graduada.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='%23F5F3FF' stroke='%236D28D9' stroke-width='11'/%3E%3Ccircle cx='50' cy='50' r='7' fill='%230D9488'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  /* Sin copia MathML oculta: algunos navegadores móviles la pintan visible
+     (subíndices y exponentes gigantes) encima o en vez del SVG. */
+  options: {
+    enableAssistiveMml: false,
+    menuOptions: { settings: { assistiveMml: false } }
+  },
+  /* 1) Los cuadros ocultos (justificaciones, detalles) se destapan de forma
+     invisible durante el dibujado para que MathJax mida fuentes reales;
+     2) re-dibuja al cargar las fuentes (calibración); 3) APLANA las
+     transformaciones compuestas «translate(…) scale(…)» a «matrix(…)»:
+     algunos visores móviles descartan la segunda operación y los
+     sub/superíndices quedan a tamaño completo. */
+  startup: {
+    pageReady() {
+      let lote = [];
+      const midiendo = si => {
+        if (si) {
+          lote = Array.from(document.querySelectorAll('[style*="display:none"], [style*="display: none"]'))
+            .filter(el => el.textContent.indexOf('\\(') !== -1 || el.textContent.indexOf('\\[') !== -1 || el.querySelector('mjx-container'));
+          lote.forEach(el => { el.style.display = 'block'; el.style.position = 'absolute'; el.style.visibility = 'hidden'; });
+        } else {
+          lote.forEach(el => { el.style.display = 'none'; el.style.position = ''; el.style.visibility = ''; });
+          lote = [];
+        }
+      };
+      const aplanar = () => {
+        document.querySelectorAll('mjx-container svg [transform], #MJX-SVG-global-cache [transform]').forEach(el => {
+          const m = el.getAttribute('transform').match(/^translate\((-?[\d.eE+]+)(?:\s*,\s*(-?[\d.eE+]+))?\)\s+scale\((-?[\d.eE+]+)(?:\s*,\s*(-?[\d.eE+]+))?\)$/);
+          if (m) {
+            const tx = +m[1], ty = +(m[2] || 0), sx = +m[3], sy = m[4] !== undefined ? +m[4] : +m[3];
+            el.setAttribute('transform', `matrix(${sx},0,0,${sy},${tx},${ty})`);
+          }
+        });
+      };
+      midiendo(true);
+      return MathJax.startup.defaultPageReady()
+        .then(() => { aplanar(); midiendo(false); })
+        .then(() => document.fonts.ready)
+        .then(() => { midiendo(true); return MathJax.startup.document.rerender(); })
+        .catch(() => {})
+        .then(() => { aplanar(); midiendo(false); });
+    }
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js"></script>
+<style>
+/* ══ TOKENS ═════════════════════════════════════════════════════════════ */
+:root{
+  --papel:#F7F8FA; --tinta:#141A24; --tinta2:#5B6472;
+  --primario:#5B21B6; --primario-tinte:#F1EDFB;
+  --linea:#E3E6EC; --lienzo:#0E1116;
+  /* paleta didáctica de los SVG (idéntica a la fuente) */
+  --violet:#6D28D9; --violet-m:#7C3AED; --violet-50:#F5F3FF; --violet-100:#EDE9FE;
+  --teal:#0D9488; --teal-50:#F0FDFA;
+  --blue:#1D4ED8; --blue-50:#EFF6FF;
+  --red:#DC2626; --red-50:#FEF2F2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--lienzo);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  font-family:'Inter',system-ui,sans-serif;
+}
+
+/* ══ ESCENARIO 16:9 ═════════════════════════════════════════════════════ */
+#escenario{
+  position:relative;
+  width:min(100vw, calc(100vh * 16 / 9));
+  height:min(100vh, calc(100vw * 9 / 16));
+  width:min(100svw, calc(100svh * 16 / 9));
+  height:min(100svh, calc(100svw * 9 / 16));
+  container-type:size;
+  background:var(--papel);
+  color:var(--tinta);
+  overflow:hidden;
+  box-shadow:0 0 6vh rgba(0,0,0,.55);
+}
+/* Nota: las unidades cq* deben declararse en HIJOS del contenedor;
+   declararlas sobre #escenario caería al viewport (un contenedor no
+   puede consultarse a sí mismo). */
+
+/* ══ CROMO DISCRETO ═════════════════════════════════════════════════════ */
+.barra{
+  position:absolute;inset:0 0 auto 0;height:4.6cqh;z-index:30;
+  display:flex;align-items:center;gap:1.2cqw;padding:0 1.8cqw;
+  background:rgba(247,248,250,.86);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--linea);
+  transition:opacity .5s;
+}
+.marca{font-size:1.7cqh;font-weight:600;color:var(--tinta2);white-space:nowrap}
+.menu{margin-left:auto;display:flex;gap:.2cqw}
+.menu button{
+  font:500 1.75cqh/1 'Inter',sans-serif;color:var(--tinta2);
+  background:none;border:none;cursor:pointer;
+  padding:1cqh .95cqw;border-radius:.9cqh;position:relative;white-space:nowrap;
+}
+.menu button:hover{color:var(--tinta);background:rgba(0,0,0,.04)}
+.menu button.actual{color:var(--primario);font-weight:600}
+.menu button.actual::after{
+  content:'';position:absolute;left:.95cqw;right:.95cqw;bottom:.45cqh;
+  height:.35cqh;background:var(--primario);border-radius:1cqh;
+}
+.btn-fs{
+  font-size:2.3cqh;color:var(--tinta2);background:none;border:none;
+  cursor:pointer;padding:.8cqh 1cqh;border-radius:.9cqh;line-height:1;
+}
+.btn-fs:hover{color:var(--tinta);background:rgba(0,0,0,.04)}
+.flecha{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:30;
+  width:4.6cqh;height:4.6cqh;border-radius:50%;
+  border:1px solid var(--linea);background:rgba(255,255,255,.75);
+  color:var(--tinta2);cursor:pointer;opacity:.4;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .25s;
+}
+.flecha:hover{opacity:1;color:var(--primario)}
+.flecha svg{width:2.4cqh;height:2.4cqh;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.flecha.izq{left:.6cqw}.flecha.der{right:.6cqw}
+.flecha.vert{width:4cqh;height:4cqh}
+.flecha.vert svg{width:2cqh;height:2cqh}
+.flecha.arr{top:calc(50% - 7.6cqh)}
+.flecha.aba{top:calc(50% + 7.6cqh)}
+#escenario.sin-pasos .flecha.vert{display:none}
+.pie{
+  position:absolute;right:1.8cqw;bottom:2.2cqh;z-index:30;
+  font-size:1.7cqh;color:var(--tinta2);transition:opacity .5s;
+}
+.pie:hover{color:var(--tinta)}
+.pie-in{width:7ch;font:inherit;color:var(--tinta);background:#fff;border:1px solid var(--linea);border-radius:.6cqh;padding:.15cqh .5cqh;text-align:center}
+.recta{position:absolute;left:0;right:0;bottom:0;height:1.7cqh;z-index:29}
+.recta::before{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--linea)}
+.recta .lleno{position:absolute;left:0;bottom:0;height:.55cqh;background:var(--primario);transition:width .35s ease}
+.recta .tick{position:absolute;bottom:0;width:2px;height:1.2cqh;background:#C6CCD8}
+#escenario.quieto .barra,
+#escenario.quieto .flecha,
+#escenario.quieto .pie{opacity:.1}
+.credito{position:absolute;left:1.8cqw;bottom:2.2cqh;z-index:29;font-size:1.3cqh;color:var(--tinta2);opacity:.7;transition:opacity .5s}
+#escenario.quieto .credito{opacity:.08}
+
+/* ══ DIAPOSITIVAS ═══════════════════════════════════════════════════════ */
+.diapositiva{
+  position:absolute;inset:0;z-index:10;
+  font-size:2.45cqh;line-height:1.5;
+  padding:5.6cqh 3cqw 3.2cqh;
+  opacity:0;visibility:hidden;transform:translateY(1.6cqh);
+  transition:opacity .35s ease,transform .35s ease,visibility 0s .35s;
+  overflow:hidden;
+}
+.diapositiva.activa{
+  opacity:1;visibility:visible;transform:none;
+  transition:opacity .35s ease,transform .35s ease,visibility 0s;
+}
+.ceja{
+  font-size:1.65cqh;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--primario);
+}
+h2.titulo{font:600 4cqh/1.18 'Lora',serif;margin:.4cqh 0 1.6cqh}
+/* Fragmentos: mismo modelo que las fases de la animación — siempre visibles,
+   atenuados, y al 100% cuando les llega el turno (↓ / →). */
+.frag{opacity:.25;transition:opacity .35s ease}
+[data-seccion="Ejemplo 1"] .frag,[data-seccion="Ejemplo 2"] .frag,[data-seccion="Práctica"] .frag{opacity:.07}
+.frag.frag-on{opacity:1}
+
+/* ══ COMPONENTES ════════════════════════════════════════════════════════ */
+.dos{display:grid;grid-template-columns:1.05fr .95fr;gap:2cqw;align-items:center}
+.caja{border-left:.45cqw solid;border-radius:0 1.4cqh 1.4cqh 0;padding:1.4cqh 1.3cqw}
+.caja .caja-lbl{
+  display:block;font-size:1.55cqh;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:.8cqh;
+}
+.caja.recuerda{background:var(--teal-50);border-color:var(--teal)}
+.caja.recuerda .caja-lbl{color:#0F766E}
+.caja.mdef{background:var(--violet-50);border-color:var(--violet)}
+.caja.mdef .caja-lbl{color:var(--primario)}
+.caja.mwarn{background:var(--red-50);border-color:var(--red)}
+.caja.mwarn .caja-lbl{color:#B91C1C}
+.caja.nota{background:var(--teal-50);border-color:var(--teal)}
+.caja.nota .caja-lbl{color:#0F766E}
+.kf{
+  display:inline-block;padding:.9cqh 1.6cqw;
+  background:var(--violet-100);border:1px solid #D9CFF3;
+  border-radius:1.3cqh;font-size:1.1em;
+}
+.centrado{text-align:center}
+.dm{margin:1.1cqh 0}
+.rad{text-decoration:overline}
+.mvar{font-family:'STIX Two Text',Georgia,serif;font-style:italic}
+.mrm{font-family:'STIX Two Text',Georgia,serif}
+
+/* Derivación afirmación → razón */
+.jl{
+  padding:.8cqh 1.1cqw;border-left:.4cqw solid var(--linea);
+  border-radius:0 .9cqh .9cqh 0;margin-bottom:1cqh;
+}
+.jl .claim{font-weight:600;font-size:2.5cqh}
+.jl .reason{display:block;color:var(--tinta2);font-size:2.1cqh;margin-top:.35cqh}
+
+/* Versión B (diapositiva 5): afirmación en filas · razón en caja fija */
+.pa-fila{display:flex;align-items:baseline;gap:1cqw;width:100%;text-align:left;background:none;
+  border:none;border-left:.4cqw solid var(--linea);cursor:pointer;font:inherit;color:inherit;
+  padding:.7cqh 1.1cqw;border-radius:0 .9cqh .9cqh 0;margin-bottom:.7cqh}
+.pa-fila:hover{background:var(--violet-50)}
+#dp-afirmacion-razon .pa-fila,#dp-siysolosi .pa-fila{opacity:1}
+.pa-num{opacity:.35}
+.pa-fila.pa-activa{background:var(--violet-50)}
+.pa-fila.pa-activa .pa-num{opacity:1}
+.pa-num{flex:none;width:3.4cqh;height:3.4cqh;border-radius:50%;background:var(--linea);color:var(--tinta2);
+  font-size:1.9cqh;font-weight:700;display:grid;place-items:center;align-self:center}
+.pa-fila.pa-activa .pa-num{background:var(--primario);color:#fff}
+.pa-math{font-size:2.5cqh;font-weight:600}
+.pa-tag{margin-left:auto;font-size:1.75cqh;color:var(--tinta2);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.pa-caja{margin-top:1.4cqh;min-height:12.5cqh}
+.pa-razon{font-size:2.2cqh}
+.pa-vacia{color:var(--tinta2);font-size:2.1cqh;font-style:italic;margin:0}
+
+/* Resumen interactivo (cierre): ítems a la izquierda, detalle a la derecha */
+.rs-item{display:flex;gap:1cqw;align-items:center;width:100%;text-align:left;background:#fff;
+  border:1px solid var(--linea);border-left:.5cqw solid var(--linea);border-radius:1cqh;
+  padding:.85cqh 1cqw;margin-bottom:.9cqh;cursor:pointer;font:inherit;color:inherit;font-size:2cqh}
+.rs-item:hover{background:var(--violet-50)}
+.rs-item.rs-on{background:var(--violet-50);outline:2px solid var(--violet);outline-offset:-1px}
+.rs-t{display:block;font-size:1.65cqh;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2cqh}
+.rs-n{flex:none;width:3.2cqh;height:3.2cqh;border-radius:50%;background:var(--linea);color:var(--tinta2);
+  font-size:1.8cqh;font-weight:700;display:grid;place-items:center}
+.rs-item.rs-on .rs-n{background:var(--primario);color:#fff}
+.rs-det{font-size:2.15cqh;margin-top:1.2cqh}
+
+
+/* Pulido profesional: tipografía, foco accesible, profundidad coherente */
+::selection{background:var(--violet-100)}
+h2.titulo{text-wrap:balance}
+.diapositiva p,.diapositiva li{text-wrap:pretty}
+.pie{font-variant-numeric:tabular-nums}
+.rs-item,.pa-fila,.menu button,.btn-fs{transition:background .15s ease,color .15s ease}
+button:focus-visible,input[type=range]:focus-visible,select:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.rs-item{box-shadow:0 .25cqh 1cqh rgba(20,26,36,.04)}
+.caja{box-shadow:0 .25cqh 1.2cqh rgba(20,26,36,.05)}
+.obj{display:grid;grid-template-columns:1fr 1fr;gap:1.3cqh 1.7cqw;max-width:58cqw}
+.obj .o{display:flex;gap:.85cqw;align-items:flex-start;font-size:2.4cqh;line-height:1.45;text-wrap:pretty}
+.obj .on{flex:none;width:3.2cqh;height:3.2cqh;border-radius:50%;background:var(--violet-100);color:var(--primario);font-size:1.85cqh;font-weight:700;display:grid;place-items:center;margin-top:.2cqh}
+
+/* Ejemplo resuelto por pasos */
+.paso{display:flex;gap:1.3cqw;align-items:flex-start;margin-bottom:1.2cqh}
+.paso .n{
+  flex:none;width:3.3cqh;height:3.3cqh;border-radius:50%;
+  background:var(--violet-100);color:var(--primario);
+  font-size:1.85cqh;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-top:.3cqh;
+}
+.paso .paso-tx{flex:1}
+.paso .paso-nom{font-weight:600}
+
+.lista{list-style:none}
+.lista li{padding-left:2cqw;position:relative;margin-bottom:1.2cqh}
+.lista li::before{
+  content:'';position:absolute;left:.35cqw;top:1.02cqh;
+  width:1.02cqh;height:1.02cqh;border-radius:50%;background:var(--primario);
+}
+ul.plana{margin:.6cqh 0 .9cqh 2.2cqw}
+ul.plana li{margin-bottom:.5cqh}
+
+/* ══ SVG DIDÁCTICOS ═════════════════════════════════════════════════════ */
+.isvg{display:block;margin:auto}
+.isvg text{
+  font-family:'STIX Two Text',Georgia,serif;
+  paint-order:stroke;stroke:var(--papel);stroke-width:3px;stroke-linejoin:round;
+}
+.svg-estatico text{
+  paint-order:stroke;stroke:var(--papel);stroke-width:3px;stroke-linejoin:round;
+}
+
+/* Panel de figura (cromo de la fuente: marco, encabezado con punto, pie) */
+.svgbox{
+  border:1px solid var(--linea);border-radius:1.5cqh;background:#fff;
+  padding:1cqh .9cqw;box-shadow:0 .5cqh 2cqh rgba(20,26,36,.06);
+}
+.svghd{
+  display:flex;align-items:center;gap:.8cqw;
+  font-size:1.75cqh;font-weight:600;color:var(--tinta2);
+  letter-spacing:.03em;margin-bottom:.9cqh;
+}
+.svghd .dot{width:1.15cqh;height:1.15cqh;border-radius:50%;background:var(--violet-m);flex:none}
+.svghd.azul .dot{background:var(--blue)}
+
+/* Diapositivas densas */
+.diapositiva.compacta{font-size:2.25cqh}
+
+/* Aviso de rotación: solo móvil vertical (puntero táctil) */
+.giro{
+  display:none;position:absolute;left:50%;top:6.2cqh;transform:translateX(-50%);
+  z-index:40;background:rgba(20,26,36,.85);color:#fff;
+  font-size:1.95cqh;padding:1.1cqh 2.4cqw;border-radius:5cqh;
+  pointer-events:none;white-space:nowrap;
+}
+@media (orientation: portrait) and (pointer: coarse){ .giro{display:block} }
+
+/* Valores vivos de los exploradores (aquí y en los SVG se permiten superíndices y signo menos tipográficos) */
+.eq-text{font-family:'STIX Two Text',Georgia,serif;font-size:2.9cqh}
+.eq-cap{font-size:1.8cqh;color:var(--tinta2);margin-top:.7cqh}
+.svgft{font-family:'STIX Two Text',Georgia,serif;font-size:2.5cqh;margin-top:1.2cqh}
+
+/* Controles */
+.controles{display:flex;flex-direction:column;gap:1.5cqh}
+.ctrl{display:grid;grid-template-columns:max-content 1fr max-content;align-items:center;gap:1.1cqw}
+.ctrl label{font-size:2.1cqh;white-space:nowrap}
+.ctrl .val{font-family:'STIX Two Text',Georgia,serif;font-size:2.2cqh;text-align:right;min-width:6.5cqw}
+input[type=range]{width:100%;accent-color:var(--primario);height:2.6cqh}
+.pt-header{font-family:'STIX Two Text',Georgia,serif;font-size:2.4cqh;font-weight:600;margin-bottom:.8cqh}
+.pt-header sub{font-size:.66em;font-style:normal}
+.pt-group{border:1px solid var(--linea);border-radius:1.3cqh;padding:1.2cqh 1.1cqw;background:#fff}
+select{
+  font:500 2cqh 'Inter',sans-serif;color:var(--tinta);
+  border:1px solid var(--linea);border-radius:.9cqh;background:#fff;
+  padding:.9cqh 1cqw;width:100%;
+}
+.sd-campo label{display:block;font-size:1.8cqh;color:var(--tinta2);margin-bottom:.5cqh}
+.sdemo-vals{display:grid;grid-template-columns:repeat(3,1fr);gap:1cqw}
+.sdemo-val{border:1px solid var(--linea);border-radius:1.1cqh;background:#fff;padding:1cqh .8cqw;text-align:center}
+.sdemo-val .lbl{font-size:1.55cqh;color:var(--tinta2)}
+.sdemo-val .num{font-family:'STIX Two Text',Georgia,serif;font-size:2.7cqh;font-weight:600}
+.note-ok{color:#0F766E;font-size:1.85cqh;margin-top:.5cqh}
+.note-warn{color:#B91C1C;font-size:1.85cqh;margin-top:.5cqh}
+
+/* Animación hero */
+.anim-btn{
+  font:600 1.9cqh 'Inter',sans-serif;color:var(--primario);
+  border:1px solid #D9CFF3;background:var(--violet-50);
+  padding:1cqh 1.5cqw;border-radius:5cqh;cursor:pointer;white-space:nowrap;
+}
+.anim-btn:hover{background:var(--violet-100)}
+.anim-fase{display:flex;gap:1.1cqw;align-items:flex-start;margin-bottom:1.1cqh;opacity:.32;transition:opacity .35s ease}
+.anim-fase.fase-on{opacity:1}
+.anim-fase .ph-num{background:#B9AEDA;transition:background .35s ease}
+.anim-fase.fase-on .ph-num{background:var(--primario)}
+.ph-num{
+  flex:none;width:3.3cqh;height:3.3cqh;border-radius:50%;
+  background:var(--primario);color:#fff;font-size:1.85cqh;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-top:.3cqh;
+}
+.ph-txt{font-size:2.15cqh;color:var(--tinta)}
+
+/* ══ PORTADA ════════════════════════════════════════════════════════════ */
+.portada{display:flex;flex-direction:column;justify-content:center}
+.portada h1{font:600 7.4cqh/1.12 'Lora',serif;margin:1.4cqh 0 2.2cqh;max-width:75cqw}
+.portada .regla{width:7cqw;height:.7cqh;background:var(--primario);border-radius:1cqh;margin-bottom:2.6cqh}
+.portada .sub{font-size:2.9cqh;color:var(--tinta2);max-width:64cqw}
+.portada .meta{margin-top:5cqh;font-size:2cqh;color:var(--tinta2)}
+.ayuda{
+  position:absolute;left:50%;bottom:2.6cqh;transform:translateX(-50%);
+  font-size:1.7cqh;color:var(--tinta2);white-space:nowrap;
+}
+.ayuda kbd{
+  font:600 1.5cqh 'Inter',sans-serif;border:1px solid var(--linea);
+  background:#fff;border-radius:.6cqh;padding:.25cqh .7cqh;
+}
+
+/* ══ ACCESIBILIDAD / IMPRESIÓN ══════════════════════════════════════════ */
+:focus-visible{outline:.4cqh solid var(--primario);outline-offset:.3cqh}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;animation:none !important}
+}
+@page{size:landscape;margin:0}
+@media print{
+  body{background:#fff;display:block;overflow:visible}
+  #escenario{width:100%;height:auto;container-type:normal;box-shadow:none;overflow:visible}
+  .barra,.flecha,.pie,.recta,.ayuda,.credito{display:none !important}
+  .diapositiva{
+    position:relative;inset:auto;opacity:1;visibility:visible;transform:none;
+    container-type:size;width:100%;aspect-ratio:16/9;
+    page-break-after:always;break-after:page;border-bottom:1px solid var(--linea);
+  }
+  .frag{opacity:1;transform:none;filter:none}
+  .anim-fase{opacity:1}
+  .anim-fase .ph-num{background:var(--primario)}
+}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#F7F8FA">
+  <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="110" cy="110" r="78" fill="#F5F3FF"/>
+    <circle cx="110" cy="110" r="78" fill="none" stroke="#6D28D9" stroke-width="6"/>
+    <line x1="110" y1="110" x2="165" y2="55" stroke="#0D9488" stroke-width="5" stroke-dasharray="10,7"/>
+    <circle cx="110" cy="110" r="9" fill="#0D9488"/>
+    <circle cx="165" cy="55" r="9" fill="#DC2626"/>
+  </svg>
+</template>
+</head>
+<body>
+<div id="escenario">
+
+  <!-- ── Cromo (menú y marcas autogenerados) ────────────────────────────── -->
+  <header class="barra">
+    <span class="marca">Álgebra · Ecuaciones lineales</span>
+    <nav class="menu" aria-label="Secciones de la lección" id="menu"></nav>
+    <button class="btn-fs" id="btn-fs" aria-label="Pantalla completa" title="Pantalla completa (F)">⛶</button>
+  </header>
+  <button class="flecha izq" id="btn-ant" aria-label="Diapositiva anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="flecha der" id="btn-sig" aria-label="Diapositiva siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button class="flecha izq vert arr" aria-label="Paso anterior dentro de la diapositiva" title="Paso anterior (↑)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7"/></svg></button>
+  <button class="flecha izq vert aba" aria-label="Paso siguiente dentro de la diapositiva" title="Paso siguiente (↓)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
+  <button class="flecha der vert arr" aria-label="Paso anterior dentro de la diapositiva" title="Paso anterior (↑)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7"/></svg></button>
+  <button class="flecha der vert aba" aria-label="Paso siguiente dentro de la diapositiva" title="Paso siguiente (↓)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
+  <div class="pie" id="contador" aria-live="polite"></div>
+  <div class="recta" id="recta" aria-hidden="true"><div class="lleno" id="recta-lleno"></div></div>
+  <p class="credito">Material de estudio · W. Alexander Flórez</p>
+  <div class="giro">Gira el dispositivo para ver la presentación a pantalla completa</div>
+
+  <!-- 1 · Portada ─────────────────────────────────────────────────────────-->
+  <section class="diapositiva portada" data-seccion="Inicio" data-screen-label="Portada">
+    <p class="ceja">Álgebra elemental · Ecuaciones</p>
+    <h1 style="max-width:60cqw">Ecuaciones lineales en una variable</h1>
+    <div class="regla"></div>
+    <p class="sub" style="max-width:58cqw">Solución, verificación y despeje justificado: por qué funcionan los atajos que ya usas.</p>
+    <p style="margin:3.2cqh 0 1.2cqh;font-size:2.5cqh;font-weight:600">Al terminar esta lección podrás:</p>
+    <div class="obj">
+      <div class="o"><span class="on">1</span><span><strong>Decidir</strong>, por sustitución, si un número es solución de una ecuación.</span></div>
+      <div class="o"><span class="on">2</span><span><strong>Identificar</strong> si una ecuación es lineal mirando la expresión ya <em>simplificada</em>.</span></div>
+      <div class="o"><span class="on">3</span><span><strong>Justificar</strong> cada paso de un despeje nombrando la propiedad de \(\mathbb{R}\) que lo autoriza.</span></div>
+      <div class="o"><span class="on">4</span><span><strong>Explicar</strong> por qué \(ax+b=c\) exige \(a\neq 0\) y qué ocurre si \(a=0\).</span></div>
+      <div class="o"><span class="on">5</span><span><strong>Resolver</strong> ecuaciones con paréntesis y denominadores, verificando en la original.</span></div>
+      <div class="o"><span class="on">6</span><span><strong>Clasificar</strong> una ecuación como condicional, identidad o contradicción.</span></div>
+    </div>
+    <!-- Emblema: balanza en equilibrio. Bloques a escala de valor (unidad = 6 px),
+         de modo que 3x + 2 = 11 se ve nivelado cuando x = 3. -->
+    <svg class="svg-estatico" viewBox="0 0 220 200" aria-hidden="true"
+         style="position:absolute;right:5cqw;top:50%;transform:translateY(-50%);height:44cqh;width:auto;opacity:.95">
+      <line x1="40" y1="95" x2="180" y2="95" stroke="#5B6472" stroke-width="3.2" stroke-linecap="round"/>
+      <circle cx="110" cy="95" r="4.5" fill="#5B6472"/>
+      <polygon points="110,99 92,172 128,172" fill="#EDE9FE" stroke="#6D28D9" stroke-width="1.6"/>
+      <line x1="78" y1="174" x2="142" y2="174" stroke="#1C1B2E" stroke-width="2" stroke-linecap="round"/>
+      <line x1="40" y1="95" x2="40" y2="126" stroke="#5B6472" stroke-width="1.3"/>
+      <line x1="180" y1="95" x2="180" y2="126" stroke="#5B6472" stroke-width="1.3"/>
+      <path d="M2,126 Q40,148 78,126" fill="none" stroke="#5B6472" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M142,126 Q180,148 218,126" fill="none" stroke="#5B6472" stroke-width="2.2" stroke-linecap="round"/>
+      <rect x="6" y="104" width="54" height="22" rx="4" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.6"/>
+      <text x="33" y="119" text-anchor="middle" font-size="13" fill="#1D4ED8" font-weight="700" font-family="'STIX Two Text',Georgia,serif">3<tspan font-style="italic">x</tspan></text>
+      <rect x="62" y="104" width="12" height="22" rx="3" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.6"/>
+      <text x="68" y="119" text-anchor="middle" font-size="10" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">2</text>
+      <rect x="147" y="104" width="66" height="22" rx="4" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.6"/>
+      <text x="180" y="119" text-anchor="middle" font-size="13" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">11</text>
+      <text x="110" y="30" text-anchor="middle" font-size="17" font-family="'STIX Two Text',Georgia,serif" fill="#141A24"><tspan fill="#1D4ED8" font-weight="700">a</tspan><tspan fill="#1D4ED8" font-weight="700" font-style="italic">x</tspan> + <tspan fill="#0D9488" font-weight="700">b</tspan> = <tspan fill="#0D9488" font-weight="700">c</tspan></text>
+      <text x="110" y="52" text-anchor="middle" font-size="10" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">el signo = es un equilibrio, no una orden</text>
+    </svg>
+    <p class="ayuda"><kbd>→</kbd> diapositiva siguiente &nbsp;·&nbsp; <kbd>↑</kbd><kbd>↓</kbd> pasos dentro de la diapositiva &nbsp;·&nbsp; <kbd>espacio</kbd> todo en orden &nbsp;·&nbsp; <kbd>F</kbd> pantalla completa</p>
+  </section>
+
+  <!-- 2 · La idea central, animada (hero) ─────────────────────────────────-->
+  <section class="diapositiva" data-seccion="Inicio" id="dp-hero" data-screen-label="La balanza, animada">
+    <p class="ceja">§ 0 · Inicio</p>
+    <h2 class="titulo">La idea central, animada</h2>
+    <div class="dos" style="grid-template-columns:auto 1fr;gap:2cqw;align-items:start">
+      <div class="svgbox">
+        <div class="svghd">
+          <span class="dot"></span>
+          <span style="flex:1">La balanza: \(3x+2=11\)</span>
+          <span id="hero-bucle" style="font:600 1.6cqh 'Inter',sans-serif;color:var(--primario);white-space:nowrap"></span>
+          <button class="anim-btn" id="hero-btn" aria-pressed="false" title="Pausar / animar (P) · ↑ ↓ fase a fase, en bucle · C ciclo completo">❚❚&nbsp;Pausar</button>
+        </div>
+        <svg id="hero" class="isvg" viewBox="0 0 440 320" style="height:54cqh;width:auto" data-fscale="1.15" role="img"
+             aria-label="Animación en cinco fases de una balanza que representa la ecuación tres equis más dos igual once: primero se nombran el coeficiente y los términos independientes; después se retira el dos de los dos platillos y el equilibrio se conserva; luego el contenido de cada platillo se reparte en tres porciones iguales y una porción de la izquierda, equis, iguala a una porción de la derecha, tres; a continuación se muestra que con coeficiente cero no hay nada que repartir y la balanza se desnivela; por último se devuelve el valor tres a la ecuación de partida y la igualdad resulta verdadera."></svg>
+      </div>
+      <div>
+        <div class="anim-fase" data-fase="0">
+          <span class="ph-num" aria-hidden="true">1</span>
+          <span class="ph-txt"><strong>La ecuación.</strong> En un platillo, <span class="mrm" style="color:#1D4ED8">3<i>x</i></span> y <span class="mrm" style="color:#0D9488">2</span>; en el otro, <span class="mrm" style="color:#0D9488">11</span>. El signo <span class="mrm">=</span> afirma que los dos lados son <em>el mismo número</em>.</span>
+        </div>
+        <div class="anim-fase" data-fase="1">
+          <span class="ph-num" aria-hidden="true">2</span>
+          <span class="ph-txt"><strong>Quitar lo mismo de los dos lados.</strong> Retiramos <span class="mrm" style="color:#0D9488">2</span> de cada platillo: el equilibrio se conserva y queda <span class="mrm" style="color:#1D4ED8">3<i>x</i></span> = <span class="mrm" style="color:#0D9488">9</span>.</span>
+        </div>
+        <div class="anim-fase" data-fase="2">
+          <span class="ph-num" aria-hidden="true">3</span>
+          <span class="ph-txt"><strong>Repartir en \(a\) porciones iguales.</strong> Partimos cada platillo en <span class="mrm" style="color:#1D4ED8">3</span> partes iguales; una parte contra una parte da <span class="mrm" style="color:#6D28D9"><i>x</i> = 3</span>.</span>
+        </div>
+        <div class="anim-fase" data-fase="3">
+          <span class="ph-num" aria-hidden="true">4</span>
+          <span class="ph-txt"><strong>Por qué \(a\neq 0\).</strong> Con coeficiente <span class="mrm" style="color:#DC2626">0</span> no hay nada que repartir: la ecuación sería <span class="mrm">2 = 11</span> y la balanza se desnivela.</span>
+        </div>
+        <div class="anim-fase" data-fase="4">
+          <span class="ph-num" aria-hidden="true">5</span>
+          <span class="ph-txt"><strong>Verificar.</strong> Devolvemos <span class="mrm" style="color:#6D28D9">3</span> a la ecuación <em>de partida</em>: \(3\cdot 3+2=11\). La igualdad es verdadera ✓.</span>
+        </div>
+        <div class="caja mdef" style="margin-top:1.2cqh">
+          <span class="caja-lbl">Idea clave</span>
+          La balanza es una <strong>analogía</strong>, no una demostración. Lo que en rigor autoriza cada paso son las dos <strong>propiedades de la igualdad</strong>: sumar el mismo número a ambos lados, y multiplicar ambos lados por un mismo número <em>no nulo</em>. La derivación formal está en § Despeje.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · Repaso: las propiedades de R ────────────────────────────────────-->
+  <section class="diapositiva compacta" data-seccion="Repaso" data-screen-label="Propiedades de R">
+    <p class="ceja">§ 1 · Repaso</p>
+    <h2 class="titulo">Las propiedades de \(\mathbb{R}\) que autorizan cada paso</h2>
+    <div class="dos" style="grid-template-columns:1.15fr .85fr;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja recuerda">
+          <span class="caja-lbl">Recuerda · axiomas de cuerpo</span>
+          Para todos \(u,v,w\in\mathbb{R}\):
+          <ul class="plana">
+            <li><strong>Inverso aditivo:</strong> cada \(u\) tiene un único \(-u\) con \(u+(-u)=0\).</li>
+            <li><strong>Inverso multiplicativo:</strong> cada \(u\neq 0\) tiene un único \(u^{-1}=\tfrac1u\) con \(u^{-1}u=1\).</li>
+            <li><strong>Modulativas:</strong> \(u+0=u\) y \(1\cdot u=u\).</li>
+            <li><strong>Conmutativa y asociativa:</strong> \(u+v=v+u\) y \((u+v)+w=u+(v+w)\); lo mismo para el producto.</li>
+            <li><strong>Distributiva:</strong> \(u(v+w)=uv+uw\).</li>
+          </ul>
+        </div>
+        <div class="jl frag" style="margin-top:1.2cqh;border-left-color:var(--teal)">
+          <span class="claim">Restar es sumar el opuesto; dividir es multiplicar por el recíproco</span>
+          <span class="reason">\(u-v\) abrevia \(u+(-v)\); \(\dfrac{u}{v}\) abrevia \(u\cdot v^{-1}\), <em>definido solo si</em> \(v\neq 0\).</span>
+        </div>
+        <div class="jl frag" style="border-left-color:var(--blue)">
+          <span class="claim">Tabla del cero: \(u\cdot 0=0\) para todo \(u\)</span>
+          <span class="reason">No es un axioma: es un <em>teorema</em> que se deduce de los axiomas anteriores.</span>
+        </div>
+        <div class="jl frag" style="border-left-color:var(--red)">
+          <span class="claim">El \(0\) no tiene inverso multiplicativo</span>
+          <span class="reason">Si existiera \(0^{-1}\), sería \(0\cdot 0^{-1}=1\) por definición de inverso y \(0\cdot 0^{-1}=0\) por la tabla del cero; entonces \(0=1\), contra el axioma del neutro multiplicativo.</span>
+        </div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd"><span class="dot"></span>Los dos inversos de un número</div>
+        <svg class="svg-estatico" viewBox="0 0 300 196" data-fscale="1.25" style="display:block;height:40cqh;width:auto;margin:0 auto"
+             role="img" aria-label="Tabla de inversos: el tres tiene opuesto menos tres y recíproco un tercio; el menos cinco tiene opuesto cinco y recíproco menos un quinto; el cero tiene opuesto cero pero no tiene recíproco.">
+          <rect x="6" y="140" width="288" height="46" rx="8" fill="#FEF2F2"/>
+          <line x1="6" y1="44" x2="294" y2="44" stroke="#E3E6EC" stroke-width="1.4"/>
+          <line x1="6" y1="92" x2="294" y2="92" stroke="#E3E6EC" stroke-width="1.2"/>
+          <line x1="6" y1="140" x2="294" y2="140" stroke="#E3E6EC" stroke-width="1.2"/>
+          <line x1="92" y1="10" x2="92" y2="186" stroke="#E3E6EC" stroke-width="1.2"/>
+          <line x1="192" y1="10" x2="192" y2="186" stroke="#E3E6EC" stroke-width="1.2"/>
+          <text x="49" y="30" text-anchor="middle" font-size="12" fill="#5B6472" font-weight="700" font-family="'STIX Two Text',Georgia,serif"><tspan font-style="italic">u</tspan></text>
+          <text x="142" y="26" text-anchor="middle" font-size="11" fill="#5B6472" font-family="'STIX Two Text',Georgia,serif">opuesto</text>
+          <text x="142" y="39" text-anchor="middle" font-size="10" fill="#9896B0" font-family="'STIX Two Text',Georgia,serif">(inv. aditivo)</text>
+          <text x="243" y="26" text-anchor="middle" font-size="11" fill="#5B6472" font-family="'STIX Two Text',Georgia,serif">recíproco</text>
+          <text x="243" y="39" text-anchor="middle" font-size="10" fill="#9896B0" font-family="'STIX Two Text',Georgia,serif">(inv. multiplicativo)</text>
+          <text x="49" y="74" text-anchor="middle" font-size="15" fill="#141A24" font-family="'STIX Two Text',Georgia,serif">3</text>
+          <text x="142" y="74" text-anchor="middle" font-size="15" fill="#0D9488" font-weight="600" font-family="'STIX Two Text',Georgia,serif">&#x2212;3</text>
+          <text x="243" y="74" text-anchor="middle" font-size="15" fill="#0D9488" font-weight="600" font-family="'STIX Two Text',Georgia,serif">1/3</text>
+          <text x="49" y="122" text-anchor="middle" font-size="15" fill="#141A24" font-family="'STIX Two Text',Georgia,serif">&#x2212;5</text>
+          <text x="142" y="122" text-anchor="middle" font-size="15" fill="#0D9488" font-weight="600" font-family="'STIX Two Text',Georgia,serif">5</text>
+          <text x="243" y="122" text-anchor="middle" font-size="15" fill="#0D9488" font-weight="600" font-family="'STIX Two Text',Georgia,serif">&#x2212;1/5</text>
+          <text x="49" y="170" text-anchor="middle" font-size="15" fill="#141A24" font-weight="700" font-family="'STIX Two Text',Georgia,serif">0</text>
+          <text x="142" y="166" text-anchor="middle" font-size="15" fill="#0D9488" font-weight="600" font-family="'STIX Two Text',Georgia,serif">0 ✓</text>
+          <text x="142" y="180" text-anchor="middle" font-size="9.5" fill="#0F766E" font-family="'STIX Two Text',Georgia,serif">sí existe</text>
+          <text x="243" y="166" text-anchor="middle" font-size="14" fill="#DC2626" font-weight="700" font-family="'STIX Two Text',Georgia,serif">no existe ✗</text>
+          <text x="243" y="180" text-anchor="middle" font-size="9.5" fill="#B91C1C" font-family="'STIX Two Text',Georgia,serif">ningún <tspan font-style="italic">k</tspan> cumple 0·<tspan font-style="italic">k</tspan> = 1</text>
+        </svg>
+        <p class="svgft centrado" style="font-size:1.9cqh">El \(0\) es el único real <strong>sin recíproco</strong>. Ese será, exactamente, el motivo de la hipótesis \(a\neq 0\).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · Repaso: igualdad y grado ────────────────────────────────────────-->
+  <section class="diapositiva compacta" data-seccion="Repaso" data-screen-label="Igualdad y grado">
+    <p class="ceja">§ 1 · Repaso</p>
+    <h2 class="titulo">Las dos propiedades de la igualdad · el grado se lee al final</h2>
+    <div class="dos" style="align-items:start">
+      <div>
+        <div class="caja recuerda">
+          <span class="caja-lbl">Recuerda · propiedades de la igualdad</span>
+          Si \(u=v\), entonces para todo \(w\in\mathbb{R}\):
+          <ul class="plana">
+            <li><strong>Aditiva:</strong> \(u+w=v+w\).</li>
+            <li><strong>Multiplicativa:</strong> \(uw=vw\).</li>
+          </ul>
+        </div>
+        <div class="jl frag" style="margin-top:1.2cqh;border-left-color:var(--violet)">
+          <span class="claim">Ambas son <em>reversibles</em> — cuando corresponde</span>
+          <span class="reason">La aditiva siempre (se vuelve sumando \(-w\)); la multiplicativa <strong>solo si \(w\neq 0\)</strong> (se vuelve multiplicando por \(w^{-1}\)).</span>
+        </div>
+        <div class="caja nota frag">
+          <span class="caja-lbl">Por qué importa</span>
+          Esa reversibilidad es lo que garantiza que al despejar <strong>no se gane ni se pierda</strong> ninguna solución: cada línea del desarrollo tiene el mismo conjunto solución que la anterior.
+        </div>
+      </div>
+      <div>
+        <div class="caja recuerda">
+          <span class="caja-lbl">Recuerda · grado</span>
+          El <strong>grado</strong> de un término no nulo en una variable es el <em>exponente</em> de la variable; el de un polinomio no nulo es el mayor de los grados de sus términos, <strong>una vez reducidos los términos semejantes</strong>.
+        </div>
+        <div class="svgbox frag" style="margin-top:1.2cqh">
+          <div class="svghd azul"><span class="dot"></span>Primero reducir, después leer el grado</div>
+          <svg class="svg-estatico" viewBox="0 0 300 108" data-fscale="1.3" style="display:block;height:20cqh;width:auto;margin:0 auto"
+               role="img" aria-label="La expresión dos equis cuadrado menos dos equis cuadrado más equis se reduce a equis, de modo que su grado es uno y no dos.">
+            <text x="150" y="26" text-anchor="middle" font-size="15" font-family="'STIX Two Text',Georgia,serif" fill="#141A24"><tspan fill="#B0ACCC">2<tspan font-style="italic">x</tspan>²</tspan> <tspan fill="#B0ACCC">&#x2212; 2<tspan font-style="italic">x</tspan>²</tspan> + <tspan fill="#1D4ED8" font-weight="700"><tspan font-style="italic">x</tspan></tspan></text>
+            <line x1="82" y1="21" x2="176" y2="21" stroke="#DC2626" stroke-width="1.8"/>
+            <text x="150" y="48" text-anchor="middle" font-size="10" fill="#B91C1C" font-family="'STIX Two Text',Georgia,serif">los términos semejantes se cancelan</text>
+            <line x1="150" y1="56" x2="150" y2="72" stroke="#6D28D9" stroke-width="1.6"/>
+            <polygon points="146,68 154,68 150,77" fill="#6D28D9"/>
+            <text x="122" y="98" text-anchor="middle" font-size="16" font-weight="700" font-style="italic" fill="#1D4ED8" font-family="'STIX Two Text',Georgia,serif">x</text>
+            <rect x="140" y="82" width="76" height="20" rx="9" fill="#EDE9FE" stroke="#D9CFF3" stroke-width="1.2"/>
+            <text x="178" y="96" text-anchor="middle" font-size="11" fill="#5B21B6" font-weight="700" font-family="'STIX Two Text',Georgia,serif">grado 1, no 2</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Ecuación, solución, conjunto solución ───────────────────────────-->
+  <section class="diapositiva compacta" data-seccion="Solución" data-screen-label="Solución y verificación">
+    <p class="ceja">§ 2 · Solución</p>
+    <h2 class="titulo">Ecuación, solución y conjunto solución</h2>
+    <div class="dos" style="grid-template-columns:1.05fr .95fr;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja mdef">
+          <span class="caja-lbl">Definición · ecuación</span>
+          Una <strong>ecuación</strong> en la variable \(x\) es una igualdad entre dos expresiones (sus <em>miembros</em>) en la que aparece \(x\). Por sí misma <strong>no es verdadera ni falsa</strong>: adquiere valor de verdad cuando se sustituye \(x\) por un número concreto.
+        </div>
+        <div class="caja mdef frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Definición · solución y conjunto solución</span>
+          Un real \(r\) es <strong>solución</strong> si al sustituir \(x\) por \(r\) y efectuar todas las operaciones se obtiene una afirmación <em>verdadera</em>. El <strong>conjunto solución</strong> \({\color{#6D28D9}S}\) reúne todas las soluciones reales.
+        </div>
+        <div class="caja mdef frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Definición · ecuaciones equivalentes</span>
+          Dos ecuaciones son <strong>equivalentes</strong> si tienen el mismo conjunto solución. <em>Resolver</em> es construir una cadena de ecuaciones equivalentes que termina en \(x=r\).
+        </div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd"><span class="dot"></span>Verificar es sustituir y comparar — no hace falta resolver</div>
+        <div style="display:grid;grid-template-columns:max-content 1fr 1fr;gap:.9cqh 1cqw;align-items:baseline;font-size:2.05cqh">
+          <span style="color:var(--tinta2);font-size:1.7cqh;text-transform:uppercase;letter-spacing:.08em">Ecuación</span>
+          <span class="centrado">\(x+3=5\)</span>
+          <span class="centrado">\(x^2-2x=5\)</span>
+          <span style="color:var(--tinta2);font-size:1.7cqh;text-transform:uppercase;letter-spacing:.08em">Candidato</span>
+          <span class="centrado">\(x=2\)</span>
+          <span class="centrado">\(x=-1\)</span>
+          <span style="color:var(--tinta2);font-size:1.7cqh;text-transform:uppercase;letter-spacing:.08em">Sustituir</span>
+          <span class="centrado">\(2+3=5\)</span>
+          <span class="centrado">\((-1)^2-2(-1)=3\)</span>
+          <span style="color:var(--tinta2);font-size:1.7cqh;text-transform:uppercase;letter-spacing:.08em">Comparar</span>
+          <span class="centrado">\({\color{#0D9488}5=5}\)</span>
+          <span class="centrado">\({\color{#DC2626}3\neq 5}\)</span>
+          <span style="color:var(--tinta2);font-size:1.7cqh;text-transform:uppercase;letter-spacing:.08em">Veredicto</span>
+          <span class="centrado" style="color:#0F766E;font-weight:700">✓ sí es solución</span>
+          <span class="centrado" style="color:#B91C1C;font-weight:700">✗ no es solución</span>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.3cqh">
+          <span class="caja-lbl">Observa</span>
+          Que \(-1\) <em>no</em> sea solución no dice nada sobre si la ecuación tiene soluciones. De hecho \(x^2-2x=5\) sí las tiene: \(1-\sqrt{6}\) y \(1+\sqrt{6}\). La verificación decide sobre <strong>un candidato</strong>, no sobre <strong>la ecuación</strong>.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · Verificador de candidatos (explorador) ──────────────────────────-->
+  <section class="diapositiva" data-seccion="Solución" data-screen-label="Verificador de candidatos">
+    <p class="ceja">§ 2 · Solución</p>
+    <h2 class="titulo">Verificador de candidatos</h2>
+    <div class="dos" style="grid-template-columns:1fr auto;gap:2cqw;align-items:start">
+      <div class="controles">
+        <p style="margin:0">Elige una ecuación y recorre el candidato con la barra. <strong>¿Cuántos valores igualan las dos columnas?</strong></p>
+        <div class="sd-campo">
+          <label for="vc-eq">Ecuación:</label>
+          <select id="vc-eq">
+            <option value="A" selected>3x − 9 = 0</option>
+            <option value="B">3(x + 2) = 3x + 6</option>
+            <option value="C">4x + 1 = 4x − 2</option>
+          </select>
+        </div>
+        <div class="ctrl"><label for="vc-r">Candidato \(r\)</label><input type="range" id="vc-r" min="-4" max="6" step="1" value="0"><span class="val"><i>r</i> = <span id="vc-vr">0</span></span></div>
+        <div class="sdemo-vals">
+          <div class="sdemo-val"><div class="lbl">lado izquierdo</div><div class="num" id="vc-li" style="color:#1D4ED8">−9</div></div>
+          <div class="sdemo-val"><div class="lbl">lado derecho</div><div class="num" id="vc-ld" style="color:#0D9488">0</div></div>
+          <div class="sdemo-val"><div class="lbl">¿son iguales?</div><div class="num" id="vc-ig" style="color:#DC2626">no</div></div>
+        </div>
+        <div id="vc-out"></div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd azul"><span class="dot"></span>Los dos miembros, medidos con la misma regla</div>
+        <svg id="vc-svg" class="isvg" viewBox="0 0 420 280" style="height:50cqh;width:auto" data-fscale="1.2" data-inter
+             role="img" aria-label="Recta de candidatos con el valor elegido marcado, y dos barras horizontales que representan el valor numérico de cada miembro de la ecuación; cuando las barras coinciden el candidato es solución."></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · Definición de ecuación lineal ───────────────────────────────────-->
+  <section class="diapositiva compacta" data-seccion="Linealidad" data-screen-label="Qué es una ecuación lineal">
+    <p class="ceja">§ 3 · Linealidad</p>
+    <h2 class="titulo">Qué es una ecuación lineal</h2>
+    <div class="dos" style="grid-template-columns:1.05fr .95fr;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja mdef">
+          <span class="caja-lbl">Definición · ecuación lineal en una variable</span>
+          <p>Una ecuación es <strong>lineal</strong> (o de primer grado) en \(x\) si, <em>después de simplificar ambos miembros y reducir términos semejantes</em>, puede escribirse en la forma</p>
+          <p class="centrado" style="margin:1.1cqh 0"><span class="kf">\({\color{#1D4ED8}a}\,{\color{#1D4ED8}x}+{\color{#0D9488}b}={\color{#0D9488}c}\,,\qquad {\color{#1D4ED8}a}\neq 0\)</span></p>
+          <p>con \(a,b,c\in\mathbb{R}\). Equivalentemente \(ax+d=0\) con \(a\neq0\), tomando \(d=b-c\).</p>
+        </div>
+      </div>
+      <div>
+        <div class="jl frag" style="border-left-color:var(--blue)">
+          <span class="claim">La condición \({\color{#1D4ED8}a\neq 0}\) forma parte de la definición</span>
+          <span class="reason">No es un detalle técnico: sin ella el término en \(x\) desaparece y la expresión deja de tener grado 1.</span>
+        </div>
+        <div class="jl frag" style="border-left-color:var(--teal)">
+          <span class="claim">Los coeficientes son <em>reales</em>, no solo enteros o racionales</span>
+          <span class="reason">\(\sqrt{2}\,x-\pi=1\) es tan lineal como \(2x-3=4\): lo que importa es la forma, no qué clase de número sea \(a\).</span>
+        </div>
+        <div class="jl frag" style="border-left-color:var(--violet)">
+          <span class="claim">«Después de simplificar» es la parte que más se olvida</span>
+          <span class="reason">La apariencia inicial engaña en las dos direcciones: puede esconder un grado 1 tras un \(x^2\), o disimular un grado 2. Lo vemos en la siguiente diapositiva.</span>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Nota de notación</span>
+          Muchos textos escriben la forma general como \(ax+b=0\). Aquí usamos \(ax+b=c\); son la misma cosa con \(c=0\), y todo lo que sigue vale para ambas.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · Grado aparente frente a grado real (explorador «parámetros») ────-->
+  <section class="diapositiva" data-seccion="Linealidad" data-screen-label="Grado aparente y grado real">
+    <p class="ceja">§ 3 · Linealidad</p>
+    <h2 class="titulo">Grado aparente frente a grado real</h2>
+    <div class="dos" style="grid-template-columns:1fr auto;gap:2cqw;align-items:start">
+      <div class="controles">
+        <p style="margin:0">Ecuación \(\;p\,x^2+q=r\,x^2+x\;\): elige los coeficientes y observa el <strong>grado de la diferencia reducida</strong>.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1cqw">
+          <div class="sd-campo"><label for="ga-p">\(p\) (izquierda)</label>
+            <select id="ga-p"><option>0</option><option>1</option><option selected>2</option><option>3</option></select></div>
+          <div class="sd-campo"><label for="ga-r">\(r\) (derecha)</label>
+            <select id="ga-r"><option>0</option><option>1</option><option selected>2</option><option>3</option></select></div>
+          <div class="sd-campo"><label for="ga-q">\(q\)</label>
+            <select id="ga-q"><option>1</option><option>2</option><option selected>3</option></select></div>
+        </div>
+        <div class="eq-text" id="ga-eq"></div>
+        <div class="sdemo-vals">
+          <div class="sdemo-val"><div class="lbl">grado aparente</div><div class="num" id="ga-ap" style="color:#B0ACCC">2</div></div>
+          <div class="sdemo-val"><div class="lbl">grado real</div><div class="num" id="ga-re" style="color:#1D4ED8">1</div></div>
+          <div class="sdemo-val"><div class="lbl">conjunto solución</div><div class="num" id="ga-s" style="color:#6D28D9">{3}</div></div>
+        </div>
+        <div id="ga-out"></div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd"><span class="dot"></span>La diferencia entre los dos miembros, y sus ceros</div>
+        <svg id="ga-svg" class="isvg" viewBox="0 0 400 270" style="height:48cqh;width:auto" data-fscale="1.2" data-inter
+             role="img" aria-label="Gráfica de la diferencia entre los dos miembros de la ecuación; sus ceros son las soluciones. Cuando los coeficientes cuadráticos coinciden la gráfica es una recta y hay una sola solución; cuando no coinciden es una parábola y puede haber dos, una o ninguna."></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · Teorema central y su derivación (afirmación · razón) ────────────-->
+  <section class="diapositiva compacta" data-seccion="Despeje" id="dp-afirmacion-razon" data-screen-label="Derivación afirmación y razón">
+    <p class="ceja">§ 4 · Despeje</p>
+    <h2 class="titulo">Si \(a\neq 0\), la ecuación \(ax+b=c\) tiene <em>exactamente una</em> solución</h2>
+    <div class="dos" style="grid-template-columns:1.12fr .88fr;gap:2cqw;align-items:stretch">
+      <div data-inter>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--linea)">
+          <span class="pa-num">1</span>
+          <span class="pa-math">\({\color{#1D4ED8}a}{\color{#1D4ED8}x}+{\color{#0D9488}b}={\color{#0D9488}c}\)</span>
+          <span class="pa-tag">hipótesis</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--teal)">
+          <span class="pa-num">2</span>
+          <span class="pa-math">\((ax+b)+({\color{#0D9488}-b})=c+({\color{#0D9488}-b})\)</span>
+          <span class="pa-tag">prop. aditiva</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--teal)">
+          <span class="pa-num">3</span>
+          <span class="pa-math">\({\color{#1D4ED8}ax}={\color{#0D9488}c-b}\)</span>
+          <span class="pa-tag">inverso aditivo</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--blue)">
+          <span class="pa-num">4</span>
+          <span class="pa-math">\({\color{#1D4ED8}a^{-1}}(ax)={\color{#1D4ED8}a^{-1}}(c-b)\)</span>
+          <span class="pa-tag">multiplicativa · a ≠ 0</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--blue)">
+          <span class="pa-num">5</span>
+          <span class="pa-math">\(x=a^{-1}(c-b)\)</span>
+          <span class="pa-tag">inverso multiplicativo</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--violet)">
+          <span class="pa-num">6</span>
+          <span class="pa-math">\({\color{#6D28D9}x=\dfrac{c-b}{a}}\)</span>
+          <span class="pa-tag">definición de cociente</span>
+        </button>
+        <div class="caja mwarn" style="margin-top:1.2cqh">
+          <span class="caja-lbl">El único paso que exige \(a\neq 0\)</span>
+          Es el <strong>paso 4</strong>: solo cuando \(a\neq 0\) existe \(a^{-1}\). Todos los demás valen para cualquier real. Por eso la hipótesis no se puede quitar.
+        </div>
+      </div>
+      <div class="caja mdef pa-caja" data-inter style="margin-top:0;align-self:stretch">
+        <span class="caja-lbl">Justificación del paso</span>
+        <p class="pa-vacia"><strong>Idea:</strong> cada línea se obtiene de la anterior aplicando <em>una</em> propiedad de \(\mathbb{R}\) o de la igualdad, y todas son reversibles. Pulsa ↓ para recorrer los pasos en orden, o toca cualquier paso para ver aquí su justificación.</p>
+        <div class="pa-razon" style="display:none"><strong>Punto de partida.</strong> Suponemos que \(x\) es un real que satisface la ecuación. No suponemos nada más: \(a,b,c\) son reales cualesquiera con \(a\neq0\).</div>
+        <div class="pa-razon" style="display:none"><strong style="color:#0F766E">Propiedad aditiva de la igualdad.</strong> Si dos números son iguales, siguen siéndolo al sumarles el mismo número. El número que sumamos es \(-b\), el <strong>inverso aditivo</strong> del \(b\) que <em>está</em> en la ecuación. Es una elección deliberada: es el único número que hará desaparecer el \(b\) del lado izquierdo.</div>
+        <div class="pa-razon" style="display:none"><strong style="color:#0F766E">Tres propiedades encadenadas.</strong> A la izquierda, la <em>asociativa</em> reagrupa \((ax+b)+(-b)=ax+\bigl(b+(-b)\bigr)\); el <em>inverso aditivo</em> da \(b+(-b)=0\); la <em>modulativa</em> de la suma borra ese \(0\): queda \(ax\). A la derecha, \(c+(-b)\) se escribe \(c-b\) por definición de resta.</div>
+        <div class="pa-razon" style="display:none"><strong style="color:var(--blue)">Propiedad multiplicativa de la igualdad — y la hipótesis.</strong> Multiplicamos ambos lados por \(a^{-1}\). <strong>Aquí, y solo aquí, se usa \(a\neq 0\)</strong>: el \(0\) es el único real sin inverso multiplicativo, así que si \(a\) fuera \(0\) este paso no existiría.</div>
+        <div class="pa-razon" style="display:none"><strong style="color:var(--blue)">Otras tres encadenadas.</strong> La <em>asociativa</em> del producto da \(a^{-1}(ax)=(a^{-1}a)x\); el <em>inverso multiplicativo</em> da \(a^{-1}a=1\); la <em>modulativa</em> del producto borra ese \(1\): queda \(x\).</div>
+        <div class="pa-razon" style="display:none"><strong style="color:var(--violet)">Conclusión: existencia y unicidad.</strong> \(a^{-1}(c-b)=\dfrac{c-b}{a}\) por definición de cociente. La cadena es <strong>reversible</strong>: al paso 2 se vuelve sumando \(b\) y al 4 multiplicando por \(a\) (lícito porque \(a\neq0\)); los demás son reescrituras. De ahí (\(\Rightarrow\)) <em>a lo sumo una</em> solución y (\(\Leftarrow\)) <em>al menos una</em>, como confirma la sustitución directa \(a\cdot\frac{c-b}{a}+b=(c-b)+b=c\) ✓. Luego \({\color{#6D28D9}S=\left\{\frac{c-b}{a}\right\}}\).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · Los atajos escolares, traducidos ───────────────────────────────-->
+  <section class="diapositiva compacta" data-seccion="Despeje" data-screen-label="Los atajos traducidos">
+    <p class="ceja">§ 4 · Despeje</p>
+    <h2 class="titulo">Los atajos escolares, traducidos: \(2x-3=4\)</h2>
+    <div class="dos" style="grid-template-columns:1.1fr .9fr;gap:2cqw;align-items:start">
+      <div>
+        <div class="jl frag" style="border-left-color:var(--teal)">
+          <span class="claim">\(2x=3+4\) &nbsp;<span style="color:var(--tinta2);font-weight:400;font-size:.85em">«pasamos el tres con signo contrario»</span></span>
+          <span class="reason">Sumar a ambos lados el <strong>inverso aditivo de \({\color{#0D9488}-3}\)</strong>, que es \(+3\): \((2x-3)+3=4+3\).</span>
+        </div>
+        <div class="jl frag" style="border-left-color:var(--teal)">
+          <span class="claim">\(2x=7\) &nbsp;<span style="color:var(--tinta2);font-weight:400;font-size:.85em">«sumamos los números de la derecha»</span></span>
+          <span class="reason">Efectuar \(3+4\) a la derecha; a la izquierda, \(-3+3=0\) y la modulativa borra ese \(0\).</span>
+        </div>
+        <div class="jl frag" style="border-left-color:var(--blue)">
+          <span class="claim">\(x=\dfrac{7}{2}\) &nbsp;<span style="color:var(--tinta2);font-weight:400;font-size:.85em">«pasamos a dividir el dos»</span></span>
+          <span class="reason">Multiplicar ambos lados por el <strong>inverso multiplicativo de \({\color{#1D4ED8}2}\)</strong>, que es \(\tfrac12\). Existe porque \(2\neq 0\).</span>
+        </div>
+        <p class="centrado frag" style="margin-top:1.4cqh">Verificación ✓ &nbsp; \(2\cdot\dfrac{7}{2}-3=7-3=4\), &nbsp; luego \({\color{#6D28D9}S=\left\{\tfrac72\right\}}\).</p>
+      </div>
+      <div>
+        <div class="caja mwarn">
+          <span class="caja-lbl">La regla que gobierna los tres atajos</span>
+          El objeto cuyo inverso se toma es <strong>el número que está en la ecuación</strong>, no el que aparece después del atajo.
+          <ul class="plana">
+            <li>En la ecuación está \(-3\): se suma su opuesto, \(+3\) — no \(-3\).</li>
+            <li>En la ecuación está \(2\): se multiplica por su recíproco, \(\tfrac12\) — no por \(2\). Si al «pasar el dos» se multiplica en vez de dividir, de \(2x=7\) sale \({\color{#DC2626}x=7\cdot 2=14}\), y \(2\cdot 14-3=25\neq 4\): <strong>✗ no es solución.</strong></li>
+          </ul>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.2cqh">
+          <span class="caja-lbl">Por qué conviene saber esto</span>
+          Los atajos no son reglas arbitrarias: <em>abrevian</em> propiedades de \(\mathbb{R}\). Saber cuál abrevia cada uno es lo que permite decidir si un paso dudoso es lícito, en vez de recordar una receta.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · Explorador de la balanza (deslizadores) ────────────────────────-->
+  <section class="diapositiva" data-seccion="Despeje" data-screen-label="Explorador de la balanza">
+    <p class="ceja">§ 4 · Despeje</p>
+    <h2 class="titulo">Explorador: \(ax+b=c\) con \(a\), \(b\), \(c\) a tu elección</h2>
+    <div class="dos" style="grid-template-columns:1fr auto;gap:2cqw;align-items:start">
+      <div class="controles">
+        <div class="ctrl"><label for="bl-a">coeficiente \(a\)</label><input type="range" id="bl-a" min="-3" max="3" step="1" value="3"><span class="val"><i>a</i> = <span id="bl-va">3</span></span></div>
+        <div class="ctrl"><label for="bl-b">término \(b\)</label><input type="range" id="bl-b" min="-6" max="6" step="1" value="2"><span class="val"><i>b</i> = <span id="bl-vb">2</span></span></div>
+        <div class="ctrl"><label for="bl-c">término \(c\)</label><input type="range" id="bl-c" min="-6" max="12" step="1" value="11"><span class="val"><i>c</i> = <span id="bl-vc">11</span></span></div>
+        <div style="border-top:1px solid var(--linea);padding-top:1.4cqh">
+          <div id="bl-pasos"></div>
+        </div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd"><span class="dot"></span>El conjunto solución, dibujado sobre la recta real</div>
+        <svg id="bl-svg" class="isvg" viewBox="0 0 420 200" style="height:36cqh;width:auto" data-fscale="1.2" data-inter
+             role="img" aria-label="Recta real en la que se marca el conjunto solución de la ecuación: un único punto cuando el coeficiente no es cero, toda la recta cuando la ecuación es una identidad, y ningún punto cuando es una contradicción."></svg>
+        <div class="caja nota" style="margin-top:1.2cqh">
+          <span class="caja-lbl">Lleva \(a\) hasta \(0\)</span>
+          El último paso se bloquea: no hay \(a^{-1}\) que aplicar. Entonces el desenlace ya no depende de \(x\), sino de si \(b\) y \(c\) coinciden.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · Cuando la variable desaparece ──────────────────────────────────-->
+  <section class="diapositiva compacta" data-seccion="Despeje" data-screen-label="Cuando la variable desaparece">
+    <p class="ceja">§ 4 · Despeje</p>
+    <h2 class="titulo">Cuando la variable desaparece: \(a=0\) y los tres desenlaces</h2>
+    <div class="dos" style="grid-template-columns:1fr 1fr;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja mdef">
+          <span class="caja-lbl">Teorema · el caso \(a=0\)</span>
+          Si \(a=0\), la tabla del cero y la modulativa reducen \(ax+b=c\) a \({\color{#0D9488}b=c}\), donde ya <strong>no aparece \(x\)</strong>. Entonces:
+          <ul class="plana">
+            <li>si \(b=c\), <em>toda</em> sustitución es verdadera y \({\color{#6D28D9}S=\mathbb{R}}\);</li>
+            <li>si \(b\neq c\), <em>ninguna</em> lo es y \({\color{#6D28D9}S=\varnothing}\).</li>
+          </ul>
+          En ambos casos falla la unicidad: por eso \(a\neq0\) no puede omitirse.
+        </div>
+        <div class="caja mdef frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Definición · clasificación</span>
+          Una ecuación es <strong>condicional</strong> si es verdadera para algunos valores y falsa para otros; una <strong>identidad</strong> si es verdadera para todos (\(S=\mathbb{R}\)); una <strong>contradicción</strong> si es falsa para todos (\(S=\varnothing\)).
+        </div>
+      </div>
+      <div>
+        <div class="svgbox">
+          <div class="svghd azul"><span class="dot"></span>Los tres desenlaces, con ejemplos</div>
+          <div style="display:grid;grid-template-columns:1.05fr .9fr 1fr .7fr;gap:.8cqh 1cqw;align-items:baseline;font-size:1.95cqh">
+            <span style="color:var(--tinta2);font-size:1.55cqh;text-transform:uppercase;letter-spacing:.08em">Ecuación</span>
+            <span style="color:var(--tinta2);font-size:1.55cqh;text-transform:uppercase;letter-spacing:.08em">Al reducir</span>
+            <span style="color:var(--tinta2);font-size:1.55cqh;text-transform:uppercase;letter-spacing:.08em">Clase</span>
+            <span style="color:var(--tinta2);font-size:1.55cqh;text-transform:uppercase;letter-spacing:.08em">\(S\)</span>
+            <span>\(3x-9=0\)</span><span>\(3x=9\)</span><span>condicional</span><span style="color:#6D28D9;font-weight:700">\(\{3\}\)</span>
+            <span>\(3(x+2)=3x+6\)</span><span>\(6=6\)</span><span>identidad</span><span style="color:#6D28D9;font-weight:700">\(\mathbb{R}\)</span>
+            <span>\(4x+1=4x-2\)</span><span>\(1=-2\)</span><span>contradicción</span><span style="color:#6D28D9;font-weight:700">\(\varnothing\)</span>
+          </div>
+          <p class="svgft" style="font-size:1.85cqh;margin-top:1cqh">Señal de reconocimiento: si al despejar <strong>desaparece la variable</strong>, lee la afirmación numérica que quedó. Verdadera \(\Rightarrow\) toda la recta; falsa \(\Rightarrow\) nada. Y «sin solución» es un <em>resultado</em>, no un fracaso.</p>
+        </div>
+        <div class="caja mwarn frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">No confundas los dos inversos</span>
+          «Pedimos \(a\neq0\) porque si no, \(a\) no tendría inverso <em>aditivo</em>» es <strong>falso</strong>: el \(0\) sí tiene opuesto, y es él mismo (\(0+0=0\)). Lo que no tiene es <strong>recíproco</strong>, y ese es justamente el que usa el paso 4.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 · Cuidado con los signos (explorador «parámetros») ───────────────-->
+  <section class="diapositiva" data-seccion="Cuidados" data-screen-label="Cuidado con los signos">
+    <p class="ceja">§ 5 · Cuidados</p>
+    <h2 class="titulo">¡Cuidado con los signos al trasponer!</h2>
+    <div class="dos" style="grid-template-columns:1.08fr auto;gap:2cqw;align-items:start">
+      <div class="controles">
+        <p style="margin:0">Elige cómo aparece el término independiente y qué escribes al pasarlo. Solo una de las dos escrituras <em>verifica</em>.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1cqw">
+          <div class="sd-campo"><label for="sg-s">La ecuación es:</label>
+            <select id="sg-s"><option value="-3" selected>2x − 3 = 4</option><option value="3">2x + 3 = 4</option></select></div>
+          <div class="sd-campo"><label for="sg-w">Al pasar el término escribo:</label>
+            <select id="sg-w"><option value="3" selected>2x = 4 + 3</option><option value="-3">2x = 4 − 3</option></select></div>
+        </div>
+        <div class="sdemo-vals">
+          <div class="sdemo-val"><div class="lbl">\(x\) obtenido</div><div class="num" id="sg-x" style="color:#6D28D9">7/2</div></div>
+          <div class="sdemo-val"><div class="lbl">al sustituir da</div><div class="num" id="sg-v" style="color:#1D4ED8">4</div></div>
+          <div class="sdemo-val"><div class="lbl">debía dar</div><div class="num" style="color:#0D9488">4</div></div>
+        </div>
+        <div id="sg-out"></div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd"><span class="dot"></span>La misma regla que en el verificador: comparar los dos lados</div>
+        <svg id="sg-svg" class="isvg" viewBox="0 0 360 180" style="height:30cqh;width:auto" data-fscale="1.2" data-inter
+             role="img" aria-label="Dos barras que comparan el valor del miembro izquierdo al sustituir el candidato con el valor del miembro derecho; coinciden solo cuando la trasposición se hizo con el signo correcto."></svg>
+        <div class="caja mwarn" style="margin-top:1.2cqh">
+          <span class="caja-lbl">La regla, sin excepciones</span>
+          Se suma a ambos lados el <strong>opuesto del término que está</strong>: si está \(-3\) se suma \(+3\); si está \(+3\) se suma \(-3\). En símbolos: de \(2x+s=4\) se pasa a \(2x=4-s\).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 · Distribuir a medias · verificar en la original ─────────────────-->
+  <section class="diapositiva compacta" data-seccion="Cuidados" data-screen-label="Distribuir y verificar">
+    <p class="ceja">§ 5 · Cuidados</p>
+    <h2 class="titulo">Distribuir a medias · verificar en la ecuación equivocada</h2>
+    <div class="dos" style="align-items:start">
+      <div>
+        <div class="caja mwarn">
+          <span class="caja-lbl">Error · distribuir a medias</span>
+          En \(8x-1=4\), multiplicar por \(\tfrac18\) <em>solo</em> el término con la variable:
+          <p class="centrado" style="margin:.9cqh 0">\({\color{#DC2626}x-1=\tfrac12}\;\Rightarrow\;x=\tfrac32\)</p>
+          Verificación: \(8\cdot\tfrac32-1=11\neq 4\). <strong>✗ no es solución.</strong>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Hecho bien</span>
+          La <strong>distributiva</strong> exige repartir el factor sobre <em>todos</em> los términos: \(\tfrac18(8x-1)=x-\tfrac18\). Luego \(x-\tfrac18=\tfrac12\) y \(x=\tfrac12+\tfrac18=\tfrac58\). Verificación: \(8\cdot\tfrac58-1=4\) ✓.
+        </div>
+      </div>
+      <div>
+        <div class="caja mwarn">
+          <span class="caja-lbl">Error · verificar en una ecuación intermedia</span>
+          Al quitar paréntesis en \(2(x+3)-x+7(x-1)=4\) alguien escribe \({\color{#DC2626}8x+1=4}\) (el término independiente es \(-1\), no \(+1\)) y obtiene \(x=\tfrac38\). Ese valor <em>sí</em> satisface \(8x+1=4\)…
+        </div>
+        <div class="caja nota frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">…pero no la original</span>
+          \(2\left(\tfrac38+3\right)-\tfrac38+7\left(\tfrac38-1\right)=2\neq 4\). <strong>✗</strong> La verificación solo detecta el error si se hace en la <strong>ecuación de partida</strong>.
+        </div>
+      </div>
+    </div>
+    <div class="caja nota frag" style="margin-top:1.2cqh">
+      <span class="caja-lbl">Cuándo verificar deja de ser opcional</span>
+      Sumar, y multiplicar por constantes no nulas, produce ecuaciones equivalentes: la cadena es reversible y no aparecen soluciones extrañas, así que verificar es un control de errores de cálculo. En cambio, multiplicar por una expresión que puede anularse <strong>añade</strong> soluciones (de \(x-1=0\), con \(S=\{1\}\), se pasa a \(x(x-1)=0\), con \(S=\{0,1\}\)) y dividir por ella las <strong>pierde</strong> (\(x^2=x\) tiene \(S=\{0,1\}\); dividir entre \(x\) deja \(x=1\)). Ahí verificar es obligatorio.
+    </div>
+  </section>
+
+  <!-- 15 · Ejemplo 1: planteo y simplificación ────────────────────────────-->
+  <section class="diapositiva compacta" data-seccion="Ejemplo 1" data-screen-label="Ejemplo: planteo">
+    <p class="ceja">§ 6 · Ejemplo 1: una ecuación con paréntesis</p>
+    <h2 class="titulo">Planteo y simplificación</h2>
+    <div class="dos" style="grid-template-columns:1.25fr .75fr;gap:2cqw;align-items:start">
+      <div>
+        <p style="margin-bottom:1.2cqh"><strong>Problema.</strong> Resolver \(\;2(x+3)-x+7(x-1)=4\;\) y verificar el resultado en la ecuación original.</p>
+        <div class="paso"><span class="n">1</span>
+          <div class="paso-tx">
+            <span class="paso-nom">Quitar los paréntesis con la distributiva.</span>
+            <div class="frag">\(2(x+3)=2x+6\) y \(7(x-1)=7x-7\). El miembro izquierdo pasa a ser
+              <div class="dm">\[2x+6-x+7x-7.\]</div>
+              Cuidado con el signo del factor que se distribuye: el \(7\) multiplica <em>a los dos</em> términos del paréntesis, y \(7\cdot(-1)=-7\).
+            </div>
+          </div>
+        </div>
+        <div class="paso"><span class="n">2</span>
+          <div class="paso-tx">
+            <span class="paso-nom">Reducir términos semejantes.</span>
+            <div class="frag">Los términos con \(x\): \({\color{#1D4ED8}2x-x+7x=(2-1+7)x=8x}\), por la distributiva leída de derecha a izquierda. Los independientes: \({\color{#0D9488}6-7=-1}\). La ecuación equivalente es
+              <p class="centrado" style="margin:1cqh 0"><span class="kf">\({\color{#1D4ED8}8x}{\color{#0D9488}-1}={\color{#0D9488}4}\)</span></p>
+              Ya tiene la forma \(ax+b=c\) con \(a=8\neq0\): el Teorema garantiza <em>una</em> solución.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+      <div class="caja nota">
+        <span class="caja-lbl">Procedimiento general</span>
+        <ol style="margin-left:1.6cqw">
+          <li>Quitar <strong>paréntesis</strong> (distributiva).</li>
+          <li>Quitar <strong>denominadores</strong>, multiplicando por un múltiplo común no nulo.</li>
+          <li><strong>Agrupar</strong> los términos con \(x\) en un miembro y los independientes en el otro.</li>
+          <li><strong>Reducir</strong> semejantes hasta \(ax=d\).</li>
+          <li><strong>Despejar</strong> multiplicando por \(a^{-1}\), que existe porque \(a\neq0\).</li>
+          <li><strong>Verificar</strong> en la ecuación <em>original</em>.</li>
+        </ol>
+      </div>
+      <div class="caja mdef frag" style="margin-top:1.1cqh">
+        <span class="caja-lbl">El paso 2, en acción</span>
+        En \(\dfrac{x}{2}+\dfrac{x}{3}=5\), multiplicar ambos lados por \({\color{#0D9488}6}\) —múltiplo común de los denominadores y \(\neq0\), luego reversible— da \({\color{#1D4ED8}3x+2x}=30\), es decir \(5x=30\) y \({\color{#6D28D9}x=6}\). Verificación en la original: \(\tfrac62+\tfrac63=3+2=5\) ✓.
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 · Ejemplo 1: los dos caminos y la verificación ───────────────────-->
+  <section class="diapositiva compacta" data-seccion="Ejemplo 1" data-screen-label="Ejemplo: dos caminos y verificación">
+    <p class="ceja">§ 6 · Ejemplo 1: una ecuación con paréntesis</p>
+    <h2 class="titulo">Dos órdenes posibles, un mismo resultado</h2>
+    <div class="dos" style="align-items:start">
+      <div>
+        <div class="paso"><span class="n">3</span>
+          <div class="paso-tx">
+            <span class="paso-nom">Camino A — primero el inverso aditivo.</span>
+            <div class="frag">Sumar \(1\) a ambos lados: \({\color{#1D4ED8}8x}={\color{#0D9488}5}\). Multiplicar por \(\tfrac18\):
+              <p class="centrado" style="margin:.9cqh 0">\({\color{#6D28D9}x=\tfrac58}\)</p>
+            </div>
+          </div>
+        </div>
+        <div class="paso"><span class="n">4</span>
+          <div class="paso-tx">
+            <span class="paso-nom">Camino B — primero el inverso multiplicativo.</span>
+            <div class="frag">Multiplicar por \(\tfrac18\) <strong>distribuyendo sobre los dos términos</strong>: \(x-\tfrac18=\tfrac12\). Sumar \(\tfrac18\):
+              <p class="centrado" style="margin:.9cqh 0">\({\color{#6D28D9}x=\tfrac12+\tfrac18=\tfrac48+\tfrac18=\tfrac58}\)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="paso"><span class="n">5</span>
+          <div class="paso-tx">
+            <span class="paso-nom">Verificar en la ecuación original.</span>
+            <div class="frag">Con \(x=\tfrac58\):
+              <div class="dm">\[2\left(\tfrac58+3\right)-\tfrac58+7\left(\tfrac58-1\right)=\tfrac{58}{8}-\tfrac58-\tfrac{21}{8}=\tfrac{32}{8}=4.\]</div>
+              <span style="color:#0F766E;font-weight:700">✓ Sí es solución</span>, y por el Teorema es la única: \({\color{#6D28D9}S=\left\{\tfrac58\right\}}\).
+            </div>
+          </div>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Qué enseña la comparación</span>
+          El orden <strong>no</strong> lo fija la matemática: ambas cadenas son de ecuaciones equivalentes y deben coincidir. Pero el camino B tiene un paso que el A no tiene —la <strong>distributiva</strong>—, y es exactamente donde se comete el error de «distribuir a medias».
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 · Cierre: resumen interactivo ────────────────────────────────────-->
+  <section class="diapositiva" data-seccion="Cierre" id="dp-resumen" data-screen-label="Cierre">
+    <p class="ceja">§ 7 · Cierre</p>
+    <h2 class="titulo">En resumen</h2>
+    <div class="dos" style="grid-template-columns:1.05fr .95fr;gap:2cqw;align-items:start">
+      <div data-inter>
+        <button type="button" class="rs-item" style="border-left-color:var(--teal)"><span class="rs-n">1</span><span><span class="rs-t" style="color:var(--primario)">Solución y verificación</span>Verificar es sustituir y comparar, no despejar.</span></button>
+        <button type="button" class="rs-item" style="border-left-color:var(--blue)"><span class="rs-n">2</span><span><span class="rs-t" style="color:var(--primario)">Qué es lineal</span>El grado se lee <em>después</em> de simplificar.</span></button>
+        <button type="button" class="rs-item" style="border-left-color:var(--teal)"><span class="rs-n">3</span><span><span class="rs-t" style="color:var(--primario)">Por qué funcionan los atajos</span>Abrevian los dos inversos, nada más.</span></button>
+        <button type="button" class="rs-item" style="border-left-color:var(--red)"><span class="rs-n">4</span><span><span class="rs-t" style="color:var(--primario)">Por qué \(a\neq 0\)</span>El \(0\) es el único real sin recíproco.</span></button>
+        <button type="button" class="rs-item" style="border-left-color:var(--violet)"><span class="rs-n">5</span><span><span class="rs-t" style="color:var(--primario)">Control del proceso</span>Qué preserva el conjunto solución y qué no.</span></button>
+        <p class="centrado frag" style="margin-top:1.4cqh"><span class="kf" style="font-size:2.9cqh">\({\color{#1D4ED8}a}{\color{#1D4ED8}x}+{\color{#0D9488}b}={\color{#0D9488}c}\ \ ({\color{#1D4ED8}a}\neq0)\iff {\color{#6D28D9}x=\dfrac{c-b}{a}}\)</span></p>
+      </div>
+      <div data-inter>
+        <div class="svgbox" id="rs-fig-a">
+          <div class="svghd"><span class="dot"></span>El despeje, de un vistazo</div>
+          <svg class="svg-estatico" viewBox="0 0 340 250" data-fscale="1.2" style="display:block;height:38cqh;width:auto;margin:0 auto"
+               role="img" aria-label="Esquema del despeje: de a equis más b igual c se pasa, sumando el opuesto de b, a a equis igual c menos b; si a no es cero se multiplica por el recíproco de a y se obtiene equis igual c menos b sobre a; si a es cero la ecuación se reduce a b igual c, que es identidad cuando coinciden y contradicción cuando no.">
+            <rect x="70" y="8" width="200" height="34" rx="9" fill="#F7F8FA" stroke="#E3E6EC" stroke-width="1.4"/>
+            <text x="170" y="30" text-anchor="middle" font-size="15" font-family="'STIX Two Text',Georgia,serif"><tspan fill="#1D4ED8" font-weight="700"><tspan font-style="italic">a</tspan><tspan font-style="italic">x</tspan></tspan> + <tspan fill="#0D9488" font-weight="700" font-style="italic">b</tspan> = <tspan fill="#0D9488" font-weight="700" font-style="italic">c</tspan></text>
+            <line x1="170" y1="42" x2="170" y2="66" stroke="#0D9488" stroke-width="1.6"/>
+            <polygon points="166,62 174,62 170,72" fill="#0D9488"/>
+            <text x="180" y="60" font-size="10" fill="#0F766E" font-family="'STIX Two Text',Georgia,serif">sumar &#x2212;<tspan font-style="italic">b</tspan> · prop. aditiva</text>
+            <rect x="70" y="74" width="200" height="34" rx="9" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.4"/>
+            <text x="170" y="96" text-anchor="middle" font-size="15" font-family="'STIX Two Text',Georgia,serif"><tspan fill="#1D4ED8" font-weight="700"><tspan font-style="italic">a</tspan><tspan font-style="italic">x</tspan></tspan> = <tspan fill="#0D9488" font-weight="700"><tspan font-style="italic">c</tspan> &#x2212; <tspan font-style="italic">b</tspan></tspan></text>
+            <line x1="130" y1="108" x2="88" y2="140" stroke="#6D28D9" stroke-width="1.6"/>
+            <polygon points="94,132 87,144 100,141" fill="#6D28D9"/>
+            <text x="26" y="126" font-size="10" fill="#5B21B6" font-weight="700" font-family="'STIX Two Text',Georgia,serif"><tspan font-style="italic">a</tspan> &#x2260; 0</text>
+            <line x1="210" y1="108" x2="252" y2="140" stroke="#DC2626" stroke-width="1.6"/>
+            <polygon points="246,132 253,144 240,141" fill="#DC2626"/>
+            <text x="286" y="126" font-size="10" fill="#B91C1C" font-weight="700" font-family="'STIX Two Text',Georgia,serif"><tspan font-style="italic">a</tspan> = 0</text>
+            <rect x="8" y="146" width="150" height="38" rx="9" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.6"/>
+            <text x="83" y="170" text-anchor="middle" font-size="15" fill="#6D28D9" font-weight="700" font-family="'STIX Two Text',Georgia,serif"><tspan font-style="italic">x</tspan> = (<tspan font-style="italic">c</tspan> &#x2212; <tspan font-style="italic">b</tspan>) / <tspan font-style="italic">a</tspan></text>
+            <rect x="182" y="146" width="150" height="38" rx="9" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.6"/>
+            <text x="257" y="170" text-anchor="middle" font-size="15" fill="#DC2626" font-weight="700" font-family="'STIX Two Text',Georgia,serif"><tspan font-style="italic">b</tspan> = <tspan font-style="italic">c</tspan> ?</text>
+            <text x="83" y="204" text-anchor="middle" font-size="11.5" fill="#5B21B6" font-family="'STIX Two Text',Georgia,serif">exactamente una solución</text>
+            <text x="83" y="222" text-anchor="middle" font-size="12" fill="#5B21B6" font-weight="700" font-family="'STIX Two Text',Georgia,serif"><tspan font-style="italic">S</tspan> = { (<tspan font-style="italic">c</tspan>&#x2212;<tspan font-style="italic">b</tspan>)/<tspan font-style="italic">a</tspan> }</text>
+            <text x="257" y="204" text-anchor="middle" font-size="11.5" fill="#B91C1C" font-family="'STIX Two Text',Georgia,serif">sí: identidad · no: contradicción</text>
+            <text x="257" y="222" text-anchor="middle" font-size="12" fill="#B91C1C" font-weight="700" font-family="'STIX Two Text',Georgia,serif"><tspan font-style="italic">S</tspan> = ℝ &nbsp;·&nbsp; <tspan font-style="italic">S</tspan> = ∅</text>
+          </svg>
+        </div>
+        <div class="rs-det">Toca un punto del recorrido para ampliar su explicación.</div>
+        <div class="rs-det" data-fig="a" style="display:none">Un número es solución si al sustituirlo la igualdad resulta <strong>verdadera</strong>. Por eso, para decidir sobre un candidato no hace falta resolver nada: basta sustituir y comparar los dos lados. Y el veredicto sobre un candidato no dice nada sobre si la ecuación tiene o no soluciones.</div>
+        <div class="rs-det" data-fig="a" style="display:none">Una ecuación es lineal si, <em>ya simplificada</em>, se escribe \(ax+b=c\) con \(a\neq0\). Un \(x^2\) que se cancela no la hace cuadrática: en \(2x^2+3=2x^2+x\) la diferencia entre los miembros es \(3-x\), de grado 1, y \(S=\{3\}\).</div>
+        <div class="rs-det" data-fig="a" style="display:none">«Pasar con signo contrario» es sumar a ambos lados el <strong>inverso aditivo</strong> del término que está; «pasar dividiendo» es multiplicar ambos lados por el <strong>inverso multiplicativo</strong> del coeficiente que está. Son abreviaturas de propiedades, no reglas arbitrarias.</div>
+        <div class="rs-det" data-fig="a" style="display:none">El \(0\) es el único real sin inverso multiplicativo (sí tiene opuesto: él mismo). Si \(a=0\), el despeje se detiene y la ecuación se reduce a \(b=c\): identidad si coinciden (\(S=\mathbb{R}\)) y contradicción si no (\(S=\varnothing\)).</div>
+        <div class="rs-det" data-fig="a" style="display:none">Sumar, y multiplicar por constantes <em>no nulas</em>, preserva el conjunto solución. Multiplicar o dividir por expresiones que contienen la variable, no: puede añadir o perder soluciones. Verifica siempre en la ecuación <strong>original</strong>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 · Práctica: niveles 1 y 2 ────────────────────────────────────────-->
+  <section class="diapositiva compacta" data-seccion="Práctica" data-screen-label="Práctica: niveles 1 y 2">
+    <p class="ceja">§ 8 · Práctica</p>
+    <h2 class="titulo">Practica tú — directo e inverso</h2>
+    <p style="margin-bottom:1.3cqh">Resuélvelos en papel y <strong>verifica cada resultado en la ecuación original</strong>. Las respuestas no están en la lección: la verificación es tu control.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6cqh 2.4cqw">
+      <div class="paso" style="margin-bottom:.5cqh"><span class="n">1</span>
+        <div class="paso-tx"><span class="paso-nom">Nivel 1 · directo.</span> Resuelve \(2x-3=7\) y \(3(x-2)=9\).</div>
+      </div>
+      <div class="paso" style="margin-bottom:.5cqh"><span class="n">5</span>
+        <div class="paso-tx"><span class="paso-nom">Nivel 2 · nombrar las propiedades.</span> En \(\dfrac{2x-1}{3}=5\), indica qué propiedad autoriza cada paso del despeje, y resuelve.</div>
+      </div>
+      <div class="paso" style="margin-bottom:.5cqh"><span class="n">2</span>
+        <div class="paso-tx"><span class="paso-nom">Nivel 1 · signo delante de la variable.</span> Resuelve \(5-2x=11\).</div>
+      </div>
+      <div class="paso" style="margin-bottom:.5cqh"><span class="n">6</span>
+        <div class="paso-tx"><span class="paso-nom">Nivel 2 · parámetro.</span> Determina \(k\) para que \(x=4\) sea solución de \(kx-6=2\).</div>
+      </div>
+      <div class="paso" style="margin-bottom:.5cqh"><span class="n">3</span>
+        <div class="paso-tx"><span class="paso-nom">Nivel 1 · denominadores.</span> Resuelve \(\dfrac{x}{2}+\dfrac{x}{3}=5\).</div>
+      </div>
+      <div class="paso" style="margin-bottom:.5cqh"><span class="n">7</span>
+        <div class="paso-tx"><span class="paso-nom">Nivel 2 · construir.</span> Escribe <em>dos</em> ecuaciones distintas, ambas con paréntesis, equivalentes a \(8x=5\).</div>
+      </div>
+      <div class="paso" style="margin-bottom:.5cqh"><span class="n">4</span>
+        <div class="paso-tx"><span class="paso-nom">Nivel 1 · directo.</span> Resuelve \(3x-9=0\) y \(x+4=9\).</div>
+      </div>
+      <div class="paso" style="margin-bottom:.5cqh"><span class="n">8</span>
+        <div class="paso-tx"><span class="paso-nom">Nivel 2 · construir.</span> Escribe una ecuación lineal con paréntesis cuya única solución sea \(x=-3\).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19 · Práctica: niveles 3 y 4 ────────────────────────────────────────-->
+  <section class="diapositiva compacta" data-seccion="Práctica" data-screen-label="Práctica: niveles 3 y 4">
+    <p class="ceja">§ 8 · Práctica</p>
+    <h2 class="titulo">Practica tú — trampas y síntesis</h2>
+    <div class="dos" style="grid-template-columns:1.32fr .68fr;gap:2cqw;align-items:start">
+      <div>
+        <div class="paso" style="margin-bottom:.7cqh"><span class="n">9</span>
+          <div class="paso-tx"><span class="paso-nom">Nivel 3 · localizar el error.</span> Un estudiante resuelve \(8x-1=4\) así: «multiplico por \(\tfrac18\) y queda \(x-1=\tfrac12\), luego \(x=\tfrac32\)». Señala el paso incorrecto, <em>nombra</em> la propiedad mal aplicada y da la solución correcta.</div>
+        </div>
+        <div class="paso" style="margin-bottom:.7cqh"><span class="n">10</span>
+          <div class="paso-tx"><span class="paso-nom">Nivel 3 · grado aparente.</span> Decide, justificando, si \(x^2+5=x^2+2x-1\) es lineal, y resuélvela.</div>
+        </div>
+        <div class="paso" style="margin-bottom:.7cqh"><span class="n">11</span>
+          <div class="paso-tx"><span class="paso-nom">Nivel 3 · clasificar.</span> Clasifica como condicional, identidad o contradicción y da \(S\): (a) \(3(x+2)=3x+6\); (b) \(4x+1=4x-2\); (c) \(4(x-1)-2(x+3)=0\).</div>
+        </div>
+        <div class="paso" style="margin-bottom:.7cqh"><span class="n">12</span>
+          <div class="paso-tx"><span class="paso-nom">Nivel 3 · refutar.</span> Alguien afirma: «en \(ax+b=c\) pedimos \(a\neq0\) porque si \(a=0\) no existiría el inverso aditivo de \(a\)». Explica por qué es falsa y enuncia la razón correcta.</div>
+        </div>
+        <div class="paso" style="margin-bottom:.7cqh"><span class="n">13</span>
+          <div class="paso-tx"><span class="paso-nom">Nivel 4 · síntesis con parámetro.</span> Determina \(a\) para que \(x=2\) sea solución de \(ax(x^3+2)=ax^4-4\), y describe el conjunto solución de la ecuación <em>para cada valor real</em> de \(a\).</div>
+        </div>
+        <div class="paso" style="margin-bottom:.7cqh"><span class="n">14</span>
+          <div class="paso-tx"><span class="paso-nom">Nivel 4 · discusión completa.</span> Discute, según el valor del parámetro \(k\), el conjunto solución de \(kx+3=2x+3k\).</div>
+        </div>
+      </div>
+      <div>
+        <div class="caja nota">
+          <span class="caja-lbl">Sugerencia</span>
+          En los dos últimos, empieza por <strong>reducir</strong> la ecuación hasta la forma \(Ax=B\) dejando el parámetro dentro de \(A\) y \(B\). Después discute por separado los casos \(A=0\) y \(A\neq0\): son los dos desenlaces del § Despeje.
+        </div>
+        <div class="caja recuerda frag" style="margin-top:1.2cqh">
+          <span class="caja-lbl">Antes de entregar</span>
+          <ul class="plana">
+            <li>¿Verificaste en la ecuación <em>original</em>?</li>
+            <li>¿Nombraste la propiedad de cada paso?</li>
+            <li>¿Escribiste \(S\), y no solo el número?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+'use strict';
+/* ═══════════════════════════════════════════════════════════════════════
+   NÚCLEO clase-slides v1.1 — motor de navegación, menú autogenerado,
+   fragmentos, recta de progreso, atajos, gestos, hash, atenuación.
+   v1.1: (a) emite el evento 'diapositiva' en cada cambio (lo usa la
+   animación hero para pausarse fuera de su diapositiva); (b) espacio/Enter
+   sobre botones, enlaces o selects no navega (evita dobles avances).
+   ═══════════════════════════════════════════════════════════════════════ */
+(function(){
+  const esc  = document.getElementById('escenario');
+  const dps  = Array.from(document.querySelectorAll('.diapositiva'));
+  const N    = dps.length;
+  const frags  = dps.map(d => Array.from(d.querySelectorAll('.frag')));
+  const vistos = dps.map(() => 0);
+  let i = 0;
+
+  const menu = document.getElementById('menu');
+  const recta = document.getElementById('recta');
+  const lleno = document.getElementById('recta-lleno');
+  const contador = document.getElementById('contador');
+  const secciones = [];
+  dps.forEach((d, k) => {
+    const s = d.dataset.seccion || '—';
+    if (!secciones.length || secciones[secciones.length - 1].nombre !== s)
+      secciones.push({ nombre: s, inicio: k });
+  });
+  const botones = secciones.map(sec => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = sec.nombre;
+    b.dataset.seccion = sec.nombre;
+    b.addEventListener('click', () => irA(sec.inicio, false));
+    menu.appendChild(b);
+    if (sec.inicio > 0) {
+      const t = document.createElement('div');
+      t.className = 'tick';
+      t.style.left = (sec.inicio / N * 100) + '%';
+      recta.appendChild(t);
+    }
+    return b;
+  });
+
+  function pinta(){
+    dps.forEach((d, k) => {
+      const on = (k === i);
+      d.classList.toggle('activa', on);
+      d.setAttribute('aria-hidden', on ? 'false' : 'true');
+      d.inert = !on;
+    });
+    frags[i].forEach((f, k) => f.classList.toggle('frag-on', k < vistos[i]));
+    const sec = dps[i].dataset.seccion;
+    botones.forEach(b => {
+      const cur = (b.dataset.seccion === sec);
+      b.classList.toggle('actual', cur);
+      if (cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+    esc.classList.toggle('sin-pasos', frags[i].length === 0 && dps[i].id !== 'dp-hero');
+    contador.textContent = (i + 1) + ' / ' + N;
+    lleno.style.width = ((i + 1) / N * 100) + '%';
+    history.replaceState(null, '', '#/' + (i + 1));
+    document.dispatchEvent(new CustomEvent('diapositiva', { detail: { i: i, id: dps[i].id || '' } }));
+  }
+  function irA(n, todosLosFrag){
+    i = Math.max(0, Math.min(N - 1, n));
+    vistos[i] = todosLosFrag ? frags[i].length : 0;
+    pinta();
+  }
+  function sig(){
+    if (vistos[i] < frags[i].length) { vistos[i]++; pinta(); }
+    else if (i < N - 1) { i++; vistos[i] = 0; pinta(); }
+  }
+  function ant(){
+    if (vistos[i] > 0) { vistos[i]--; pinta(); }
+    else if (i > 0) { i--; vistos[i] = frags[i].length; pinta(); }
+  }
+  /* Navegación homogénea: ← → cambian de diapositiva SIN pasar por los
+     fragmentos (eso es ↓ ↑); espacio conserva el avance clásico paso a paso. */
+  function sigDp(){ if (i < N - 1) { i++; vistos[i] = 0; pinta(); } }
+  function antDp(){ if (i > 0) { i--; vistos[i] = frags[i].length; pinta(); } }
+
+  document.getElementById('btn-sig').addEventListener('click', sigDp);
+  document.getElementById('btn-ant').addEventListener('click', antDp);
+  document.getElementById('btn-fs').addEventListener('click', pantallaCompleta);
+  /* Botones ↑ ↓: emiten la misma tecla, así valen también para las fases
+     de la animación hero (su manejador global escucha ArrowUp/ArrowDown). */
+  const teclaVert = k => dispatchEvent(new KeyboardEvent('keydown', { key: k }));
+  document.querySelectorAll('.flecha.aba').forEach(b => b.addEventListener('click', () => teclaVert('ArrowDown')));
+  document.querySelectorAll('.flecha.arr').forEach(b => b.addEventListener('click', () => teclaVert('ArrowUp')));
+  function pantallaCompleta(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(() => {});
+  }
+
+  /* Zoom táctil en pantalla completa. Dentro del Fullscreen API los
+     navegadores móviles desactivan el pellizco nativo, así que se emula:
+     dos dedos acercan/alejan, un dedo desplaza mientras hay zoom, y todo
+     se reinicia al salir. */
+  (() => {
+    const esc = document.getElementById('escenario');
+    let s = 1, tx = 0, ty = 0, pinch = null, pan = null, base = null;
+    window.__zoomActivo = () => s > 1.001 || pinch !== null;
+    const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    const mid  = t => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
+    const mideBase = () => {
+      const r = esc.getBoundingClientRect();
+      base = { L0: r.left - tx, T0: r.top - ty, W: r.width / s, H: r.height / s };
+    };
+    const clampPan = () => {
+      const vw = innerWidth, vh = innerHeight, sw = base.W * s, sh = base.H * s;
+      tx = sw <= vw + 1 ? (vw - sw) / 2 - base.L0 : Math.min(-base.L0, Math.max(vw - sw - base.L0, tx));
+      ty = sh <= vh + 1 ? (vh - sh) / 2 - base.T0 : Math.min(-base.T0, Math.max(vh - sh - base.T0, ty));
+    };
+    const aplica = () => {
+      esc.style.transformOrigin = '0 0';
+      esc.style.transform = s > 1.001 ? `translate(${tx}px,${ty}px) scale(${s})` : '';
+    };
+    document.addEventListener('touchstart', e => {
+      if (!document.fullscreenElement) return;
+      if (e.touches.length === 2) {
+        mideBase();
+        pinch = { d: dist(e.touches), m: mid(e.touches), s, tx, ty };
+        pan = null;
+        e.preventDefault();
+      } else if (e.touches.length === 1 && s > 1.001) {
+        const t = e.target;
+        if (t instanceof Element && t.closest('input, button, a, summary, [data-cp]')) return;
+        mideBase();
+        pan = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx, ty, moved: false };
+      }
+    }, { passive: false, capture: true });
+    document.addEventListener('touchmove', e => {
+      if (!document.fullscreenElement) return;
+      if (pinch && e.touches.length === 2) {
+        e.preventDefault();
+        const ns = Math.min(5, Math.max(1, pinch.s * dist(e.touches) / pinch.d));
+        const m = mid(e.touches), k = ns / pinch.s;
+        tx = m.x - (pinch.m.x - pinch.tx) * k;
+        ty = m.y - (pinch.m.y - pinch.ty) * k;
+        s = ns; clampPan(); aplica();
+      } else if (pan && e.touches.length === 1) {
+        const dx = e.touches[0].clientX - pan.x, dy = e.touches[0].clientY - pan.y;
+        if (!pan.moved && Math.abs(dx) + Math.abs(dy) > 6) pan.moved = true;
+        if (pan.moved) { e.preventDefault(); tx = pan.tx + dx; ty = pan.ty + dy; clampPan(); aplica(); }
+      }
+    }, { passive: false, capture: true });
+    document.addEventListener('touchend', e => {
+      if (e.touches.length < 2) pinch = null;
+      if (e.touches.length === 0) pan = null;
+    }, true);
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) { s = 1; tx = ty = 0; aplica(); }
+    });
+  })();
+
+  addEventListener('keydown', e => {
+    if (e.target instanceof Element && e.target.matches('input, textarea, select')) return;
+    if ((e.key === ' ' || e.key === 'Enter') && e.target instanceof Element && e.target.closest('button, a, summary')) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': e.preventDefault(); sigDp(); break;
+      case ' ': e.preventDefault(); (e.shiftKey ? ant : sig)(); break;
+      case 'ArrowLeft': case 'PageUp': e.preventDefault(); antDp(); break;
+      /* ↓ ↑: avance interno de la diapositiva — revela u oculta fragmentos.
+         En la diapositiva animada (sin fragmentos) actúa el control de fases. */
+      case 'ArrowDown': e.preventDefault(); if (vistos[i] < frags[i].length) { vistos[i]++; pinta(); } break;
+      case 'ArrowUp':   e.preventDefault(); if (vistos[i] > 0) { vistos[i]--; pinta(); } break;
+      case 'Home': e.preventDefault(); irA(0, false); break;
+      case 'End':  e.preventDefault(); irA(N - 1, false); break;
+      case 'f': case 'F': pantallaCompleta(); break;
+    }
+  });
+
+  /* Navegación por swipe eliminada: existen botones y teclado para ello y
+     el gesto interfería con el zoom y el desplazamiento táctil. */
+
+  function deHash(){
+    const m = location.hash.match(/^#\/(\d+)$/);
+    if (m) { const n = parseInt(m[1], 10) - 1; if (n >= 0 && n < N && n !== i) irA(n, false); }
+  }
+  addEventListener('hashchange', deHash);
+
+  let temporizador;
+  function despierta(){
+    esc.classList.remove('quieto');
+    clearTimeout(temporizador);
+    temporizador = setTimeout(() => esc.classList.add('quieto'), 3500);
+  }
+  ['pointermove', 'pointerdown', 'keydown'].forEach(ev => addEventListener(ev, despierta));
+
+  const m0 = location.hash.match(/^#\/(\d+)$/);
+  if (m0) { const n = parseInt(m0[1], 10) - 1; if (n >= 0 && n < N) i = n; }
+  pinta();
+  despierta();
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   UTILIDADES (portadas de la fuente)
+   ═══════════════════════════════════════════════════════════════════════ */
+function svgPt(svg, evt) {
+  const pt = svg.createSVGPoint();
+  pt.x = evt.touches ? evt.touches[0].clientX : evt.clientX;
+  pt.y = evt.touches ? evt.touches[0].clientY : evt.clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+function fmt(n) { return (n % 1 === 0) ? n.toString() : n.toFixed(2).replace(/\.?0+$/, ''); }
+function fmt4(n) { return parseFloat(n.toFixed(4)).toString(); }
+
+/* Notación legible: escala los font-size de los SVG marcados con data-fscale. */
+document.querySelectorAll('svg[data-fscale]').forEach(svg => {
+  const f = parseFloat(svg.dataset.fscale);
+  const apl = () => svg.querySelectorAll('text[font-size], tspan[font-size]').forEach(t => {
+    if (t.__fsOk) return;
+    t.setAttribute('font-size', (parseFloat(t.getAttribute('font-size')) * f).toFixed(2));
+    t.__fsOk = true;
+  });
+  apl();
+  new MutationObserver(apl).observe(svg, { childList: true, subtree: true });
+});
+</script>
+
+<script>
+/* Diapositiva "afirmación · razón": la caja de justificación cambia con el
+   paso activo (último fragmento revelado con ↓, o el que se toque/cliquee). */
+function wirePA(idDp){
+  const dp = document.getElementById(idDp);
+  if (!dp) return;
+  const filas = Array.from(dp.querySelectorAll('.pa-fila'));
+  const razones = Array.from(dp.querySelectorAll('.pa-razon'));
+  const vacia = dp.querySelector('.pa-vacia');
+  function muestra(k){
+    filas.forEach((f, j) => f.classList.toggle('pa-activa', j === k));
+    razones.forEach((r, j) => r.style.display = j === k ? 'block' : 'none');
+    vacia.style.display = k < 0 ? 'block' : 'none';
+  }
+  function ultimaOn(){
+    let k = -1;
+    filas.forEach((f, j) => { if (f.classList.contains('frag-on')) k = j; });
+    return k;
+  }
+  filas.forEach((f, j) => f.addEventListener('click', () => muestra(j)));
+  let firma = '';
+  const mo = new MutationObserver(() => {
+    const f2 = filas.map(f => f.classList.contains('frag-on') ? '1' : '0').join('');
+    if (f2 !== firma) { firma = f2; muestra(ultimaOn()); }
+  });
+  filas.forEach(f => mo.observe(f, { attributes: true, attributeFilter: ['class'] }));
+  muestra(-1);
+}
+wirePA('dp-afirmacion-razon');
+wirePA('dp-siysolosi');
+</script>
+
+<script>
+/* Cierre interactivo (dp-resumen): el detalle —y la figura si hay varias
+   con id rs-fig-*— cambia con el ítem elegido. El primer .rs-det es el
+   texto inicial (se muestra sin selección). */
+(function(){
+  const dp = document.getElementById('dp-resumen');
+  if (!dp) return;
+  const its = Array.from(dp.querySelectorAll('.rs-item'));
+  const dets = Array.from(dp.querySelectorAll('.rs-det'));
+  const figs = {};
+  dp.querySelectorAll('[id^="rs-fig-"]').forEach(f => { figs[f.id.slice(7)] = f; });
+  const claves = Object.keys(figs);
+  function sel(k){
+    its.forEach((b, j) => b.classList.toggle('rs-on', j === k));
+    let fig = null;
+    dets.forEach((d, j) => {
+      const on = (j === k + 1);
+      d.style.display = on ? 'block' : 'none';
+      if (on) fig = d.dataset.fig || null;
+    });
+    claves.forEach(n => { figs[n].style.display = (fig ? n === fig : n === claves[0]) ? 'block' : 'none'; });
+  }
+  its.forEach((b, j) => b.addEventListener('click', () => sel(j)));
+  sel(-1);
+})();
+</script>
+
+<script>
+/* Contador → ir a diapositiva: toca el contador, escribe el número y Enter. */
+(function(){
+  const pie = document.getElementById('contador');
+  if (!pie) return;
+  pie.title = 'Ir a una diapositiva: toca y escribe el número';
+  pie.style.cursor = 'pointer';
+  pie.setAttribute('role','button');
+  pie.tabIndex = 0;
+  function abre(){
+    if (pie.querySelector('input')) return;
+    const total = (pie.textContent.split('/')[1] || '').trim();
+    const prev = pie.innerHTML;
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.inputMode = 'numeric'; inp.className = 'pie-in';
+    inp.setAttribute('aria-label','Número de diapositiva');
+    inp.placeholder = '1–' + total;
+    pie.innerHTML = ''; pie.appendChild(inp); inp.focus();
+    let listo = false;
+    function cierra(ir){
+      if (listo) return; listo = true;
+      const n = parseInt(inp.value, 10);
+      pie.innerHTML = prev;
+      if (ir && n >= 1 && n <= parseInt(total, 10)) location.hash = '#/' + n;
+    }
+    inp.addEventListener('keydown', e => {
+      e.stopPropagation();
+      if (e.key === 'Enter') cierra(true);
+      else if (e.key === 'Escape') cierra(false);
+    });
+    inp.addEventListener('blur', () => cierra(false));
+  }
+  pie.addEventListener('click', abre);
+  pie.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); abre(); } });
+})();
+</script>
+<script>
+'use strict';
+/* ═══════════════════════════════════════════════════════════════════════
+   UTILIDADES PROPIAS DE ESTA LECCIÓN
+   ═══════════════════════════════════════════════════════════════════════ */
+function mcd(u, v) { u = Math.abs(u); v = Math.abs(v); while (v) { const t = u % v; u = v; v = t; } return u; }
+
+/* Fracción (n/d) reducida, con el signo siempre en el numerador.
+   Devuelve {n, d, txt}: txt es entero si d = 1. */
+function frac(n, d) {
+  if (d < 0) { n = -n; d = -d; }
+  const g = mcd(n, d) || 1;
+  n /= g; d /= g;
+  const txt = (d === 1) ? String(n) : (n + '/' + d);
+  return { n: n, d: d, txt: txt.replace(/-/g, '\u2212') };
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ANIMACIÓN HERO — la balanza de 3x + 2 = 11
+   viewBox 440 × 320 · pivote (220, 150) · brazo 120 px · 1 unidad = 6 px
+   Las anchuras son PROPORCIONALES al valor, de modo que el equilibrio
+   dibujado (54 + 12 = 66) es exactamente el que expresa la ecuación.
+   Fases (ciclo 17.0 s): 1 la ecuación · 2 quitar b de ambos lados ·
+   3 repartir en a porciones · 4 el caso a = 0 · 5 verificar.
+   Corre solo con su diapositiva activa; P pausa, ↑↓ fijan una fase en
+   bucle, C restaura el ciclo completo.
+   ═══════════════════════════════════════════════════════════════════════ */
+const heroSvg = document.getElementById('hero');
+const HERO_DUR = [3.0, 3.8, 3.8, 3.2, 3.2];
+const HERO_INI = [0, 3.0, 6.8, 10.6, 13.8];
+const HERO_CYCLE = 17.0;
+const HERO_MARCAS = [2.4, 6.4, 10.0, 13.2, 16.4];
+const HB = { cx: 220, py: 150, L: 120, drop: 56, h: 26, u: 6 };
+let heroT = 0, heroRAF = null, heroLast = null, heroPhPrev = -1;
+let heroUserPaused = false, heroVisible = false, heroLoop = null;
+const heroFases = Array.from(document.querySelectorAll('#dp-hero .anim-fase'));
+const heroReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function heroEase(u) { return u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; }
+
+/* Bloque rectangular con rótulo centrado. */
+function hBlk(x, yBase, w, label, tono, op, dy, fs) {
+  const azul = (tono === 'x');
+  const fill = azul ? '#EFF6FF' : '#F0FDFA';
+  const st = azul ? '#1D4ED8' : '#0D9488';
+  const y = yBase - HB.h + (dy || 0);
+  let s = `<g opacity="${(op === undefined ? 1 : op).toFixed(2)}">`;
+  s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${HB.h}" rx="4" fill="${fill}" stroke="${st}" stroke-width="1.8"/>`;
+  if (label) s += `<text x="${(x + w / 2).toFixed(1)}" y="${(y + HB.h / 2 + 4.5).toFixed(1)}" text-anchor="middle" font-size="${fs || 13}" font-weight="700" fill="${st}">${label}</text>`;
+  s += '</g>';
+  return s;
+}
+/* Líneas divisorias internas: parte el bloque en n porciones. */
+function hParte(x, yBase, w, n, e, etiqueta, tono) {
+  const st = (tono === 'x') ? '#1D4ED8' : '#0D9488';
+  const y = yBase - HB.h;
+  let s = '';
+  for (let i = 1; i < n; i++) {
+    const gx = x + w * i / n;
+    s += `<line x1="${gx.toFixed(1)}" y1="${y}" x2="${gx.toFixed(1)}" y2="${(y + HB.h * e).toFixed(1)}" stroke="${st}" stroke-width="1.6" stroke-dasharray="3,2.5"/>`;
+  }
+  if (etiqueta && e > .92) {
+    for (let i = 0; i < n; i++) {
+      const gx = x + w * (i + .5) / n;
+      s += `<text x="${gx.toFixed(1)}" y="${(y + HB.h / 2 + 4.5).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="700" fill="${st}">${etiqueta}</text>`;
+    }
+  }
+  return s;
+}
+function hPan(cx, py) {
+  return `<path d="M${(cx - 54).toFixed(1)},${py.toFixed(1)} Q${cx.toFixed(1)},${(py + 18).toFixed(1)} ${(cx + 54).toFixed(1)},${py.toFixed(1)}" fill="none" stroke="#5B6472" stroke-width="2.2" stroke-linecap="round"/>`;
+}
+
+function heroDraw(t) {
+  if (!heroSvg) return;
+  if (t < 0) t = 0;
+  let ph = 0;
+  for (let i = 4; i >= 0; i--) { if (t >= HERO_INI[i]) { ph = i; break; } }
+  const u = Math.max(0, Math.min(1, (t - HERO_INI[ph]) / HERO_DUR[ph]));
+
+  /* Inclinación de la barra: solo la fase 4 desnivela (2 ≠ 11);
+     la fase 2 hace un balanceo breve que vuelve al equilibrio. */
+  let th = 0;
+  if (ph === 1) { const e = Math.min(1, u / .6); th = 0.035 * Math.sin(2 * Math.PI * 2.5 * e) * (1 - e); }
+  if (ph === 3) { th = 0.17 * heroEase(Math.min(1, u / .5)); }
+
+  const lx = HB.cx - HB.L * Math.cos(th), ly = HB.py - HB.L * Math.sin(th);
+  const rx = HB.cx + HB.L * Math.cos(th), ry = HB.py + HB.L * Math.sin(th);
+  const lpy = ly + HB.drop, rpy = ry + HB.drop;
+
+  let m = '';
+
+  /* — Ecuación de cabecera y rótulos — */
+  const eq = { 0: 1, 1: 1, 2: 2, 3: 3, 4: 4 }[ph];
+  if (ph === 0) {
+    m += `<text x="220" y="34" text-anchor="middle" font-size="19"><tspan fill="#1D4ED8" font-weight="700">3<tspan font-style="italic">x</tspan></tspan><tspan fill="#141A24"> + </tspan><tspan fill="#0D9488" font-weight="700">2</tspan><tspan fill="#141A24"> = </tspan><tspan fill="#0D9488" font-weight="700">11</tspan></text>`;
+    const op = Math.min(1, u / .35).toFixed(2);
+    m += `<text x="220" y="58" text-anchor="middle" font-size="10.5" opacity="${op}"><tspan fill="#1D4ED8" font-weight="700">a = 3</tspan><tspan fill="#6B688A"> coeficiente · </tspan><tspan fill="#0D9488" font-weight="700">b = 2</tspan><tspan fill="#6B688A">, </tspan><tspan fill="#0D9488" font-weight="700">c = 11</tspan><tspan fill="#6B688A"> términos independientes</tspan></text>`;
+  } else if (ph === 1) {
+    const e = Math.min(1, u / .6);
+    m += `<text x="220" y="34" text-anchor="middle" font-size="19" opacity="${(1 - e).toFixed(2)}"><tspan fill="#1D4ED8" font-weight="700">3<tspan font-style="italic">x</tspan></tspan><tspan fill="#141A24"> + </tspan><tspan fill="#0D9488" font-weight="700">2</tspan><tspan fill="#141A24"> = </tspan><tspan fill="#0D9488" font-weight="700">11</tspan></text>`;
+    m += `<text x="220" y="34" text-anchor="middle" font-size="19" opacity="${e.toFixed(2)}"><tspan fill="#1D4ED8" font-weight="700">3<tspan font-style="italic">x</tspan></tspan><tspan fill="#141A24"> = </tspan><tspan fill="#0D9488" font-weight="700">9</tspan></text>`;
+    m += `<text x="220" y="58" text-anchor="middle" font-size="10.5" fill="#6B688A">retiramos <tspan fill="#0D9488" font-weight="700">2</tspan> de los dos platillos · el equilibrio se conserva</text>`;
+  } else if (ph === 2) {
+    m += `<text x="220" y="34" text-anchor="middle" font-size="19"><tspan fill="#1D4ED8" font-weight="700">3<tspan font-style="italic">x</tspan></tspan><tspan fill="#141A24"> = </tspan><tspan fill="#0D9488" font-weight="700">9</tspan></text>`;
+    if (u > .55) m += `<text x="220" y="58" text-anchor="middle" font-size="15" opacity="${Math.min(1, (u - .55) / .25).toFixed(2)}" fill="#6D28D9" font-weight="700">una porción contra una porción: <tspan font-style="italic">x</tspan> = 3</text>`;
+    else m += `<text x="220" y="58" text-anchor="middle" font-size="10.5" fill="#6B688A">partimos cada platillo en <tspan fill="#1D4ED8" font-weight="700">3</tspan> porciones iguales</text>`;
+  } else if (ph === 3) {
+    m += `<text x="220" y="34" text-anchor="middle" font-size="19"><tspan fill="#DC2626" font-weight="700">0·<tspan font-style="italic">x</tspan></tspan><tspan fill="#141A24"> + </tspan><tspan fill="#0D9488" font-weight="700">2</tspan><tspan fill="#141A24"> = </tspan><tspan fill="#0D9488" font-weight="700">11</tspan></text>`;
+    m += `<text x="220" y="58" text-anchor="middle" font-size="10.5" fill="#B91C1C">con coeficiente <tspan font-weight="700">0</tspan> no hay porciones que repartir: queda <tspan font-weight="700">2 = 11</tspan></text>`;
+  } else {
+    m += `<text x="220" y="34" text-anchor="middle" font-size="19"><tspan fill="#1D4ED8" font-weight="700">3·3</tspan><tspan fill="#141A24"> + </tspan><tspan fill="#0D9488" font-weight="700">2</tspan><tspan fill="#141A24"> = </tspan><tspan fill="#0D9488" font-weight="700">11</tspan></text>`;
+    if (u > .4) m += `<text x="220" y="58" text-anchor="middle" font-size="15" opacity="${Math.min(1, (u - .4) / .25).toFixed(2)}" fill="#0F766E" font-weight="700">11 = 11 · verdadera ✓ &nbsp;sí es solución</text>`;
+    else m += `<text x="220" y="58" text-anchor="middle" font-size="10.5" fill="#6B688A">devolvemos <tspan fill="#6D28D9" font-weight="700">3</tspan> a la ecuación de partida</text>`;
+  }
+
+  /* — Soporte, barra y platillos — */
+  m += `<polygon points="220,150 198,290 242,290" fill="#EDE9FE" stroke="#6D28D9" stroke-width="1.6"/>`;
+  m += `<line x1="172" y1="292" x2="268" y2="292" stroke="#1C1B2E" stroke-width="2.4" stroke-linecap="round"/>`;
+  m += `<line x1="${lx.toFixed(1)}" y1="${ly.toFixed(1)}" x2="${rx.toFixed(1)}" y2="${ry.toFixed(1)}" stroke="#5B6472" stroke-width="3.4" stroke-linecap="round"/>`;
+  m += `<circle cx="220" cy="150" r="5" fill="#5B6472"/>`;
+  m += `<line x1="${lx.toFixed(1)}" y1="${ly.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${lpy.toFixed(1)}" stroke="#5B6472" stroke-width="1.4"/>`;
+  m += `<line x1="${rx.toFixed(1)}" y1="${ry.toFixed(1)}" x2="${rx.toFixed(1)}" y2="${rpy.toFixed(1)}" stroke="#5B6472" stroke-width="1.4"/>`;
+  m += hPan(lx, lpy) + hPan(rx, rpy);
+
+  /* — Contenido de los platillos, según la fase — */
+  const W3x = 54, W2 = 12, W11 = 66, W9 = 54;
+  if (ph === 0) {
+    const tot = W3x + 4 + W2, x0 = lx - tot / 2;
+    m += hBlk(x0, lpy, W3x, '3<tspan font-style="italic">x</tspan>', 'x');
+    m += hBlk(x0 + W3x + 4, lpy, W2, '2', 'b', 1, 0, 11);
+    m += hBlk(rx - W11 / 2, rpy, W11, '11', 'b');
+  } else if (ph === 1) {
+    const e = heroEase(Math.min(1, u / .6));
+    const tot = W3x + 4 + W2, x0 = lx - tot / 2;
+    m += hBlk(x0, lpy, W3x, '3<tspan font-style="italic">x</tspan>', 'x');
+    m += hBlk(x0 + W3x + 4, lpy, W2, '2', 'b', 1 - e, 46 * e, 11);
+    const rx0 = rx - W11 / 2;
+    m += hBlk(rx0, rpy, W9, e > .55 ? '9' : '', 'b');
+    m += hBlk(rx0 + W9, rpy, W2, '2', 'b', 1 - e, 46 * e, 11);
+    if (e <= .55) m += `<text x="${rx.toFixed(1)}" y="${(rpy - HB.h / 2 + 4.5).toFixed(1)}" text-anchor="middle" font-size="13" font-weight="700" fill="#0D9488" opacity="${(1 - e / .55).toFixed(2)}">11</text>`;
+  } else if (ph === 2) {
+    const e = heroEase(Math.min(1, u / .5));
+    const xl = lx - W3x / 2, xr = rx - W9 / 2;
+    m += hBlk(xl, lpy, W3x, '', 'x') + hParte(xl, lpy, W3x, 3, e, '<tspan font-style="italic">x</tspan>', 'x');
+    m += hBlk(xr, rpy, W9, '', 'b') + hParte(xr, rpy, W9, 3, e, '3', 'b');
+  } else if (ph === 3) {
+    m += hBlk(lx - W2 / 2, lpy, W2, '2', 'b', 1, 0, 11);
+    m += hBlk(rx - W11 / 2, rpy, W11, '11', 'b');
+    if (u > .5) {
+      const op = Math.min(1, (u - .5) / .3).toFixed(2);
+      m += `<g opacity="${op}"><text x="${lx.toFixed(1)}" y="${(lpy - HB.h - 12).toFixed(1)}" text-anchor="middle" font-size="13" font-weight="700" fill="#DC2626">✗ 0 porciones</text></g>`;
+      m += `<text x="220" y="312" text-anchor="middle" font-size="12.5" font-weight="700" fill="#B91C1C" opacity="${op}">2 = 11 es falsa: ningún número la vuelve verdadera · <tspan font-style="italic">S</tspan> = ∅</text>`;
+    }
+  } else {
+    const tot = W3x + 4 + W2, x0 = lx - tot / 2;
+    m += hBlk(x0, lpy, W3x, '', 'x') + hParte(x0, lpy, W3x, 3, 1, '3', 'x');
+    m += hBlk(x0 + W3x + 4, lpy, W2, '2', 'b', 1, 0, 11);
+    m += hBlk(rx - W11 / 2, rpy, W11, '11', 'b');
+  }
+
+  /* — Pie de fase — */
+  if (ph === 2 && u > .7) {
+    m += `<text x="220" y="312" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5B21B6">el reparto solo es posible porque el coeficiente no es 0</text>`;
+  } else if (ph === 1) {
+    m += `<text x="220" y="312" text-anchor="middle" font-size="12" fill="#6B688A">propiedad aditiva de la igualdad: lo mismo a los dos lados</text>`;
+  } else if (ph === 0) {
+    m += `<text x="220" y="312" text-anchor="middle" font-size="12" fill="#6B688A">los dos platillos pesan lo mismo: eso afirma el signo =</text>`;
+  } else if (ph === 4) {
+    m += `<text x="220" y="312" text-anchor="middle" font-size="12" fill="#6B688A">verificar es sustituir en la ecuación ORIGINAL y comparar</text>`;
+  }
+
+  heroSvg.innerHTML = m;
+
+  const faseVista = (heroLoop === null) ? ph : heroLoop;
+  if (faseVista !== heroPhPrev) {
+    heroFases.forEach((el, i) => el.classList.toggle('fase-on', i === faseVista));
+    heroPhPrev = faseVista;
+  }
+}
+
+function heroFrame(ts) {
+  if (heroLast === null) heroLast = ts;
+  let dt = (ts - heroLast) / 1000;
+  heroLast = ts;
+  if (dt > 0.05) dt = 0.05;
+  heroT += dt;
+  if (heroLoop === null) {
+    heroT = heroT % HERO_CYCLE;
+  } else {
+    const ini = HERO_INI[heroLoop], dur = HERO_DUR[heroLoop];
+    if (heroT < ini || heroT >= ini + dur) heroT = ini;
+  }
+  heroDraw(heroT);
+  heroRAF = requestAnimationFrame(heroFrame);
+}
+function heroSync() {
+  const corre = heroVisible && !heroUserPaused;
+  if (corre && !heroRAF) { heroLast = null; heroRAF = requestAnimationFrame(heroFrame); }
+  if (!corre && heroRAF) { cancelAnimationFrame(heroRAF); heroRAF = null; }
+}
+const heroBtn = document.getElementById('hero-btn');
+function heroSetPaused(v) {
+  heroUserPaused = v;
+  heroBtn.setAttribute('aria-pressed', v ? 'true' : 'false');
+  heroBtn.innerHTML = v ? '►&nbsp;Animar' : '❚❚&nbsp;Pausar';
+  heroSync();
+}
+function heroBucle(f) {
+  heroLoop = f;
+  const ind = document.getElementById('hero-bucle');
+  if (ind) ind.textContent = (f === null) ? '' : '⟲ fase ' + (f + 1);
+  heroPhPrev = -1;
+  heroDraw(heroT);
+}
+function heroFaseDe(t) { let ph = 0; for (let i = 4; i >= 0; i--) { if (t >= HERO_INI[i]) { ph = i; break; } } return ph; }
+function heroPaso(dir) {
+  const destino = (heroFaseDe(heroT) + dir + 5) % 5;
+  heroT = heroUserPaused ? HERO_MARCAS[destino] : HERO_INI[destino];
+  heroLoop = destino;
+  const ind = document.getElementById('hero-bucle');
+  if (ind) ind.textContent = '⟲ fase ' + (destino + 1);
+  heroPhPrev = -1;
+  heroDraw(heroT);
+}
+if (heroBtn) heroBtn.addEventListener('click', () => heroSetPaused(!heroUserPaused));
+addEventListener('keydown', e => {
+  if (!heroVisible || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.target instanceof Element && e.target.matches('input, textarea, select')) return;
+  if (e.key === 'ArrowDown') { e.preventDefault(); heroPaso(1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); heroPaso(-1); }
+  else if (e.key === 'p' || e.key === 'P') { e.preventDefault(); heroSetPaused(!heroUserPaused); }
+  else if (e.key === 'c' || e.key === 'C') { e.preventDefault(); heroBucle(null); }
+});
+document.addEventListener('diapositiva', e => { heroVisible = (e.detail.id === 'dp-hero'); heroSync(); });
+if (heroSvg) {
+  if (heroReduced) {
+    heroUserPaused = true;
+    heroT = HERO_MARCAS[2];              /* fotograma más informativo: el reparto */
+    heroBtn.innerHTML = '►&nbsp;Animar';
+    heroBtn.setAttribute('aria-pressed', 'true');
+  }
+  heroDraw(heroT);
+  heroVisible = ((document.querySelector('.diapositiva.activa') || {}).id === 'dp-hero');
+  heroSync();
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   EXPLORADOR 1 · VERIFICADOR DE CANDIDATOS  (§ Solución)
+   viewBox 420 × 280 · recta de candidatos arriba, dos barras de valor abajo
+   ═══════════════════════════════════════════════════════════════════════ */
+const VC_EQ = {
+  A: { L: r => 3 * r - 9, R: r => 0, li: '3<i>r</i> \u2212 9', ld: '0',
+       obs: 'Ecuación <strong>condicional</strong>: hay un único candidato entero del rango que iguala las dos columnas.' },
+  B: { L: r => 3 * (r + 2), R: r => 3 * r + 6, li: '3(<i>r</i> + 2)', ld: '3<i>r</i> + 6',
+       obs: 'Los dos miembros son la <em>misma</em> expresión escrita de dos maneras (distributiva): coinciden para <strong>todo</strong> candidato.' },
+  C: { L: r => 4 * r + 1, R: r => 4 * r - 2, li: '4<i>r</i> + 1', ld: '4<i>r</i> \u2212 2',
+       obs: 'Los dos miembros difieren en 3 sea cual sea el candidato: <strong>ninguno</strong> los iguala.' }
+};
+function vcDraw() {
+  const svg = document.getElementById('vc-svg');
+  if (!svg) return;
+  const key = document.getElementById('vc-eq').value;
+  const r = parseInt(document.getElementById('vc-r').value, 10);
+  const E = VC_EQ[key];
+  const li = E.L(r), ld = E.R(r), igual = (li === ld);
+
+  document.getElementById('vc-vr').textContent = r;
+  document.getElementById('vc-li').textContent = String(li).replace('-', '\u2212');
+  document.getElementById('vc-ld').textContent = String(ld).replace('-', '\u2212');
+  const ig = document.getElementById('vc-ig');
+  ig.textContent = igual ? 'sí' : 'no';
+  ig.style.color = igual ? '#0D9488' : '#DC2626';
+  document.getElementById('vc-out').innerHTML =
+    (igual
+      ? '<p class="note-ok">✓ Con <i>r</i> = ' + r + ' los dos miembros valen lo mismo: <strong>sí es solución</strong>.</p>'
+      : '<p class="note-warn">✗ Con <i>r</i> = ' + r + ' los miembros valen ' + li + ' y ' + ld + ': <strong>no es solución</strong>.</p>')
+    + '<p class="eq-cap">' + E.obs + '</p>';
+
+  const x0 = 30, x1 = 390, yR = 44, sc = (x1 - x0) / 10, ox = x0 + 4 * sc;
+  const zx = 210, vs = 6.5, yA = 122, yB = 176, bh = 26;
+  let s = '';
+  s += `<text x="${x0}" y="20" font-size="10.5" fill="#6B688A">candidato <tspan font-style="italic" font-weight="700" fill="#6D28D9">r</tspan></text>`;
+  s += `<line x1="${x0}" y1="${yR}" x2="${x1}" y2="${yR}" stroke="#1C1B2E" stroke-width="1.5"/>`;
+  for (let i = -4; i <= 6; i++) {
+    const gx = ox + i * sc;
+    s += `<line x1="${gx}" y1="${yR - 4}" x2="${gx}" y2="${yR + 4}" stroke="#1C1B2E" stroke-width="1.1"/>`;
+    if (i % 2 === 0) s += `<text x="${gx}" y="${yR + 18}" text-anchor="middle" font-size="9.5" fill="#6B688A">${i < 0 ? '\u2212' + Math.abs(i) : i}</text>`;
+  }
+  const px = ox + r * sc;
+  s += `<circle cx="${px}" cy="${yR}" r="6" fill="#7C3AED" stroke="white" stroke-width="2"/>`;
+  s += `<text x="${px}" y="${yR - 12}" text-anchor="middle" font-size="11.5" font-weight="700" fill="#6D28D9"><tspan font-style="italic">r</tspan> = ${r < 0 ? '\u2212' + Math.abs(r) : r}</text>`;
+
+  s += '<g stroke="#EDE9FE" stroke-width="0.8">';
+  for (let v = -20; v <= 25; v += 5) { const gx = zx + v * vs; s += `<line x1="${gx}" y1="100" x2="${gx}" y2="212"/>`; }
+  s += '</g>';
+  for (let v = -20; v <= 25; v += 10) { const gx = zx + v * vs; s += `<text x="${gx}" y="226" text-anchor="middle" font-size="9" fill="#B0ACCC">${v < 0 ? '\u2212' + Math.abs(v) : v}</text>`; }
+  s += `<line x1="${zx}" y1="98" x2="${zx}" y2="214" stroke="#1C1B2E" stroke-width="1.3"/>`;
+  s += `<text x="${zx}" y="240" text-anchor="middle" font-size="9.5" fill="#6B688A">0</text>`;
+
+  function barra(v, y, color, fillLight, rot) {
+    const w = Math.abs(v) * vs, bx = v >= 0 ? zx : zx - w;
+    let g = `<text x="${x0}" y="${y - 6}" font-size="10" fill="${color}" font-weight="700">${rot}</text>`;
+    g += `<rect x="${bx}" y="${y}" width="${Math.max(w, 1.5)}" height="${bh}" rx="3" fill="${fillLight}" stroke="${color}" stroke-width="1.8"/>`;
+    const tx = v >= 0 ? bx + w + 7 : bx - 7;
+    g += `<text x="${tx}" y="${y + bh / 2 + 4.5}" text-anchor="${v >= 0 ? 'start' : 'end'}" font-size="13" font-weight="700" fill="${color}">${v < 0 ? '\u2212' + Math.abs(v) : v}</text>`;
+    return g;
+  }
+  s += barra(li, yA, '#1D4ED8', '#EFF6FF', 'lado izquierdo');
+  s += barra(ld, yB, '#0D9488', '#F0FDFA', 'lado derecho');
+  const eli = zx + li * vs, eld = zx + ld * vs;
+  if (!igual) s += `<line x1="${eli}" y1="${yA}" x2="${eli}" y2="${yB + bh}" stroke="#DC2626" stroke-width="1.2" stroke-dasharray="4,3"/>`;
+  s += `<text x="220" y="266" text-anchor="middle" font-size="14" font-weight="700" fill="${igual ? '#0F766E' : '#B91C1C'}">${igual ? '✓ las dos barras coinciden: sí es solución' : '✗ las barras no coinciden: no es solución'}</text>`;
+  svg.innerHTML = s;
+}
+['vc-eq', 'vc-r'].forEach(id => { const el = document.getElementById(id); if (el) el.addEventListener('input', vcDraw); });
+vcDraw();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   EXPLORADOR 2 · GRADO APARENTE FRENTE A GRADO REAL  (§ Linealidad)
+   p x² + q = r x² + x   →   diferencia (p−r)x² − x + q
+   viewBox 400 × 270 · x ∈ [−3, 4] · eje y autoescalado y recortado
+   ═══════════════════════════════════════════════════════════════════════ */
+function gaDraw() {
+  const svg = document.getElementById('ga-svg');
+  if (!svg) return;
+  const p = parseInt(document.getElementById('ga-p').value, 10);
+  const r = parseInt(document.getElementById('ga-r').value, 10);
+  const q = parseInt(document.getElementById('ga-q').value, 10);
+  const A = p - r, B = -1, C = q;
+  const apar = (p > 0 || r > 0) ? 2 : 1;
+  const real = (A !== 0) ? 2 : 1;
+
+  const t2 = k => (k === 0) ? '' : (k === 1 ? '<i>x</i>²' : k + '<i>x</i>²');
+  const izq = (p === 0) ? String(q) : t2(p) + ' + ' + q;
+  const der = (r === 0) ? '<i>x</i>' : t2(r) + ' + <i>x</i>';
+  document.getElementById('ga-eq').innerHTML =
+    '<span style="color:#B0ACCC">' + (p === 0 ? '' : t2(p) + ' + ') + '</span><span style="color:#0D9488">' + q +
+    '</span> = <span style="color:#B0ACCC">' + (r === 0 ? '' : t2(r) + ' + ') + '</span><span style="color:#1D4ED8"><i>x</i></span>';
+
+  let raices = [], texto = '', nota = '';
+  if (A === 0) {
+    raices = [q];
+    texto = '{' + q + '}';
+    nota = '<p class="note-ok">✓ Los términos en <i>x</i>² son <strong>iguales en los dos miembros</strong>, así que se cancelan al restar. La diferencia es &minus;<i>x</i> + ' + q + ', de <strong>grado 1</strong>: la ecuación <strong>es lineal</strong> y tiene exactamente una solución.</p>';
+  } else {
+    const D = 1 - 4 * A * C;
+    if (D > 0) {
+      const s = Math.sqrt(D);
+      raices = [(1 - s) / (2 * A), (1 + s) / (2 * A)].sort((u, v) => u - v);
+      if (Number.isInteger(s)) {
+        const arr = [frac(1 - s, 2 * A), frac(1 + s, 2 * A)]
+          .map(f => ({ txt: f.txt, val: f.n / f.d })).sort((u, v) => u.val - v.val);
+        texto = '{' + arr.map(o => o.txt).join(', ') + '}';
+      } else {
+        texto = '≈ {' + raices.map(v => v.toFixed(2).replace('-', '\u2212')).join(', ') + '}';
+      }
+    } else if (D === 0) {
+      raices = [1 / (2 * A)];
+      texto = '{' + frac(1, 2 * A).txt + '}';
+    } else {
+      raices = [];
+      texto = '∅';
+    }
+    nota = '<p class="note-warn">⚠ Los coeficientes de <i>x</i>² <strong>no coinciden</strong>: al restar sobrevive ' + (A === 1 ? '' : (A === -1 ? '\u2212' : String(A).replace('-', '\u2212'))) + '<i>x</i>², de <strong>grado 2</strong>. La ecuación <strong>no es lineal</strong>' +
+      (D < 0 ? ' y no tiene soluciones reales (discriminante ' + D + ' &lt; 0).' : (D === 0 ? ' y tiene una sola solución real (discriminante 0).' : ' y tiene dos soluciones reales.')) + '</p>';
+  }
+  document.getElementById('ga-ap').textContent = apar;
+  document.getElementById('ga-re').textContent = real;
+  document.getElementById('ga-re').style.color = (real === 1) ? '#1D4ED8' : '#DC2626';
+  document.getElementById('ga-s').textContent = texto;
+  document.getElementById('ga-out').innerHTML = nota;
+
+  /* — gráfica de la diferencia — */
+  const X0 = -3, X1 = 4, PX0 = 42, PX1 = 384, sc = (PX1 - PX0) / (X1 - X0);
+  const f = v => A * v * v + B * v + C;
+  let mx = 0;
+  for (let i = 0; i <= 200; i++) { const v = X0 + (X1 - X0) * i / 200; mx = Math.max(mx, Math.abs(f(v))); }
+  const Y = Math.max(4, Math.min(14, Math.ceil(mx)));
+  const PY0 = 18, PY1 = 232, oy = (PY0 + PY1) / 2, ys = (PY1 - PY0) / 2 / Y;
+  const ox = PX0 + (0 - X0) * sc;
+  const sx = v => PX0 + (v - X0) * sc, sy = v => oy - v * ys;
+
+  let s = `<defs><clipPath id="ga-clip"><rect x="${PX0 - 2}" y="${PY0}" width="${PX1 - PX0 + 4}" height="${PY1 - PY0}"/></clipPath></defs>`;
+  s += '<g stroke="#EDE9FE" stroke-width="0.7">';
+  for (let i = X0; i <= X1; i++) s += `<line x1="${sx(i).toFixed(1)}" y1="${PY0}" x2="${sx(i).toFixed(1)}" y2="${PY1}"/>`;
+  const paso = Y <= 6 ? 1 : (Y <= 10 ? 2 : 4);
+  for (let j = -Y; j <= Y; j += paso) s += `<line x1="${PX0}" y1="${sy(j).toFixed(1)}" x2="${PX1}" y2="${sy(j).toFixed(1)}"/>`;
+  s += '</g>';
+  s += `<line x1="${PX0 - 8}" y1="${oy.toFixed(1)}" x2="${PX1 + 8}" y2="${oy.toFixed(1)}" stroke="#1C1B2E" stroke-width="1.5"/>`;
+  s += `<polygon points="${PX1 + 6},${(oy - 4).toFixed(1)} ${PX1 + 6},${(oy + 4).toFixed(1)} ${PX1 + 14},${oy.toFixed(1)}" fill="#1C1B2E"/>`;
+  s += `<text x="${PX1 + 17}" y="${(oy + 4).toFixed(1)}" font-size="11" font-style="italic" fill="#1C1B2E">x</text>`;
+  s += `<line x1="${ox.toFixed(1)}" y1="${PY1 + 6}" x2="${ox.toFixed(1)}" y2="${PY0 - 8}" stroke="#1C1B2E" stroke-width="1.5"/>`;
+  s += `<polygon points="${(ox - 4).toFixed(1)},${PY0 - 4} ${(ox + 4).toFixed(1)},${PY0 - 4} ${ox.toFixed(1)},${PY0 - 12}" fill="#1C1B2E"/>`;
+  for (let i = X0; i <= X1; i++) {
+    if (i === 0) continue;
+    s += `<text x="${sx(i).toFixed(1)}" y="${(oy + 15).toFixed(1)}" text-anchor="middle" font-size="9.5" fill="#6B688A">${i < 0 ? '\u2212' + Math.abs(i) : i}</text>`;
+  }
+  let pts = [];
+  for (let i = 0; i <= 240; i++) { const v = X0 + (X1 - X0) * i / 240; pts.push(sx(v).toFixed(1) + ',' + sy(f(v)).toFixed(1)); }
+  s += `<polyline points="${pts.join(' ')}" fill="none" stroke="#7C3AED" stroke-width="2.6" stroke-linecap="round" clip-path="url(#ga-clip)"/>`;
+  let fuera = 0;
+  raices.forEach(v => {
+    if (v < X0 || v > X1) { fuera++; return; }
+    s += `<circle cx="${sx(v).toFixed(1)}" cy="${oy.toFixed(1)}" r="6" fill="#6D28D9" stroke="white" stroke-width="2"/>`;
+    s += `<text x="${sx(v).toFixed(1)}" y="${(oy - 13).toFixed(1)}" text-anchor="middle" font-size="11.5" font-weight="700" fill="#6D28D9">${Number.isInteger(v) ? v : v.toFixed(2).replace('-', '\u2212')}</text>`;
+  });
+  s += `<rect x="${PX0 + 4}" y="${PY0 + 4}" width="150" height="22" rx="9" fill="${real === 1 ? '#EFF6FF' : '#FEF2F2'}" stroke="${real === 1 ? '#1D4ED8' : '#DC2626'}" stroke-width="1.3"/>`;
+  s += `<text x="${PX0 + 79}" y="${PY0 + 19}" text-anchor="middle" font-size="11" font-weight="700" fill="${real === 1 ? '#1D4ED8' : '#DC2626'}">${real === 1 ? 'diferencia de grado 1' : 'diferencia de grado 2'}</text>`;
+  s += `<text x="200" y="258" text-anchor="middle" font-size="10.5" fill="#6B688A">las soluciones de la ecuación son los <tspan fill="#6D28D9" font-weight="700">ceros</tspan> de la diferencia entre sus miembros${fuera ? ' · ' + fuera + ' cero fuera del tramo dibujado' : ''}</text>`;
+  svg.innerHTML = s;
+}
+['ga-p', 'ga-r', 'ga-q'].forEach(id => { const el = document.getElementById(id); if (el) el.addEventListener('change', gaDraw); });
+gaDraw();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   EXPLORADOR 3 · LA BALANZA ax + b = c  (§ Despeje)
+   Deslizadores enteros · el conjunto solución dibujado sobre la recta real
+   viewBox 420 × 200 · tramo visible x ∈ [−10, 10]
+   ═══════════════════════════════════════════════════════════════════════ */
+function blDraw() {
+  const svg = document.getElementById('bl-svg');
+  if (!svg) return;
+  const a = parseInt(document.getElementById('bl-a').value, 10);
+  const b = parseInt(document.getElementById('bl-b').value, 10);
+  const c = parseInt(document.getElementById('bl-c').value, 10);
+  document.getElementById('bl-va').textContent = String(a).replace('-', '\u2212');
+  document.getElementById('bl-vb').textContent = String(b).replace('-', '\u2212');
+  document.getElementById('bl-vc').textContent = String(c).replace('-', '\u2212');
+
+  const num = v => String(v).replace('-', '\u2212');
+  const par = v => (v < 0 ? '(' + num(v) + ')' : num(v));
+  const term = v => (v === 0 ? '' : (v > 0 ? ' + ' + v : ' \u2212 ' + Math.abs(v)));
+  const ax = (a === 0) ? '0·<i>x</i>' : (a === 1 ? '<i>x</i>' : (a === -1 ? '\u2212<i>x</i>' : num(a) + '<i>x</i>'));
+  const eq1 = ax + term(b) + ' = ' + num(c);
+  const P = [];
+  P.push({ n: 1, t: eq1, r: 'ecuación de partida' });
+  if (a === 0) {
+    P.push({ n: 2, t: num(b) + ' = ' + num(c), r: 'tabla del cero y modulativa: 0·<i>x</i> = 0, y la variable desaparece' });
+    P.push({ n: 3, t: '\u2014', r: '<strong style="color:#B91C1C">paso bloqueado</strong>: el 0 no tiene recíproco, no hay <i>a</i><sup>\u22121</sup> por el que multiplicar' });
+  } else {
+    const rz2 = (b === 0)
+      ? 'no hay término independiente que trasladar'
+      : 'sumar ' + (b > 0 ? '\u2212' + b : '+' + Math.abs(b)) + ' a ambos lados · inverso aditivo';
+    P.push({ n: 2, t: ax + ' = ' + num(c - b), r: rz2 });
+    const F = frac(c - b, a);
+    const cociente = par(c - b) + ' / ' + par(a);
+    const t3 = '<i>x</i> = ' + cociente + (F.txt === num(c - b) + '/' + num(a) ? '' : ' = <strong style="color:#6D28D9">' + F.txt + '</strong>');
+    P.push({ n: 3, t: t3, r: 'multiplicar por 1/' + par(a) + ' · inverso multiplicativo, que existe porque <i>a</i> \u2260 0' });
+  }
+  let html = '<div style="font-family:\'STIX Two Text\',Georgia,serif">';
+  P.forEach(s => {
+    html += '<div style="display:flex;gap:.9cqw;align-items:baseline;margin-bottom:.9cqh">' +
+      '<span style="flex:none;width:2.9cqh;height:2.9cqh;border-radius:50%;background:var(--linea);color:var(--tinta2);font:700 1.7cqh Inter,sans-serif;display:grid;place-items:center">' + s.n + '</span>' +
+      '<span style="font-size:2.5cqh;font-weight:600;min-width:9cqw">' + s.t + '</span>' +
+      '<span style="font:400 1.75cqh Inter,sans-serif;color:var(--tinta2)">' + s.r + '</span></div>';
+  });
+  html += '</div>';
+  if (a === 0) {
+    html += (b === c)
+      ? '<p class="note-ok">La afirmación que queda es <strong>verdadera</strong>: todo real la satisface. <strong>Identidad</strong>, <i>S</i> = ℝ.</p>'
+      : '<p class="note-warn">La afirmación que queda es <strong>falsa</strong>: ningún real la satisface. <strong>Contradicción</strong>, <i>S</i> = ∅.</p>';
+  } else {
+    html += '<p class="note-ok">Ecuación <strong>condicional</strong>: exactamente una solución, <i>S</i> = {' + frac(c - b, a).txt + '}.</p>';
+  }
+  document.getElementById('bl-pasos').innerHTML = html;
+
+  /* — recta real — */
+  const X0 = 30, X1 = 390, yR = 108, sc = (X1 - X0) / 20, ox = X0 + 10 * sc;
+  let s = `<text x="210" y="24" text-anchor="middle" font-size="14" font-weight="700" fill="#141A24">${eq1}</text>`;
+  s += `<text x="210" y="44" text-anchor="middle" font-size="10.5" fill="#6B688A">conjunto solución sobre la recta real</text>`;
+  if (a === 0 && b === c) {
+    s += `<line x1="${X0 - 6}" y1="${yR}" x2="${X1 + 6}" y2="${yR}" stroke="#7C3AED" stroke-width="9" stroke-linecap="round" opacity="0.35"/>`;
+  }
+  s += `<line x1="${X0 - 10}" y1="${yR}" x2="${X1 + 10}" y2="${yR}" stroke="#1C1B2E" stroke-width="1.5"/>`;
+  s += `<polygon points="${X1 + 8},${yR - 4} ${X1 + 8},${yR + 4} ${X1 + 16},${yR}" fill="#1C1B2E"/>`;
+  s += `<polygon points="${X0 - 8},${yR - 4} ${X0 - 8},${yR + 4} ${X0 - 16},${yR}" fill="#1C1B2E"/>`;
+  for (let i = -10; i <= 10; i++) {
+    const gx = ox + i * sc;
+    s += `<line x1="${gx.toFixed(1)}" y1="${yR - 4}" x2="${gx.toFixed(1)}" y2="${yR + 4}" stroke="#1C1B2E" stroke-width="1"/>`;
+    if (i % 2 === 0) s += `<text x="${gx.toFixed(1)}" y="${yR + 18}" text-anchor="middle" font-size="9.5" fill="#6B688A">${i < 0 ? '\u2212' + Math.abs(i) : i}</text>`;
+  }
+  if (a !== 0) {
+    const xs = (c - b) / a, F = frac(c - b, a);
+    if (Math.abs(xs) <= 10) {
+      const gx = ox + xs * sc;
+      s += `<circle cx="${gx.toFixed(1)}" cy="${yR}" r="6.5" fill="#6D28D9" stroke="white" stroke-width="2.2"/>`;
+      s += `<text x="${gx.toFixed(1)}" y="${yR - 14}" text-anchor="middle" font-size="13" font-weight="700" fill="#6D28D9"><tspan font-style="italic">x</tspan> = ${F.txt}</text>`;
+    } else {
+      const lado = xs > 0 ? 1 : -1, gx = ox + lado * 10 * sc;
+      s += `<text x="${gx.toFixed(1)}" y="${yR - 14}" text-anchor="${lado > 0 ? 'end' : 'start'}" font-size="12" font-weight="700" fill="#6D28D9"><tspan font-style="italic">x</tspan> = ${F.txt} →</text>`;
+      s += `<text x="${gx.toFixed(1)}" y="${yR - 30}" text-anchor="${lado > 0 ? 'end' : 'start'}" font-size="9.5" fill="#9896B0">fuera del tramo dibujado</text>`;
+    }
+    s += `<text x="210" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="#5B21B6"><tspan font-style="italic">S</tspan> = { ${F.txt} } · condicional</text>`;
+  } else if (b === c) {
+    s += `<text x="210" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="#5B21B6"><tspan font-style="italic">S</tspan> = ℝ · identidad: toda la recta</text>`;
+  } else {
+    s += `<text x="210" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="#B91C1C">✗ <tspan font-style="italic">S</tspan> = ∅ · contradicción: ningún punto</text>`;
+  }
+  svg.innerHTML = s;
+}
+['bl-a', 'bl-b', 'bl-c'].forEach(id => { const el = document.getElementById(id); if (el) el.addEventListener('input', blDraw); });
+blDraw();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   EXPLORADOR 4 · LOS SIGNOS AL TRASPONER  (§ Cuidados)
+   Ecuación 2x + s = 4 con s = ±3 · se escribe 2x = 4 + w con w = ±3
+   Correcto si y solo si w = −s. viewBox 360 × 180
+   ═══════════════════════════════════════════════════════════════════════ */
+function sgDraw() {
+  const svg = document.getElementById('sg-svg');
+  if (!svg) return;
+  const s = parseInt(document.getElementById('sg-s').value, 10);
+  const w = parseInt(document.getElementById('sg-w').value, 10);
+  const F = frac(4 + w, 2);
+  const valor = (4 + w) + s;
+  const bien = (valor === 4);
+
+  document.getElementById('sg-x').textContent = F.txt;
+  const ev = document.getElementById('sg-v');
+  ev.textContent = String(valor).replace('-', '\u2212');
+  ev.style.color = bien ? '#0D9488' : '#DC2626';
+  document.getElementById('sg-out').innerHTML = bien
+    ? '<p class="note-ok">✓ <strong>Sí es solución.</strong> Escribiste \u2212(' + s + ') = ' + (-s) + ', el <strong>opuesto del término que está</strong> en la ecuación. Al sustituir, los dos lados valen 4.</p>'
+    : '<p class="note-warn">✗ <strong>No es solución.</strong> El término que está en la ecuación es ' + (s > 0 ? '+' : '\u2212') + Math.abs(s) + ', así que debías sumar ' + (-s > 0 ? '+' : '\u2212') + Math.abs(s) + ' a ambos lados y escribir <span style="font-family:\'STIX Two Text\',Georgia,serif;font-weight:700">2<i>x</i> = 4 ' + (-s > 0 ? '+ ' : '\u2212 ') + Math.abs(s) + '</span>. Al sustituir, el lado izquierdo da ' + String(valor).replace('-', '\u2212') + ' y no 4.</p>';
+
+  const zx = 60, vs = 24, bh = 26;
+  let g = `<text x="180" y="20" text-anchor="middle" font-size="12" fill="#6B688A">al sustituir <tspan font-style="italic" fill="#6D28D9" font-weight="700">x</tspan> = <tspan fill="#6D28D9" font-weight="700">${F.txt}</tspan> en la ecuación ORIGINAL</text>`;
+  g += '<g stroke="#EDE9FE" stroke-width="0.8">';
+  for (let v = -2; v <= 10; v += 2) { const gx = zx + v * vs; g += `<line x1="${gx}" y1="36" x2="${gx}" y2="150"/>`; }
+  g += '</g>';
+  g += `<line x1="${zx}" y1="34" x2="${zx}" y2="152" stroke="#1C1B2E" stroke-width="1.3"/>`;
+  function barra(v, y, color, light, rot) {
+    const wd = Math.abs(v) * vs, bx = v >= 0 ? zx : zx - wd;
+    let o = `<text x="6" y="${y - 5}" font-size="9.5" fill="${color}" font-weight="700">${rot}</text>`;
+    o += `<rect x="${bx}" y="${y}" width="${Math.max(wd, 1.5)}" height="${bh}" rx="3" fill="${light}" stroke="${color}" stroke-width="1.8"/>`;
+    const tx = v >= 0 ? bx + wd + 7 : bx - 7;
+    o += `<text x="${tx}" y="${y + bh / 2 + 4.5}" text-anchor="${v >= 0 ? 'start' : 'end'}" font-size="13" font-weight="700" fill="${color}">${v < 0 ? '\u2212' + Math.abs(v) : v}</text>`;
+    return o;
+  }
+  g += barra(valor, 52, '#1D4ED8', '#EFF6FF', '2x + s con ese x');
+  g += barra(4, 106, '#0D9488', '#F0FDFA', 'debía dar 4');
+  g += `<text x="180" y="174" text-anchor="middle" font-size="13.5" font-weight="700" fill="${bien ? '#0F766E' : '#B91C1C'}">${bien ? '✓ coinciden: sí es solución' : '✗ no coinciden: no es solución'}</text>`;
+  svg.innerHTML = g;
+}
+['sg-s', 'sg-w'].forEach(id => { const el = document.getElementById(id); if (el) el.addEventListener('change', sgDraw); });
+sgDraw();
+</script>
+</body>
+</html>

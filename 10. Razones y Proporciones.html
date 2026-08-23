@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Razones, proporciones y proporcionalidad. Aritmética</title>
+<!--
+  ═══════════════════════════════════════════════════════════════════════
+  LECCIÓN-PRESENTACIÓN clase-slides · «Razones, proporciones y
+  proporcionalidad» (skill temas-clase-html).
+  Construida sobre assets/plantilla-slides-esqueleto.html: <head>, CSS,
+  cromo (.barra … .giro), motor v1.1, wirePA, cierre interactivo, salto
+  del contador y snippet data-fscale se conservan INTACTOS; solo se
+  rellenaron las <section class="diapositiva"> y se añadieron los
+  scripts propios de la lección (exploradores y animación hero).
+
+  ESTRUCTURA REAL: 23 diapositivas · 9 secciones
+    1 Inicio ................ 3 dp  (portada · idea central animada · objetivos)
+    2 Razón y proporción .... 4 dp  (preliminares · razón · proporción ·
+                                     teorema fundamental en afirmación·razón)
+    3 Proporcionalidad ...... 4 dp  (directa e inversa · explorador de
+                                     invariantes · el cruce en afirmación·razón ·
+                                     regla de tres)
+    4 Porcentaje ............ 2 dp  (definición y tres tipos · explorador)
+    5 Cuidados .............. 2 dp  (escalado del área · porcentajes sucesivos)
+    6 Ejemplo 1 ............. 2 dp  (regla de tres inversa: obreros y días)
+    7 Ejemplo 2 ............. 2 dp  (aumento y descuento sucesivos)
+    8 Cierre ................ 1 dp  (resumen interactivo)
+    9 Práctica .............. 3 dp  (10 enunciados, sin solución)
+
+  NAVEGACIÓN: → / ← cambian de diapositiva · ↓ / ↑ revelan u ocultan
+  fragmentos (y recorren las fases de la animación en la dp. 2) ·
+  espacio avanza en orden · Inicio/Fin · F pantalla completa ·
+  P pausa la animación · C restaura su ciclo completo · el contador
+  «n / N» admite salto directo · hash #/n.
+
+  CÓDIGO DE COLOR DIDÁCTICO (constante en TODAS las figuras):
+    Azul  #1D4ED8 → primera magnitud: antecedente, numerador, x, x₁, x₂,
+                     la parte A en el porcentaje.
+    Rojo  #DC2626 → segunda magnitud: consecuente, denominador, y, y₁, y₂.
+    Teal  #0D9488 → LA CONSTANTE QUE SE CONSERVA: el cociente k en la
+                     proporcionalidad directa, el producto k en la inversa,
+                     el total T en el porcentaje. Es el eje conceptual de
+                     toda la lección: preguntar qué se conserva.
+    Violeta #6D28D9/#7C3AED → resultado calculado: la incógnita X, el
+                     porcentaje p, la resta que NO se conserva.
+    Cuadrícula #EDE9FE · ejes #1C1B2E · rótulos apagados #6B688A ·
+    proyecciones #B0ACCC discontinuas.
+  El color nunca es el único portador de significado: siempre acompaña a
+  una etiqueta textual.
+  ═══════════════════════════════════════════════════════════════════════
+-->
+<meta name="author" content="W. Alexander Flórez">
+<meta name="description" content="Lección interactiva: razón, proporción, teorema fundamental, proporcionalidad directa e inversa, regla de tres y porcentaje, con exploradores y contraejemplos.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='14' y='24' width='42' height='14' rx='4' fill='%231D4ED8'/%3E%3Crect x='14' y='46' width='56' height='14' rx='4' fill='%23DC2626'/%3E%3Crect x='14' y='68' width='72' height='10' rx='4' fill='%230D9488'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  /* Sin copia MathML oculta: algunos navegadores móviles la pintan visible
+     (subíndices y exponentes gigantes) encima o en vez del SVG. */
+  options: {
+    enableAssistiveMml: false,
+    menuOptions: { settings: { assistiveMml: false } }
+  },
+  /* 1) Los cuadros ocultos (justificaciones, detalles) se destapan de forma
+     invisible durante el dibujado para que MathJax mida fuentes reales;
+     2) re-dibuja al cargar las fuentes (calibración); 3) APLANA las
+     transformaciones compuestas «translate(…) scale(…)» a «matrix(…)»:
+     algunos visores móviles descartan la segunda operación y los
+     sub/superíndices quedan a tamaño completo. */
+  startup: {
+    pageReady() {
+      let lote = [];
+      const midiendo = si => {
+        if (si) {
+          lote = Array.from(document.querySelectorAll('[style*="display:none"], [style*="display: none"]'))
+            .filter(el => el.textContent.indexOf('\\(') !== -1 || el.textContent.indexOf('\\[') !== -1 || el.querySelector('mjx-container'));
+          lote.forEach(el => { el.style.display = 'block'; el.style.position = 'absolute'; el.style.visibility = 'hidden'; });
+        } else {
+          lote.forEach(el => { el.style.display = 'none'; el.style.position = ''; el.style.visibility = ''; });
+          lote = [];
+        }
+      };
+      const aplanar = () => {
+        document.querySelectorAll('mjx-container svg [transform], #MJX-SVG-global-cache [transform]').forEach(el => {
+          const m = el.getAttribute('transform').match(/^translate\((-?[\d.eE+]+)(?:\s*,\s*(-?[\d.eE+]+))?\)\s+scale\((-?[\d.eE+]+)(?:\s*,\s*(-?[\d.eE+]+))?\)$/);
+          if (m) {
+            const tx = +m[1], ty = +(m[2] || 0), sx = +m[3], sy = m[4] !== undefined ? +m[4] : +m[3];
+            el.setAttribute('transform', `matrix(${sx},0,0,${sy},${tx},${ty})`);
+          }
+        });
+      };
+      midiendo(true);
+      return MathJax.startup.defaultPageReady()
+        .then(() => { aplanar(); midiendo(false); })
+        .then(() => document.fonts.ready)
+        .then(() => { midiendo(true); return MathJax.startup.document.rerender(); })
+        .catch(() => {})
+        .then(() => { aplanar(); midiendo(false); });
+    }
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js"></script>
+<style>
+/* ══ TOKENS ═════════════════════════════════════════════════════════════ */
+:root{
+  --papel:#F7F8FA; --tinta:#141A24; --tinta2:#5B6472;
+  --primario:#5B21B6; --primario-tinte:#F1EDFB;
+  --linea:#E3E6EC; --lienzo:#0E1116;
+  /* paleta didáctica de los SVG (idéntica a la fuente) */
+  --violet:#6D28D9; --violet-m:#7C3AED; --violet-50:#F5F3FF; --violet-100:#EDE9FE;
+  --teal:#0D9488; --teal-50:#F0FDFA;
+  --blue:#1D4ED8; --blue-50:#EFF6FF;
+  --red:#DC2626; --red-50:#FEF2F2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--lienzo);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  font-family:'Inter',system-ui,sans-serif;
+}
+
+/* ══ ESCENARIO 16:9 ═════════════════════════════════════════════════════ */
+#escenario{
+  position:relative;
+  width:min(100vw, calc(100vh * 16 / 9));
+  height:min(100vh, calc(100vw * 9 / 16));
+  width:min(100svw, calc(100svh * 16 / 9));
+  height:min(100svh, calc(100svw * 9 / 16));
+  container-type:size;
+  background:var(--papel);
+  color:var(--tinta);
+  overflow:hidden;
+  box-shadow:0 0 6vh rgba(0,0,0,.55);
+}
+/* Nota: las unidades cq* deben declararse en HIJOS del contenedor;
+   declararlas sobre #escenario caería al viewport (un contenedor no
+   puede consultarse a sí mismo). */
+
+/* ══ CROMO DISCRETO ═════════════════════════════════════════════════════ */
+.barra{
+  position:absolute;inset:0 0 auto 0;height:4.6cqh;z-index:30;
+  display:flex;align-items:center;gap:1.2cqw;padding:0 1.8cqw;
+  background:rgba(247,248,250,.86);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--linea);
+  transition:opacity .5s;
+}
+.marca{font-size:1.7cqh;font-weight:600;color:var(--tinta2);white-space:nowrap}
+.menu{margin-left:auto;display:flex;gap:.2cqw}
+.menu button{
+  font:500 1.75cqh/1 'Inter',sans-serif;color:var(--tinta2);
+  background:none;border:none;cursor:pointer;
+  padding:1cqh .95cqw;border-radius:.9cqh;position:relative;white-space:nowrap;
+}
+.menu button:hover{color:var(--tinta);background:rgba(0,0,0,.04)}
+.menu button.actual{color:var(--primario);font-weight:600}
+.menu button.actual::after{
+  content:'';position:absolute;left:.95cqw;right:.95cqw;bottom:.45cqh;
+  height:.35cqh;background:var(--primario);border-radius:1cqh;
+}
+.btn-fs{
+  font-size:2.3cqh;color:var(--tinta2);background:none;border:none;
+  cursor:pointer;padding:.8cqh 1cqh;border-radius:.9cqh;line-height:1;
+}
+.btn-fs:hover{color:var(--tinta);background:rgba(0,0,0,.04)}
+.flecha{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:30;
+  width:4.6cqh;height:4.6cqh;border-radius:50%;
+  border:1px solid var(--linea);background:rgba(255,255,255,.75);
+  color:var(--tinta2);cursor:pointer;opacity:.4;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .25s;
+}
+.flecha:hover{opacity:1;color:var(--primario)}
+.flecha svg{width:2.4cqh;height:2.4cqh;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.flecha.izq{left:.6cqw}.flecha.der{right:.6cqw}
+.flecha.vert{width:4cqh;height:4cqh}
+.flecha.vert svg{width:2cqh;height:2cqh}
+.flecha.arr{top:calc(50% - 7.6cqh)}
+.flecha.aba{top:calc(50% + 7.6cqh)}
+#escenario.sin-pasos .flecha.vert{display:none}
+.pie{
+  position:absolute;right:1.8cqw;bottom:2.2cqh;z-index:30;
+  font-size:1.7cqh;color:var(--tinta2);transition:opacity .5s;
+}
+.pie:hover{color:var(--tinta)}
+.pie-in{width:7ch;font:inherit;color:var(--tinta);background:#fff;border:1px solid var(--linea);border-radius:.6cqh;padding:.15cqh .5cqh;text-align:center}
+.recta{position:absolute;left:0;right:0;bottom:0;height:1.7cqh;z-index:29}
+.recta::before{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--linea)}
+.recta .lleno{position:absolute;left:0;bottom:0;height:.55cqh;background:var(--primario);transition:width .35s ease}
+.recta .tick{position:absolute;bottom:0;width:2px;height:1.2cqh;background:#C6CCD8}
+#escenario.quieto .barra,
+#escenario.quieto .flecha,
+#escenario.quieto .pie{opacity:.1}
+.credito{position:absolute;left:1.8cqw;bottom:2.2cqh;z-index:29;font-size:1.3cqh;color:var(--tinta2);opacity:.7;transition:opacity .5s}
+#escenario.quieto .credito{opacity:.08}
+
+/* ══ DIAPOSITIVAS ═══════════════════════════════════════════════════════ */
+.diapositiva{
+  position:absolute;inset:0;z-index:10;
+  font-size:2.45cqh;line-height:1.5;
+  padding:5.6cqh 3cqw 3.2cqh;
+  opacity:0;visibility:hidden;transform:translateY(1.6cqh);
+  transition:opacity .35s ease,transform .35s ease,visibility 0s .35s;
+  overflow:hidden;
+}
+.diapositiva.activa{
+  opacity:1;visibility:visible;transform:none;
+  transition:opacity .35s ease,transform .35s ease,visibility 0s;
+}
+.ceja{
+  font-size:1.65cqh;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--primario);
+}
+h2.titulo{font:600 4cqh/1.18 'Lora',serif;margin:.4cqh 0 1.6cqh}
+/* Fragmentos: mismo modelo que las fases de la animación — siempre visibles,
+   atenuados, y al 100% cuando les llega el turno (↓ / →). */
+.frag{opacity:.25;transition:opacity .35s ease}
+[data-seccion="Ejemplo 1"] .frag,[data-seccion="Ejemplo 2"] .frag,[data-seccion="Práctica"] .frag{opacity:.07}
+.frag.frag-on{opacity:1}
+
+/* ══ COMPONENTES ════════════════════════════════════════════════════════ */
+.dos{display:grid;grid-template-columns:1.05fr .95fr;gap:2cqw;align-items:center}
+.caja{border-left:.45cqw solid;border-radius:0 1.4cqh 1.4cqh 0;padding:1.4cqh 1.3cqw}
+.caja .caja-lbl{
+  display:block;font-size:1.55cqh;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:.8cqh;
+}
+.caja.recuerda{background:var(--teal-50);border-color:var(--teal)}
+.caja.recuerda .caja-lbl{color:#0F766E}
+.caja.mdef{background:var(--violet-50);border-color:var(--violet)}
+.caja.mdef .caja-lbl{color:var(--primario)}
+.caja.mwarn{background:var(--red-50);border-color:var(--red)}
+.caja.mwarn .caja-lbl{color:#B91C1C}
+.caja.nota{background:var(--teal-50);border-color:var(--teal)}
+.caja.nota .caja-lbl{color:#0F766E}
+.kf{
+  display:inline-block;padding:.9cqh 1.6cqw;
+  background:var(--violet-100);border:1px solid #D9CFF3;
+  border-radius:1.3cqh;font-size:1.1em;
+}
+.centrado{text-align:center}
+.dm{margin:1.1cqh 0}
+.rad{text-decoration:overline}
+.mvar{font-family:'STIX Two Text',Georgia,serif;font-style:italic}
+.mrm{font-family:'STIX Two Text',Georgia,serif}
+
+/* Derivación afirmación → razón */
+.jl{
+  padding:.8cqh 1.1cqw;border-left:.4cqw solid var(--linea);
+  border-radius:0 .9cqh .9cqh 0;margin-bottom:1cqh;
+}
+.jl .claim{font-weight:600;font-size:2.5cqh}
+.jl .reason{display:block;color:var(--tinta2);font-size:2.1cqh;margin-top:.35cqh}
+
+/* Versión B (diapositiva 5): afirmación en filas · razón en caja fija */
+.pa-fila{display:flex;align-items:baseline;gap:1cqw;width:100%;text-align:left;background:none;
+  border:none;border-left:.4cqw solid var(--linea);cursor:pointer;font:inherit;color:inherit;
+  padding:.7cqh 1.1cqw;border-radius:0 .9cqh .9cqh 0;margin-bottom:.7cqh}
+.pa-fila:hover{background:var(--violet-50)}
+#dp-afirmacion-razon .pa-fila,#dp-siysolosi .pa-fila{opacity:1}
+.pa-num{opacity:.35}
+.pa-fila.pa-activa{background:var(--violet-50)}
+.pa-fila.pa-activa .pa-num{opacity:1}
+.pa-num{flex:none;width:3.4cqh;height:3.4cqh;border-radius:50%;background:var(--linea);color:var(--tinta2);
+  font-size:1.9cqh;font-weight:700;display:grid;place-items:center;align-self:center}
+.pa-fila.pa-activa .pa-num{background:var(--primario);color:#fff}
+.pa-math{font-size:2.5cqh;font-weight:600}
+.pa-tag{margin-left:auto;font-size:1.75cqh;color:var(--tinta2);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.pa-caja{margin-top:1.4cqh;min-height:12.5cqh}
+.pa-razon{font-size:2.2cqh}
+.pa-vacia{color:var(--tinta2);font-size:2.1cqh;font-style:italic;margin:0}
+
+/* Resumen interactivo (cierre): ítems a la izquierda, detalle a la derecha */
+.rs-item{display:flex;gap:1cqw;align-items:center;width:100%;text-align:left;background:#fff;
+  border:1px solid var(--linea);border-left:.5cqw solid var(--linea);border-radius:1cqh;
+  padding:.85cqh 1cqw;margin-bottom:.9cqh;cursor:pointer;font:inherit;color:inherit;font-size:2cqh}
+.rs-item:hover{background:var(--violet-50)}
+.rs-item.rs-on{background:var(--violet-50);outline:2px solid var(--violet);outline-offset:-1px}
+.rs-t{display:block;font-size:1.65cqh;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2cqh}
+.rs-n{flex:none;width:3.2cqh;height:3.2cqh;border-radius:50%;background:var(--linea);color:var(--tinta2);
+  font-size:1.8cqh;font-weight:700;display:grid;place-items:center}
+.rs-item.rs-on .rs-n{background:var(--primario);color:#fff}
+.rs-det{font-size:2.15cqh;margin-top:1.2cqh}
+
+
+/* Pulido profesional: tipografía, foco accesible, profundidad coherente */
+::selection{background:var(--violet-100)}
+h2.titulo{text-wrap:balance}
+.diapositiva p,.diapositiva li{text-wrap:pretty}
+.pie{font-variant-numeric:tabular-nums}
+.rs-item,.pa-fila,.menu button,.btn-fs{transition:background .15s ease,color .15s ease}
+button:focus-visible,input[type=range]:focus-visible,select:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.rs-item{box-shadow:0 .25cqh 1cqh rgba(20,26,36,.04)}
+.caja{box-shadow:0 .25cqh 1.2cqh rgba(20,26,36,.05)}
+.obj{display:grid;grid-template-columns:1fr 1fr;gap:1.3cqh 1.7cqw;max-width:58cqw}
+.obj .o{display:flex;gap:.85cqw;align-items:flex-start;font-size:2.4cqh;line-height:1.45;text-wrap:pretty}
+.obj .on{flex:none;width:3.2cqh;height:3.2cqh;border-radius:50%;background:var(--violet-100);color:var(--primario);font-size:1.85cqh;font-weight:700;display:grid;place-items:center;margin-top:.2cqh}
+
+/* Ejemplo resuelto por pasos */
+.paso{display:flex;gap:1.3cqw;align-items:flex-start;margin-bottom:1.2cqh}
+.paso .n{
+  flex:none;width:3.3cqh;height:3.3cqh;border-radius:50%;
+  background:var(--violet-100);color:var(--primario);
+  font-size:1.85cqh;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-top:.3cqh;
+}
+.paso .paso-tx{flex:1}
+.paso .paso-nom{font-weight:600}
+
+.lista{list-style:none}
+.lista li{padding-left:2cqw;position:relative;margin-bottom:1.2cqh}
+.lista li::before{
+  content:'';position:absolute;left:.35cqw;top:1.02cqh;
+  width:1.02cqh;height:1.02cqh;border-radius:50%;background:var(--primario);
+}
+ul.plana{margin:.6cqh 0 .9cqh 2.2cqw}
+ul.plana li{margin-bottom:.5cqh}
+
+/* ══ SVG DIDÁCTICOS ═════════════════════════════════════════════════════ */
+.isvg{display:block;margin:auto}
+.isvg text{
+  font-family:'STIX Two Text',Georgia,serif;
+  paint-order:stroke;stroke:var(--papel);stroke-width:3px;stroke-linejoin:round;
+}
+.svg-estatico text{
+  paint-order:stroke;stroke:var(--papel);stroke-width:3px;stroke-linejoin:round;
+}
+
+/* Panel de figura (cromo de la fuente: marco, encabezado con punto, pie) */
+.svgbox{
+  border:1px solid var(--linea);border-radius:1.5cqh;background:#fff;
+  padding:1cqh .9cqw;box-shadow:0 .5cqh 2cqh rgba(20,26,36,.06);
+}
+.svghd{
+  display:flex;align-items:center;gap:.8cqw;
+  font-size:1.75cqh;font-weight:600;color:var(--tinta2);
+  letter-spacing:.03em;margin-bottom:.9cqh;
+}
+.svghd .dot{width:1.15cqh;height:1.15cqh;border-radius:50%;background:var(--violet-m);flex:none}
+.svghd.azul .dot{background:var(--blue)}
+
+/* Diapositivas densas */
+.diapositiva.compacta{font-size:2.25cqh}
+
+/* Aviso de rotación: solo móvil vertical (puntero táctil) */
+.giro{
+  display:none;position:absolute;left:50%;top:6.2cqh;transform:translateX(-50%);
+  z-index:40;background:rgba(20,26,36,.85);color:#fff;
+  font-size:1.95cqh;padding:1.1cqh 2.4cqw;border-radius:5cqh;
+  pointer-events:none;white-space:nowrap;
+}
+@media (orientation: portrait) and (pointer: coarse){ .giro{display:block} }
+
+/* Valores vivos de los exploradores (aquí y en los SVG se permiten superíndices y signo menos tipográficos) */
+.eq-text{font-family:'STIX Two Text',Georgia,serif;font-size:2.9cqh}
+.eq-cap{font-size:1.8cqh;color:var(--tinta2);margin-top:.7cqh}
+.svgft{font-family:'STIX Two Text',Georgia,serif;font-size:2.5cqh;margin-top:1.2cqh}
+
+/* Controles */
+.controles{display:flex;flex-direction:column;gap:1.5cqh}
+.ctrl{display:grid;grid-template-columns:max-content 1fr max-content;align-items:center;gap:1.1cqw}
+.ctrl label{font-size:2.1cqh;white-space:nowrap}
+.ctrl .val{font-family:'STIX Two Text',Georgia,serif;font-size:2.2cqh;text-align:right;min-width:6.5cqw}
+input[type=range]{width:100%;accent-color:var(--primario);height:2.6cqh}
+.pt-header{font-family:'STIX Two Text',Georgia,serif;font-size:2.4cqh;font-weight:600;margin-bottom:.8cqh}
+.pt-header sub{font-size:.66em;font-style:normal}
+.pt-group{border:1px solid var(--linea);border-radius:1.3cqh;padding:1.2cqh 1.1cqw;background:#fff}
+select{
+  font:500 2cqh 'Inter',sans-serif;color:var(--tinta);
+  border:1px solid var(--linea);border-radius:.9cqh;background:#fff;
+  padding:.9cqh 1cqw;width:100%;
+}
+.sd-campo label{display:block;font-size:1.8cqh;color:var(--tinta2);margin-bottom:.5cqh}
+.sdemo-vals{display:grid;grid-template-columns:repeat(3,1fr);gap:1cqw}
+.sdemo-val{border:1px solid var(--linea);border-radius:1.1cqh;background:#fff;padding:1cqh .8cqw;text-align:center}
+.sdemo-val .lbl{font-size:1.55cqh;color:var(--tinta2)}
+.sdemo-val .num{font-family:'STIX Two Text',Georgia,serif;font-size:2.7cqh;font-weight:600}
+.note-ok{color:#0F766E;font-size:1.85cqh;margin-top:.5cqh}
+.note-warn{color:#B91C1C;font-size:1.85cqh;margin-top:.5cqh}
+
+/* Animación hero */
+.anim-btn{
+  font:600 1.9cqh 'Inter',sans-serif;color:var(--primario);
+  border:1px solid #D9CFF3;background:var(--violet-50);
+  padding:1cqh 1.5cqw;border-radius:5cqh;cursor:pointer;white-space:nowrap;
+}
+.anim-btn:hover{background:var(--violet-100)}
+.anim-fase{display:flex;gap:1.1cqw;align-items:flex-start;margin-bottom:1.1cqh;opacity:.32;transition:opacity .35s ease}
+.anim-fase.fase-on{opacity:1}
+.anim-fase .ph-num{background:#B9AEDA;transition:background .35s ease}
+.anim-fase.fase-on .ph-num{background:var(--primario)}
+.ph-num{
+  flex:none;width:3.3cqh;height:3.3cqh;border-radius:50%;
+  background:var(--primario);color:#fff;font-size:1.85cqh;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-top:.3cqh;
+}
+.ph-txt{font-size:2.15cqh;color:var(--tinta)}
+
+/* ══ PORTADA ════════════════════════════════════════════════════════════ */
+.portada{display:flex;flex-direction:column;justify-content:center}
+.portada h1{font:600 7.4cqh/1.12 'Lora',serif;margin:1.4cqh 0 2.2cqh;max-width:75cqw}
+.portada .regla{width:7cqw;height:.7cqh;background:var(--primario);border-radius:1cqh;margin-bottom:2.6cqh}
+.portada .sub{font-size:2.9cqh;color:var(--tinta2);max-width:64cqw}
+.portada .meta{margin-top:5cqh;font-size:2cqh;color:var(--tinta2)}
+.ayuda{
+  position:absolute;left:50%;bottom:2.6cqh;transform:translateX(-50%);
+  font-size:1.7cqh;color:var(--tinta2);white-space:nowrap;
+}
+.ayuda kbd{
+  font:600 1.5cqh 'Inter',sans-serif;border:1px solid var(--linea);
+  background:#fff;border-radius:.6cqh;padding:.25cqh .7cqh;
+}
+
+/* ══ ACCESIBILIDAD / IMPRESIÓN ══════════════════════════════════════════ */
+:focus-visible{outline:.4cqh solid var(--primario);outline-offset:.3cqh}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;animation:none !important}
+}
+@page{size:landscape;margin:0}
+@media print{
+  body{background:#fff;display:block;overflow:visible}
+  #escenario{width:100%;height:auto;container-type:normal;box-shadow:none;overflow:visible}
+  .barra,.flecha,.pie,.recta,.ayuda,.credito{display:none !important}
+  .diapositiva{
+    position:relative;inset:auto;opacity:1;visibility:visible;transform:none;
+    container-type:size;width:100%;aspect-ratio:16/9;
+    page-break-after:always;break-after:page;border-bottom:1px solid var(--linea);
+  }
+  .frag{opacity:1;transform:none;filter:none}
+  .anim-fase{opacity:1}
+  .anim-fase .ph-num{background:var(--primario)}
+}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#F7F8FA">
+  <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <rect x="30" y="52" width="60" height="22" rx="7" fill="#1D4ED8"/>
+    <rect x="30" y="84" width="80" height="22" rx="7" fill="#DC2626"/>
+    <rect x="30" y="128" width="120" height="18" rx="7" fill="#1D4ED8" opacity="0.55"/>
+    <rect x="30" y="154" width="160" height="18" rx="7" fill="#DC2626" opacity="0.55"/>
+    <circle cx="176" cy="63" r="13" fill="#0D9488"/>
+    <circle cx="176" cy="95" r="13" fill="#0D9488"/>
+  </svg>
+</template>
+</head>
+<body>
+<div id="escenario">
+
+  <!-- ── Cromo (menú y marcas autogenerados) ────────────────────────────── -->
+  <header class="barra">
+    <span class="marca">Razones y proporciones</span>
+    <nav class="menu" aria-label="Secciones de la lección" id="menu"></nav>
+    <button class="btn-fs" id="btn-fs" aria-label="Pantalla completa" title="Pantalla completa (F)">⛶</button>
+  </header>
+  <button class="flecha izq" id="btn-ant" aria-label="Diapositiva anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="flecha der" id="btn-sig" aria-label="Diapositiva siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button class="flecha izq vert arr" aria-label="Paso anterior dentro de la diapositiva" title="Paso anterior (↑)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7"/></svg></button>
+  <button class="flecha izq vert aba" aria-label="Paso siguiente dentro de la diapositiva" title="Paso siguiente (↓)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
+  <button class="flecha der vert arr" aria-label="Paso anterior dentro de la diapositiva" title="Paso anterior (↑)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7"/></svg></button>
+  <button class="flecha der vert aba" aria-label="Paso siguiente dentro de la diapositiva" title="Paso siguiente (↓)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
+  <div class="pie" id="contador" aria-live="polite"></div>
+  <div class="recta" id="recta" aria-hidden="true"><div class="lleno" id="recta-lleno"></div></div>
+  <p class="credito">Material de estudio · W. Alexander Flórez</p>
+  <div class="giro">Gira el dispositivo para ver la presentación a pantalla completa</div>
+
+  <!-- ═══ 1 · PORTADA ═════════════════════════════════════════════════════
+       Estilo: formato de curso (portada). -->
+  <section class="diapositiva portada" data-seccion="Inicio" data-screen-label="Portada">
+    <p class="ceja">Aritmética · Razonamiento proporcional</p>
+    <h1 style="max-width:60cqw">Razones, proporciones y proporcionalidad</h1>
+    <div class="regla"></div>
+    <p class="sub" style="max-width:56cqw">Comparar dividiendo, reconocer qué cantidad se conserva y predecir el dato que falta</p>
+    <!-- Emblema: dos parejas de barras de tamaños distintos y MISMA razón.
+         Unidad común 14 px: 3·14=42, 4·14=56, 9·14=126, 12·14=168. -->
+    <svg class="svg-estatico" viewBox="0 0 220 200" aria-hidden="true"
+         style="position:absolute;right:6cqw;top:50%;transform:translateY(-50%);height:46cqh;width:auto;opacity:.95">
+      <rect x="24" y="26" width="42" height="18" rx="5" fill="#1D4ED8"/>
+      <text x="72" y="40" font-size="12" fill="#1D4ED8" font-weight="700" font-family="'STIX Two Text',Georgia,serif">3</text>
+      <rect x="24" y="52" width="56" height="18" rx="5" fill="#DC2626"/>
+      <text x="86" y="66" font-size="12" fill="#DC2626" font-weight="700" font-family="'STIX Two Text',Georgia,serif">4</text>
+      <rect x="24" y="84" width="170" height="24" rx="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.3"/>
+      <text x="109" y="100" text-anchor="middle" font-size="12" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">3 : 4  =  9 : 12  =  0.75</text>
+      <rect x="24" y="124" width="126" height="18" rx="5" fill="#1D4ED8" opacity=".6"/>
+      <text x="156" y="138" font-size="12" fill="#1D4ED8" font-weight="700" font-family="'STIX Two Text',Georgia,serif">9</text>
+      <rect x="24" y="150" width="168" height="18" rx="5" fill="#DC2626" opacity=".6"/>
+      <text x="198" y="164" font-size="12" fill="#DC2626" font-weight="700" font-family="'STIX Two Text',Georgia,serif">12</text>
+      <text x="109" y="188" text-anchor="middle" font-size="10.5" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">distinto tamaño · la misma razón</text>
+    </svg>
+    <p class="ayuda"><kbd>→</kbd> diapositiva siguiente &nbsp;·&nbsp; <kbd>↑</kbd><kbd>↓</kbd> pasos dentro de la diapositiva &nbsp;·&nbsp; <kbd>espacio</kbd> todo en orden &nbsp;·&nbsp; <kbd>F</kbd> pantalla completa</p>
+  </section>
+
+  <!-- ═══ 2 · IDEA CENTRAL, ANIMADA ═══════════════════════════════════════
+       Estilo: animación hero (única de la lección). La idea NO es un
+       argumento ni una dependencia que convenga manipular: es un contraste
+       que hay que VER ocurrir en el tiempo (la resta cambia con la escala,
+       el cociente no). Por eso animación y no explorador. -->
+  <section class="diapositiva" data-seccion="Inicio" id="dp-hero" data-screen-label="Idea central animada">
+    <p class="ceja">§ 0 · Inicio</p>
+    <h2 class="titulo">Restar o dividir: solo una de las dos sobrevive al cambio de escala</h2>
+    <div class="dos" style="grid-template-columns:auto 1fr;gap:2cqw;align-items:start">
+      <div class="svgbox">
+        <div class="svghd">
+          <span class="dot"></span>
+          <span style="flex:1">Dos cantidades bajo un mismo factor de escala</span>
+          <span id="hero-bucle" style="font:600 1.6cqh 'Inter',sans-serif;color:var(--primario);white-space:nowrap"></span>
+          <button class="anim-btn" id="hero-btn" aria-pressed="false" title="Pausar / animar (P) · ↑ ↓ fase a fase, en bucle · C ciclo completo">❚❚&nbsp;Pausar</button>
+        </div>
+        <svg id="hero" class="isvg" viewBox="0 0 420 330" style="height:58cqh;width:auto" data-fscale="1.2" role="img" aria-label="Animación en tres fases: dos barras de longitudes tres y cuatro se comparan primero por su diferencia; después ambas se multiplican por un mismo factor de escala y la diferencia crece y decrece con él; por último aparece una tercera barra que representa el cociente tres cuartos, que permanece inmóvil mientras las otras dos siguen cambiando de tamaño."></svg>
+      </div>
+      <div>
+        <div class="anim-fase" data-fase="0">
+          <span class="ph-num" aria-hidden="true">1</span>
+          <span class="ph-txt"></span>
+        </div>
+        <div class="anim-fase" data-fase="1">
+          <span class="ph-num" aria-hidden="true">2</span>
+          <span class="ph-txt"></span>
+        </div>
+        <div class="anim-fase" data-fase="2">
+          <span class="ph-num" aria-hidden="true">3</span>
+          <span class="ph-txt"></span>
+        </div>
+        <div class="caja mdef">
+          <span class="caja-lbl">Idea clave</span>
+          Comparar <strong>restando</strong> mide una diferencia que cambia al cambiar de escala. Comparar <strong>dividiendo</strong> produce un número que <em>no cambia</em>: esa invariancia es lo que llamamos <strong>razón</strong>, y es lo único que permite predecir un valor a partir de otros tres.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 3 · OBJETIVOS ═══════════════════════════════════════════════════
+       Estilo: formato de curso (objetivos accionables, retomados en el cierre). -->
+  <section class="diapositiva" data-seccion="Inicio" data-screen-label="Objetivos">
+    <p class="ceja">§ 0 · Inicio</p>
+    <h2 class="titulo">Objetivos de aprendizaje</h2>
+    <div class="dos" style="grid-template-columns:1.35fr auto;gap:2cqw;align-items:center">
+      <div>
+        <p style="margin-bottom:1.1cqh">Al terminar esta lección podrás:</p>
+        <ul class="lista" style="font-size:2.45cqh">
+          <li><strong>Distinguir</strong> una razón de una proporción y <strong>nombrar</strong> sus términos: antecedente, consecuente, medios y extremos.</li>
+          <li><strong>Justificar</strong> el teorema fundamental con sus hipótesis y <strong>usarlo</strong> en sus dos sentidos: para despejar y para decidir.</li>
+          <li><strong>Decidir</strong>, ante una tabla, si dos magnitudes son directa, inversa o ninguna de las dos, calculando cocientes y productos.</li>
+          <li><strong>Resolver</strong> reglas de tres <strong>derivando</strong> la proporción desde la constante que se conserva, no aplicando una receta.</li>
+          <li><strong>Calcular</strong> porcentajes en los tres tipos de problema y <strong>componer</strong> aumentos y descuentos sucesivos.</li>
+          <li><strong>Detectar</strong> situaciones donde el modelo proporcional <em>no</em> aplica y <strong>exhibir</strong> un contraejemplo numérico.</li>
+        </ul>
+      </div>
+      <svg class="svg-estatico" viewBox="0 0 220 200" aria-hidden="true" style="height:42cqh;width:auto;opacity:.95">
+        <rect x="24" y="26" width="42" height="18" rx="5" fill="#1D4ED8"/>
+        <text x="72" y="40" font-size="12" fill="#1D4ED8" font-weight="700" font-family="'STIX Two Text',Georgia,serif">3</text>
+        <rect x="24" y="52" width="56" height="18" rx="5" fill="#DC2626"/>
+        <text x="86" y="66" font-size="12" fill="#DC2626" font-weight="700" font-family="'STIX Two Text',Georgia,serif">4</text>
+        <rect x="24" y="84" width="170" height="24" rx="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.3"/>
+        <text x="109" y="100" text-anchor="middle" font-size="12" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">3 : 4  =  9 : 12  =  0.75</text>
+        <rect x="24" y="124" width="126" height="18" rx="5" fill="#1D4ED8" opacity=".6"/>
+        <text x="156" y="138" font-size="12" fill="#1D4ED8" font-weight="700" font-family="'STIX Two Text',Georgia,serif">9</text>
+        <rect x="24" y="150" width="168" height="18" rx="5" fill="#DC2626" opacity=".6"/>
+        <text x="198" y="164" font-size="12" fill="#DC2626" font-weight="700" font-family="'STIX Two Text',Georgia,serif">12</text>
+        <text x="109" y="188" text-anchor="middle" font-size="10.5" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">distinto tamaño · la misma razón</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ═══ 4 · PRELIMINARES ════════════════════════════════════════════════
+       Estilo: composición estática. Son enunciados que se recuerdan, no
+       objetos que ganen algo con ser manipulados. -->
+  <section class="diapositiva compacta" data-seccion="Razón y proporción" data-screen-label="Preliminares">
+    <p class="ceja">§ 1 · Razón y proporción</p>
+    <h2 class="titulo">Lo que hace falta tener fresco</h2>
+    <div class="dos" style="grid-template-columns:1.15fr auto;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja recuerda">
+          <span class="caja-lbl">Recuerda</span>
+          <ul class="plana">
+            <li><strong>División.</strong> \(\dfrac{u}{v}\) está definida <em>si y solo si</em> \(v\neq 0\). El <em>numerador</em> sí puede ser cero: \(\dfrac{0}{5}=0\).</li>
+            <li><strong>Fracciones equivalentes.</strong> \(\dfrac{a}{b}=\dfrac{a\cdot m}{b\cdot m}\) para todo \(m\neq 0\).</li>
+          </ul>
+        </div>
+        <div class="jl frag" style="margin-top:1.2cqh;border-left-color:var(--blue)">
+          <span class="claim">Propiedad uniforme: si \(u=v\), entonces \(u\,w=v\,w\).</span>
+          <span class="reason">Y si además \(w\neq 0\), vale el recíproco. Se usará para multiplicar los dos miembros de una proporción por \(b\,d\) — y para dividirlos.</span>
+        </div>
+        <div class="jl frag" style="border-left-color:var(--red)">
+          <span class="claim">Ecuación lineal: si \(m\neq 0\), entonces \(m\,x=n\) tiene solución única \(x=\dfrac{n}{m}\).</span>
+          <span class="reason">Es el último paso de toda regla de tres: una vez planteada la proporción, despejar es esto y nada más.</span>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.2cqh">
+          <span class="caja-lbl">Observa</span>
+          Todo lo que sigue —el teorema fundamental, la regla de tres, el porcentaje— se apoya <em>únicamente</em> en estos cuatro hechos.
+        </div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd azul"><span class="dot"></span>Fracciones equivalentes: la misma longitud sombreada</div>
+        <!-- 3 de 4 y 15 de 20 sobre barras del MISMO largo total (200 px):
+             3/4·200 = 150 y 15/20·200 = 150 → los sombreados coinciden. -->
+        <svg class="svg-estatico" viewBox="0 0 240 155" style="display:block;height:32cqh;width:auto;margin:0 auto" aria-hidden="true">
+          <text x="20" y="20" font-size="11" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">3 de 4 partes</text>
+          <rect x="20" y="26" width="150" height="28" fill="#EFF6FF"/>
+          <g stroke="#B0ACCC" stroke-width="0.8"><line x1="70" y1="26" x2="70" y2="54"/><line x1="120" y1="26" x2="120" y2="54"/><line x1="170" y1="26" x2="170" y2="54"/></g>
+          <rect x="20" y="26" width="200" height="28" fill="none" stroke="#1D4ED8" stroke-width="1.6"/>
+          <text x="20" y="78" font-size="11" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">15 de 20 partes</text>
+          <rect x="20" y="84" width="150" height="28" fill="#EFF6FF"/>
+          <g stroke="#B0ACCC" stroke-width="0.6"><line x1="30" y1="84" x2="30" y2="112"/><line x1="40" y1="84" x2="40" y2="112"/><line x1="50" y1="84" x2="50" y2="112"/><line x1="60" y1="84" x2="60" y2="112"/><line x1="70" y1="84" x2="70" y2="112"/><line x1="80" y1="84" x2="80" y2="112"/><line x1="90" y1="84" x2="90" y2="112"/><line x1="100" y1="84" x2="100" y2="112"/><line x1="110" y1="84" x2="110" y2="112"/><line x1="120" y1="84" x2="120" y2="112"/><line x1="130" y1="84" x2="130" y2="112"/><line x1="140" y1="84" x2="140" y2="112"/><line x1="150" y1="84" x2="150" y2="112"/><line x1="160" y1="84" x2="160" y2="112"/><line x1="170" y1="84" x2="170" y2="112"/><line x1="180" y1="84" x2="180" y2="112"/><line x1="190" y1="84" x2="190" y2="112"/><line x1="200" y1="84" x2="200" y2="112"/><line x1="210" y1="84" x2="210" y2="112"/></g>
+          <rect x="20" y="84" width="200" height="28" fill="none" stroke="#1D4ED8" stroke-width="1.6"/>
+          <line x1="170" y1="20" x2="170" y2="118" stroke="#0D9488" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <text x="120" y="140" text-anchor="middle" font-size="12.5" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">3 : 4  =  15 : 20  =  0.75</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 5 · RAZÓN ═══════════════════════════════════════════════════════
+       Estilo: composición estática (definición + figura contemplada).
+       Incorpora dos cuidados de la fuente: la hipótesis va sobre el
+       DENOMINADOR, y comparar restando no compara. -->
+  <section class="diapositiva compacta" data-seccion="Razón y proporción" data-screen-label="Razón">
+    <p class="ceja">§ 1 · Razón y proporción</p>
+    <h2 class="titulo">Razón: comparar dos cantidades dividiéndolas</h2>
+    <div class="dos" style="grid-template-columns:1.12fr auto;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja mdef">
+          <span class="caja-lbl">Definición 1 · razón</span>
+          <p>Sean \(a\) y \(b\) números reales con \({\color{#DC2626}b\neq 0}\). La <strong>razón de \(a\) a \(b\)</strong> es el cociente</p>
+          <p class="centrado" style="margin:.9cqh 0"><span class="kf">\(\;{\color{#1D4ED8}a}:{\color{#DC2626}b}\;=\;\dfrac{{\color{#1D4ED8}a}}{{\color{#DC2626}b}}\;\)</span></p>
+          <p>Se lee «\(a\) es a \(b\)». El número \({\color{#1D4ED8}a}\) es el <strong>antecedente</strong> y \({\color{#DC2626}b}\) el <strong>consecuente</strong>; al valor del cociente se le llama <strong>valor de la razón</strong>.</p>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">La hipótesis va sobre el denominador</span>
+          <strong>No</strong> se exige \(a\neq 0\). Con \(a=2\), \(b=0\) se cumple \(a\neq0\) y aun así \(\dfrac{2}{0}\) <em>no existe</em>; con \(a=0\), \(b=5\) falla \(a\neq0\) y sin embargo \(\dfrac{0}{5}=0\) existe ✓.
+        </div>
+        <div class="caja mwarn frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Cuidado · restar no es comparar</span>
+          Una receta pide 2 tazas de harina por cada 3 de leche. Con 6 de harina, trasladar la <em>diferencia</em> da \(3+(6-2)=7\); lo correcto es conservar el <em>factor</em>: \(\dfrac{6\cdot 3}{2}=9\). En efecto \(\dfrac{2}{3}=\dfrac{6}{9}\) ✓, mientras que \(\dfrac{2}{3}\neq\dfrac{6}{7}\) ✓.
+        </div>
+      </div>
+      <div class="svgbox frag">
+        <div class="svghd"><span class="dot"></span>Parte–parte no es parte–todo</div>
+        <svg class="svg-estatico" viewBox="0 0 240 175" style="display:block;height:34cqh;width:auto;margin:0 auto" aria-hidden="true">
+          <circle cx="34" cy="42" r="15" fill="#1D4ED8"/><circle cx="70" cy="42" r="15" fill="#1D4ED8"/><circle cx="106" cy="42" r="15" fill="#1D4ED8"/>
+          <circle cx="150" cy="42" r="15" fill="#DC2626"/><circle cx="186" cy="42" r="15" fill="#DC2626"/>
+          <path d="M19,64 L19,72 L121,72 L121,64" fill="none" stroke="#1D4ED8" stroke-width="1.4"/>
+          <text x="70" y="87" text-anchor="middle" font-size="12" fill="#1D4ED8" font-weight="700" font-family="'STIX Two Text',Georgia,serif">3</text>
+          <path d="M135,64 L135,72 L201,72 L201,64" fill="none" stroke="#DC2626" stroke-width="1.4"/>
+          <text x="168" y="87" text-anchor="middle" font-size="12" fill="#DC2626" font-weight="700" font-family="'STIX Two Text',Georgia,serif">2</text>
+          <text x="120" y="112" text-anchor="middle" font-size="12" fill="#141A24" font-family="'STIX Two Text',Georgia,serif">parte : parte  =  3 : 2</text>
+          <path d="M19,124 L19,132 L201,132 L201,124" fill="none" stroke="#6D28D9" stroke-width="1.4"/>
+          <text x="120" y="152" text-anchor="middle" font-size="12" fill="#6D28D9" font-family="'STIX Two Text',Georgia,serif">parte : todo  =  3 : 5  =  60 %</text>
+          <text x="120" y="169" text-anchor="middle" font-size="10.5" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">«3 mujeres por cada 2 hombres» es lo primero, no lo segundo</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 6 · PROPORCIÓN ══════════════════════════════════════════════════
+       Estilo: composición estática con figura rotulada. La figura existe
+       porque los nombres «medios» y «extremos» son arbitrarios en la
+       escritura fraccionaria y evidentes en la escritura con dos puntos. -->
+  <section class="diapositiva compacta" data-seccion="Razón y proporción" data-screen-label="Proporción">
+    <p class="ceja">§ 1 · Razón y proporción</p>
+    <h2 class="titulo">Proporción: una igualdad entre dos razones</h2>
+    <div class="dos" style="grid-template-columns:1.05fr auto;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja mdef">
+          <span class="caja-lbl">Definición 2 · proporción</span>
+          <p>Sean \(a,b,c,d\) reales con \({\color{#DC2626}b\neq 0}\) y \({\color{#DC2626}d\neq 0}\). Una <strong>proporción</strong> es una igualdad entre dos razones:</p>
+          <p class="centrado" style="margin:.9cqh 0"><span class="kf">\(\;\dfrac{a}{b}=\dfrac{c}{d}\;\), que también se escribe \(\;a:b=c:d\;\)</span></p>
+          <p>Los cuatro números son sus <strong>términos</strong>: \(a\) y \(d\) son los <strong>extremos</strong>, \(b\) y \(c\) los <strong>medios</strong>.</p>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Dos razones cualesquiera no forman una proporción</span>
+          La igualdad debe <em>cumplirse</em>: \(\dfrac{1}{2}\) y \(\dfrac{1}{3}\) son dos razones perfectamente legítimas y \(\dfrac{1}{2}\neq\dfrac{1}{3}\) ✓. Decidir si dos razones forman proporción es justamente lo que resuelve el teorema de la diapositiva siguiente.
+        </div>
+        <div class="caja mwarn frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Cuidado · una proporción no es «directa» ni «inversa»</span>
+          Una proporción es una <em>igualdad</em>, no una magnitud: no varía, luego no puede crecer ni decrecer con nada. «Directa» e «inversa» califican la <strong>proporcionalidad entre dos magnitudes que varían</strong>, no una igualdad entre dos razones.
+        </div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd"><span class="dot"></span>De dónde salen los nombres</div>
+        <svg class="svg-estatico" viewBox="0 0 300 175" style="display:block;height:33cqh;width:auto;margin:0 auto" aria-hidden="true">
+          <path d="M40,66 Q150,16 258,66" fill="none" stroke="#5B21B6" stroke-width="1.6" stroke-dasharray="5,3"/>
+          <text x="149" y="24" text-anchor="middle" font-size="12" fill="#5B21B6" font-weight="700" font-family="'STIX Two Text',Georgia,serif">extremos</text>
+          <text x="40"  y="96" text-anchor="middle" font-size="26" fill="#141A24" font-style="italic" font-family="'STIX Two Text',Georgia,serif">a</text>
+          <text x="70"  y="96" text-anchor="middle" font-size="26" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">:</text>
+          <text x="100" y="96" text-anchor="middle" font-size="26" fill="#141A24" font-style="italic" font-family="'STIX Two Text',Georgia,serif">b</text>
+          <text x="149" y="96" text-anchor="middle" font-size="26" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">=</text>
+          <text x="198" y="96" text-anchor="middle" font-size="26" fill="#141A24" font-style="italic" font-family="'STIX Two Text',Georgia,serif">c</text>
+          <text x="228" y="96" text-anchor="middle" font-size="26" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">:</text>
+          <text x="258" y="96" text-anchor="middle" font-size="26" fill="#141A24" font-style="italic" font-family="'STIX Two Text',Georgia,serif">d</text>
+          <path d="M100,106 Q149,150 198,106" fill="none" stroke="#5B6472" stroke-width="1.6" stroke-dasharray="5,3"/>
+          <text x="149" y="166" text-anchor="middle" font-size="12" fill="#5B6472" font-weight="700" font-family="'STIX Two Text',Georgia,serif">medios</text>
+        </svg>
+        <p class="svgft centrado" style="font-size:2cqh">En \(\dfrac{a}{b}=\dfrac{c}{d}\) los nombres parecen arbitrarios; en \(a:b=c:d\) son literales.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 7 · TEOREMA FUNDAMENTAL ═════════════════════════════════════════
+       Estilo: AFIRMACIÓN·RAZÓN interactivo. La idea ES un argumento —y
+       además una doble implicación—, así que el estudiante debe recorrer
+       la cadena eslabón a eslabón viendo dónde se usa cada hipótesis.
+       6 fragmentos: 5 filas + la nota de verificación. -->
+  <section class="diapositiva compacta" data-seccion="Razón y proporción" id="dp-siysolosi" data-screen-label="Teorema fundamental">
+    <p class="ceja">§ 1 · Razón y proporción</p>
+    <h2 class="titulo">El teorema fundamental, en los dos sentidos</h2>
+    <div class="dos" style="grid-template-columns:1.14fr .86fr;gap:2cqw;align-items:stretch">
+      <div data-inter>
+        <p style="margin-bottom:1cqh">Sean \(b\neq 0\) y \(d\neq 0\). Entonces <span class="kf">\(\;\dfrac{a}{b}=\dfrac{c}{d}\;\Longleftrightarrow\; a\cdot d=b\cdot c\;\)</span></p>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--blue)">
+          <span class="pa-num">1</span>
+          <span class="pa-math" style="font-size:2.2cqh">\(\dfrac{a}{b}=\dfrac{c}{d}\)</span>
+          <span class="pa-tag">ida · hipótesis</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--blue)">
+          <span class="pa-num">2</span>
+          <span class="pa-math" style="font-size:2.2cqh">\(\dfrac{a}{b}\cdot(b\,d)=\dfrac{c}{d}\cdot(b\,d)\)</span>
+          <span class="pa-tag">propiedad uniforme</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--violet)">
+          <span class="pa-num">3</span>
+          <span class="pa-math" style="font-size:2.2cqh">\(a\,d=b\,c\)</span>
+          <span class="pa-tag">⇒ listo</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--red)">
+          <span class="pa-num">4</span>
+          <span class="pa-math" style="font-size:2.2cqh">\(\dfrac{a\,d}{b\,d}=\dfrac{b\,c}{b\,d}\)</span>
+          <span class="pa-tag">vuelta · dividir por \(b\,d\)</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--violet)">
+          <span class="pa-num">5</span>
+          <span class="pa-math" style="font-size:2.2cqh">\(\dfrac{a}{b}=\dfrac{c}{d}\)</span>
+          <span class="pa-tag">⇐ listo</span>
+        </button>
+      </div>
+      <div data-inter style="display:flex;flex-direction:column;gap:1.2cqh">
+        <div class="caja mdef pa-caja" style="margin-top:0;flex:1">
+          <span class="caja-lbl">Justificación del paso</span>
+          <p class="pa-vacia"><strong>Es una doble implicación</strong>, y por eso sirve dos veces: para <em>deducir</em> consecuencias de una proporción (despejar) y para <em>decidir</em> si dos razones dadas forman una proporción. Pulsa ↓ para recorrer los pasos, o toca cualquiera para ver aquí su justificación.</p>
+          <div class="pa-razon" style="display:none"><strong style="color:var(--blue)">Punto de partida.</strong> Suponemos que las dos razones son iguales. Las hipótesis \(b\neq 0\) y \(d\neq 0\) no son un adorno: sin ellas ni siquiera existirían las razones que estamos igualando.</div>
+          <div class="pa-razon" style="display:none"><strong style="color:var(--blue)">Multiplicar los dos miembros.</strong> Por la propiedad uniforme de la igualdad, multiplicar ambos miembros por un mismo número \(b\,d\) preserva la igualdad. Se elige \(b\,d\) precisamente porque cancelará los dos denominadores a la vez.</div>
+          <div class="pa-razon" style="display:none"><strong style="color:var(--violet)">Simplificar.</strong> \(\dfrac{a}{b}\cdot b\,d=a\,d\) y \(\dfrac{c}{d}\cdot b\,d=c\,b\); la cancelación es legítima porque \(b\neq 0\) y \(d\neq 0\). Por conmutatividad, \(a\,d=b\,c\): <em>el producto de los extremos es igual al producto de los medios</em>. ∎</div>
+          <div class="pa-razon" style="display:none"><strong style="color:var(--red)">El recíproco.</strong> Ahora partimos de \(a\,d=b\,c\) y dividimos ambos miembros por \(b\,d\), que es no nulo <em>porque</em> \(b\neq 0\) y \(d\neq 0\). Aquí es donde la hipótesis resulta indispensable: si se permitiera \(b=0\) o \(d=0\), la igualdad \(a\,d=b\,c\) podría cumplirse trivialmente sin que exista ninguna de las dos razones.</div>
+          <div class="pa-razon" style="display:none"><strong style="color:var(--violet)">Simplificar de vuelta.</strong> En \(\dfrac{a\,d}{b\,d}\) se cancela \(d\) y en \(\dfrac{b\,c}{b\,d}\) se cancela \(b\), y queda \(\dfrac{a}{b}=\dfrac{c}{d}\). ∎ Como valen las dos direcciones, el enunciado es un <strong>si y solo si</strong>.</div>
+        </div>
+        <div class="caja nota frag" style="margin-top:0">
+          <span class="caja-lbl">Verificación ✓</span>
+          En \(\dfrac{3}{4}=\dfrac{9}{12}\): extremos \(3\cdot 12=36\), medios \(4\cdot 9=36\) ✓. En cambio \(\dfrac{3}{5}\) y \(\dfrac{15}{20}\) dan \(3\cdot 20=60\) y \(5\cdot 15=75\): <strong>no</strong> forman proporción ✓.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 8 · DIRECTA E INVERSA ═══════════════════════════════════════════
+       Estilo: composición estática comparativa. Las dos definiciones se
+       entienden por CONTRASTE, y el contraste se ve mejor lado a lado que
+       manipulado: lo que hay que retener es qué se conserva en cada una.
+       La manipulación viene en la diapositiva siguiente. -->
+  <section class="diapositiva compacta" data-seccion="Proporcionalidad" data-screen-label="Directa e inversa">
+    <p class="ceja">§ 2 · Proporcionalidad</p>
+    <h2 class="titulo">Dos magnitudes: ¿qué es lo que se conserva?</h2>
+    <div class="dos" style="gap:2cqw;align-items:start">
+      <div>
+        <div class="caja mdef">
+          <span class="caja-lbl">Definición 3 · directamente proporcionales</span>
+          <p>Si \({\color{#1D4ED8}x}\) toma solo valores no nulos, \({\color{#1D4ED8}x}\) e \({\color{#DC2626}y}\) son <strong>directamente proporcionales</strong> cuando se conserva el <strong>cociente</strong>:</p>
+          <p class="centrado" style="margin:.8cqh 0"><span class="kf">\(\;\dfrac{{\color{#DC2626}y}}{{\color{#1D4ED8}x}}={\color{#0D9488}k}\;\Longleftrightarrow\;{\color{#DC2626}y}={\color{#0D9488}k}\,{\color{#1D4ED8}x}\quad({\color{#0D9488}k}\neq 0)\;\)</span></p>
+          <p>Multiplicar un valor de \(x\) por un número no nulo multiplica el valor correspondiente de \(y\) por <em>ese mismo</em> número.</p>
+        </div>
+        <div class="svgbox frag" style="margin-top:1.1cqh">
+          <div class="svghd azul"><span class="dot"></span>\(y=3x\): el cociente no cambia</div>
+          <svg class="svg-estatico" viewBox="0 0 200 150" style="display:block;height:26cqh;width:auto;margin:0 auto" data-fscale="1.15" aria-hidden="true">
+            <line x1="26" y1="126" x2="196" y2="126" stroke="#1C1B2E" stroke-width="1.4"/>
+            <line x1="26" y1="126" x2="26" y2="14" stroke="#1C1B2E" stroke-width="1.4"/>
+            <text x="192" y="140" font-size="10" fill="#1C1B2E" font-style="italic" font-family="'STIX Two Text',Georgia,serif">x</text>
+            <text x="18" y="18" font-size="10" fill="#1C1B2E" font-style="italic" font-family="'STIX Two Text',Georgia,serif">y</text>
+            <line x1="26" y1="126" x2="188" y2="23.4" stroke="#7C3AED" stroke-width="2.2"/>
+            <circle cx="44"  cy="114.6" r="3.6" fill="#7C3AED" stroke="white" stroke-width="1.4"/>
+            <circle cx="62"  cy="103.2" r="3.6" fill="#7C3AED" stroke="white" stroke-width="1.4"/>
+            <circle cx="80"  cy="91.8"  r="3.6" fill="#7C3AED" stroke="white" stroke-width="1.4"/>
+            <circle cx="98"  cy="80.4"  r="3.6" fill="#7C3AED" stroke="white" stroke-width="1.4"/>
+            <circle cx="134" cy="57.6"  r="3.6" fill="#7C3AED" stroke="white" stroke-width="1.4"/>
+            <circle cx="188" cy="23.4"  r="3.6" fill="#7C3AED" stroke="white" stroke-width="1.4"/>
+            <text x="104" y="118" font-size="11" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">y / x = 3 siempre</text>
+            <text x="30" y="140" font-size="9.5" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">pasa por el origen</text>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="caja mdef">
+          <span class="caja-lbl">Definición 4 · inversamente proporcionales</span>
+          <p>Si \({\color{#1D4ED8}x}\) e \({\color{#DC2626}y}\) toman solo valores no nulos, son <strong>inversamente proporcionales</strong> cuando se conserva el <strong>producto</strong>:</p>
+          <p class="centrado" style="margin:.8cqh 0"><span class="kf">\(\;{\color{#1D4ED8}x}\cdot{\color{#DC2626}y}={\color{#0D9488}k}\;\Longleftrightarrow\;{\color{#DC2626}y}=\dfrac{{\color{#0D9488}k}}{{\color{#1D4ED8}x}}\quad({\color{#0D9488}k}\neq 0)\;\)</span></p>
+          <p>Multiplicar un valor de \(x\) por un número no nulo <strong>divide</strong> el valor correspondiente de \(y\) por ese mismo número.</p>
+        </div>
+        <div class="svgbox frag" style="margin-top:1.1cqh">
+          <div class="svghd"><span class="dot"></span>\(x\,y=36\): los rectángulos tienen igual área</div>
+          <svg class="svg-estatico" viewBox="0 0 200 150" style="display:block;height:26cqh;width:auto;margin:0 auto" data-fscale="1.15" aria-hidden="true">
+            <rect x="26" y="72"  width="36"  height="54" fill="#0D9488" fill-opacity="0.16"/>
+            <rect x="26" y="108" width="108" height="18" fill="#0D9488" fill-opacity="0.16"/>
+            <line x1="26" y1="126" x2="196" y2="126" stroke="#1C1B2E" stroke-width="1.4"/>
+            <line x1="26" y1="126" x2="26" y2="14" stroke="#1C1B2E" stroke-width="1.4"/>
+            <text x="192" y="140" font-size="10" fill="#1C1B2E" font-style="italic" font-family="'STIX Two Text',Georgia,serif">x</text>
+            <text x="18" y="18" font-size="10" fill="#1C1B2E" font-style="italic" font-family="'STIX Two Text',Georgia,serif">y</text>
+            <polyline points="44,18 48.5,39.6 53,54 62,72 71,82.8 80,90 98,99 116,104.4 134,108 161,111.6 188,114"
+                      fill="none" stroke="#7C3AED" stroke-width="2.2"/>
+            <circle cx="62"  cy="72"  r="3.6" fill="#7C3AED" stroke="white" stroke-width="1.4"/>
+            <circle cx="134" cy="108" r="3.6" fill="#7C3AED" stroke="white" stroke-width="1.4"/>
+            <text x="70" y="66" font-size="10" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">2 · 18 = 36</text>
+            <text x="140" y="102" font-size="10" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">6 · 6 = 36</text>
+            <text x="30" y="140" font-size="9.5" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">nunca toca los ejes</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="caja mwarn frag" style="margin-top:1.2cqh">
+      <span class="caja-lbl">Cuidado · crecer no es ser proporcional</span>
+      «Al aumentar una, aumenta la otra» <strong>no</strong> es la definición y <strong>no basta</strong>: es apenas una consecuencia cuando \(k&gt;0\). Lo mismo del lado inverso con «al aumentar una, disminuye la otra». La definición exige que se conserve el cociente o el producto — compruébalo en el explorador siguiente.
+    </div>
+  </section>
+
+  <!-- ═══ 9 · EXPLORADOR DE INVARIANTES ═══════════════════════════════════
+       Estilo: PARÁMETROS. Lo que importa aquí no es una variación continua
+       sino CONTRASTAR unos pocos casos completos: dos que son proporcionales
+       y tres que no, con la misma tabla y los mismos valores de x. Elegir
+       entre relaciones discretas es exactamente el gesto pedido. -->
+  <section class="diapositiva compacta" data-seccion="Proporcionalidad" data-screen-label="Explorador de invariantes">
+    <p class="ceja">§ 2 · Proporcionalidad</p>
+    <h2 class="titulo">¿Directa, inversa o ninguna de las dos?</h2>
+    <div class="dos" style="grid-template-columns:1fr auto;gap:2cqw;align-items:start">
+      <div>
+        <div class="sd-campo" style="margin-bottom:1.1cqh">
+          <label for="ex-rel">Elige la relación entre \(x\) e \(y\):</label>
+          <select id="ex-rel">
+            <option value="3x" selected>y = 3x</option>
+            <option value="36/x">y = 36 / x</option>
+            <option value="x+1">y = x + 1</option>
+            <option value="x2">y = x²</option>
+            <option value="10-x">y = 10 − x</option>
+          </select>
+        </div>
+        <div id="ex-tabla"></div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd"><span class="dot"></span>Los mismos seis pares, vistos en el plano</div>
+        <svg id="ex-svg" class="isvg" viewBox="0 0 300 200" style="height:36cqh;width:auto" data-fscale="1.2" data-inter
+             role="img" aria-label="Diagrama de dispersión de los seis pares de la tabla para la relación elegida; se redibuja al cambiar la relación."></svg>
+        <div id="ex-veredicto" style="margin-top:1cqh"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 10 · EL CRUCE DE SUBÍNDICES ═════════════════════════════════════
+       Estilo: AFIRMACIÓN·RAZÓN interactivo. «Una de las fracciones se
+       invierte» es la frase de taller que más se memoriza y menos se
+       entiende: aquí se DEDUCE, que es lo que la vuelve legítima.
+       6 fragmentos: 4 filas + figura + verificación. -->
+  <section class="diapositiva compacta" data-seccion="Proporcionalidad" id="dp-afirmacion-razon" data-screen-label="De dónde sale el cruce">
+    <p class="ceja">§ 2 · Proporcionalidad</p>
+    <h2 class="titulo">¿De dónde sale que «una de las fracciones se invierte»?</h2>
+    <div class="dos" style="grid-template-columns:1.14fr .86fr;gap:2cqw;align-items:stretch">
+      <div data-inter>
+        <p style="margin-bottom:1cqh">Sean \((x_1,y_1)\) y \((x_2,y_2)\) dos pares correspondientes de magnitudes <strong>inversamente</strong> proporcionales.</p>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--teal)">
+          <span class="pa-num">1</span>
+          <span class="pa-math" style="font-size:2.2cqh">\({\color{#1D4ED8}x_1}{\color{#DC2626}y_1}={\color{#0D9488}k}\quad\text{y}\quad {\color{#1D4ED8}x_2}{\color{#DC2626}y_2}={\color{#0D9488}k}\)</span>
+          <span class="pa-tag">definición</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--teal)">
+          <span class="pa-num">2</span>
+          <span class="pa-math" style="font-size:2.2cqh">\({\color{#1D4ED8}x_1}{\color{#DC2626}y_1}={\color{#1D4ED8}x_2}{\color{#DC2626}y_2}\)</span>
+          <span class="pa-tag">lo que se conserva</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--violet)">
+          <span class="pa-num">3</span>
+          <span class="pa-math" style="font-size:2.2cqh">\(\dfrac{{\color{#1D4ED8}x_1}}{{\color{#1D4ED8}x_2}}=\dfrac{{\color{#DC2626}y_2}}{{\color{#DC2626}y_1}}\)</span>
+          <span class="pa-tag">teorema fundamental (⇐)</span>
+        </button>
+        <button type="button" class="pa-fila frag" style="border-left-color:var(--violet)">
+          <span class="pa-num">4</span>
+          <span class="pa-math" style="font-size:2.2cqh">Subíndices <strong>cruzados</strong> en el segundo miembro</span>
+          <span class="pa-tag">la lectura</span>
+        </button>
+        <div class="svgbox frag" style="margin-top:1cqh">
+          <div class="svghd"><span class="dot"></span>El mismo trabajo, dos repartos: 5·16 = 8·10 = 80</div>
+          <svg class="svg-estatico" viewBox="0 0 220 150" style="display:block;height:24cqh;width:auto;margin:0 auto" data-fscale="1.15" aria-hidden="true">
+            <rect x="20" y="22" width="55" height="104" fill="#0D9488" fill-opacity="0.16" stroke="#0D9488" stroke-width="1.6"/>
+            <rect x="108" y="61" width="88" height="65" fill="#0D9488" fill-opacity="0.16" stroke="#0D9488" stroke-width="1.6"/>
+            <line x1="14" y1="126" x2="210" y2="126" stroke="#1C1B2E" stroke-width="1.3"/>
+            <text x="47"  y="16" text-anchor="middle" font-size="10" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">5 · 16 = 80</text>
+            <text x="152" y="55" text-anchor="middle" font-size="10" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">8 · 10 = 80</text>
+            <text x="47"  y="139" text-anchor="middle" font-size="9.5" fill="#1D4ED8" font-family="'STIX Two Text',Georgia,serif">5 obreros</text>
+            <text x="152" y="139" text-anchor="middle" font-size="9.5" fill="#1D4ED8" font-family="'STIX Two Text',Georgia,serif">8 obreros</text>
+            <text x="16"  y="76" text-anchor="middle" font-size="9.5" fill="#DC2626" font-family="'STIX Two Text',Georgia,serif" transform="rotate(-90 16 76)">16 días</text>
+            <text x="104" y="96" text-anchor="middle" font-size="9.5" fill="#DC2626" font-family="'STIX Two Text',Georgia,serif" transform="rotate(-90 104 96)">10 días</text>
+          </svg>
+        </div>
+      </div>
+      <div data-inter style="display:flex;flex-direction:column;gap:1.2cqh">
+        <div class="caja mdef pa-caja" style="margin-top:0;flex:1">
+          <span class="caja-lbl">Justificación del paso</span>
+          <p class="pa-vacia"><strong>No es un truco.</strong> El cruce de subíndices es el teorema fundamental aplicado a la constancia del producto. Pulsa ↓ para recorrer la deducción, o toca cualquier paso para ver aquí su justificación.</p>
+          <div class="pa-razon" style="display:none"><strong style="color:#0F766E">Definición de inversa.</strong> Ser inversamente proporcionales significa, literalmente, que el producto de los valores correspondientes es siempre el mismo número \(k\neq 0\). No significa «cuando una sube la otra baja»: eso es una consecuencia, no la definición.</div>
+          <div class="pa-razon" style="display:none"><strong style="color:#0F766E">Dos expresiones del mismo \(k\).</strong> Si \(x_1y_1=k\) y \(x_2y_2=k\), ambos productos valen lo mismo, luego son iguales entre sí. Esta igualdad de productos es toda la información disponible.</div>
+          <div class="pa-razon" style="display:none"><strong style="color:var(--violet)">Aquí entra el teorema.</strong> Léase \(x_1y_1=x_2y_2\) como «producto de extremos = producto de medios» con extremos \(x_1,y_1\) y medios \(x_2,y_2\). Por el sentido <em>recíproco</em> (⇐) del teorema fundamental, equivale a \(\dfrac{x_1}{x_2}=\dfrac{y_2}{y_1}\). Las divisiones son legítimas porque \(x_2\neq 0\) y \(y_1\neq 0\): la proporcionalidad inversa exige valores no nulos.</div>
+          <div class="pa-razon" style="display:none"><strong style="color:var(--violet)">La lectura de aula.</strong> Obsérvese el orden: a la izquierda \(1,2\); a la derecha \(2,1\). <em>Eso</em>, y solo eso, es lo que en el tablero se describe como «una de las fracciones se invierte». Se conserva como lectura práctica, pero ahora se sabe de dónde viene.</div>
+        </div>
+        <div class="caja nota frag" style="margin-top:0">
+          <span class="caja-lbl">Verificación ✓</span>
+          Con \(k=80\), \((x_1,y_1)=(5,16)\) y \((x_2,y_2)=(8,10)\): productos \(5\cdot16=80\) y \(8\cdot10=80\) ✓. Y en efecto \(\dfrac{x_1}{x_2}=\dfrac{5}{8}\) coincide con \(\dfrac{y_2}{y_1}=\dfrac{10}{16}=\dfrac{5}{8}\) ✓.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 11 · REGLA DE TRES ══════════════════════════════════════════════
+       Estilo: composición estática. Es un PROCEDIMIENTO: lo que el
+       estudiante debe hacer con él es memorizar su orden y no saltarse el
+       primer paso, no manipularlo. Los pasos numerados sirven mejor que
+       cualquier interactividad. -->
+  <section class="diapositiva compacta" data-seccion="Proporcionalidad" data-screen-label="Regla de tres">
+    <p class="ceja">§ 2 · Proporcionalidad</p>
+    <h2 class="titulo">Regla de tres: tres pasos que nunca deben colapsarse</h2>
+    <div class="dos" style="grid-template-columns:1.08fr .92fr;gap:2cqw;align-items:start">
+      <div>
+        <div class="paso"><span class="n">1</span>
+          <div class="paso-tx"><span class="paso-nom">Identificar la relación y justificarla.</span> ¿Se conserva el <span style="color:#0D9488;font-weight:700">cociente</span> (directa) o el <span style="color:#0D9488;font-weight:700">producto</span> (inversa)? Aquí se juega la corrección de todo lo demás.</div>
+        </div>
+        <div class="paso frag"><span class="n">2</span>
+          <div class="paso-tx"><span class="paso-nom">Escribir la proporción que corresponde.</span>
+            <div class="centrado" style="margin:.7cqh 0"><span class="kf" style="font-size:1em">directa: \(\;\dfrac{x_1}{x_2}=\dfrac{y_1}{y_2}\;\)</span></div>
+            <div class="centrado" style="margin:.7cqh 0"><span class="kf" style="font-size:1em">inversa: \(\;\dfrac{x_1}{x_2}=\dfrac{y_2}{y_1}\;\)</span></div>
+          </div>
+        </div>
+        <div class="paso frag"><span class="n">3</span>
+          <div class="paso-tx"><span class="paso-nom">Despejar y comprobar.</span> Resolver la ecuación lineal y <strong>verificar</strong> que la constante se conserva con el valor hallado: sin esa comprobación el ejercicio no está terminado.</div>
+        </div>
+      </div>
+      <div>
+        <div class="caja mwarn">
+          <span class="caja-lbl">Cuidado · cruzar sin pensar</span>
+          «Una persona cava un hoyo en 6 horas; ¿cuánto tardan 6 personas?» admite el cruce mecánico \(\dfrac{1}{6}=\dfrac{6}{X}\Rightarrow X=36\) horas — absurdo: más personas no pueden tardar más. La relación es inversa y da \(X=\dfrac{1\cdot 6}{6}=1\) hora ✓ (producto constante \(1\cdot6=6\cdot1=6\) ✓). <strong>El paso 1 nunca se omite.</strong>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Nota · regla de tres compuesta</span>
+          Con tres o más magnitudes el principio es el mismo. En obreros–horas–días se conserva el <strong>trabajo total en obrero-hora</strong>. Ejemplo: 6 obreros a 8 h/día en 10 días son \(6\cdot8\cdot10=480\) obrero-hora; con 4 obreros a 10 h/día, \(\dfrac{480}{4\cdot10}=12\) días ✓ (comprobación: \(4\cdot10\cdot12=480\) ✓).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 12 · PORCENTAJE ═════════════════════════════════════════════════
+       Estilo: composición estática con tabla. Los tres tipos son tres
+       despejes de UNA sola ecuación; verlos juntos con los mismos números
+       es más informativo que manipularlos por separado. -->
+  <section class="diapositiva compacta" data-seccion="Porcentaje" data-screen-label="Porcentaje">
+    <p class="ceja">§ 3 · Porcentaje</p>
+    <h2 class="titulo">Porcentaje: una razón con el consecuente fijado en 100</h2>
+    <div class="dos" style="grid-template-columns:1.02fr .98fr;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja mdef">
+          <span class="caja-lbl">Definición 5 · porcentaje</span>
+          <p>Para un real \(p\), el símbolo \(p\%\) denota el número \(\dfrac{p}{100}\). Decir que una cantidad \({\color{#1D4ED8}A}\) es el \({\color{#6D28D9}p}\%\) de un total \({\color{#0D9488}T}\neq 0\) significa</p>
+          <p class="centrado" style="margin:.9cqh 0"><span class="kf">\(\;\dfrac{{\color{#1D4ED8}A}}{{\color{#0D9488}T}}=\dfrac{{\color{#6D28D9}p}}{100}\;\)</span></p>
+          <p>Si el total se imagina partido en 100 partes iguales, \(p\) de esas partes corresponden a \(A\): «\(p\) de cada 100».</p>
+        </div>
+        <div class="caja mwarn frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Cuidado · siempre relativo a un total</span>
+          Un porcentaje no es una cantidad absoluta. En un curso de 25 estudiantes, «60 % de asistencia» son 15 personas y no 60: \(\dfrac{15}{25}=\dfrac{60}{100}\) ✓. Con 25 estudiantes es imposible que asistan 60. El total nunca puede quedar implícito.
+        </div>
+      </div>
+      <div>
+        <div class="svgbox">
+          <div class="svghd"><span class="dot"></span>Una sola ecuación, tres despejes</div>
+          <table style="width:100%;border-collapse:collapse;font-size:2.05cqh">
+            <thead>
+              <tr style="text-align:left;color:var(--tinta2);font-size:1.65cqh;text-transform:uppercase;letter-spacing:.06em">
+                <th style="padding:.5cqh .6cqw;border-bottom:1px solid var(--linea)">Tipo</th>
+                <th style="padding:.5cqh .6cqw;border-bottom:1px solid var(--linea)">Se conoce</th>
+                <th style="padding:.5cqh .6cqw;border-bottom:1px solid var(--linea)">Se busca</th>
+                <th style="padding:.5cqh .6cqw;border-bottom:1px solid var(--linea)">Fórmula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:.7cqh .6cqw;border-bottom:1px solid var(--linea)">I · la parte</td>
+                  <td style="padding:.7cqh .6cqw;border-bottom:1px solid var(--linea)">\(p,\;T\)</td>
+                  <td style="padding:.7cqh .6cqw;border-bottom:1px solid var(--linea)">\({\color{#1D4ED8}A}\)</td>
+                  <td style="padding:.7cqh .6cqw;border-bottom:1px solid var(--linea)">\({\color{#1D4ED8}A}=\dfrac{p}{100}\cdot T\)</td></tr>
+              <tr><td style="padding:.7cqh .6cqw;border-bottom:1px solid var(--linea)">II · el porcentaje</td>
+                  <td style="padding:.7cqh .6cqw;border-bottom:1px solid var(--linea)">\(A,\;T\)</td>
+                  <td style="padding:.7cqh .6cqw;border-bottom:1px solid var(--linea)">\({\color{#6D28D9}p}\)</td>
+                  <td style="padding:.7cqh .6cqw;border-bottom:1px solid var(--linea)">\({\color{#6D28D9}p}=\dfrac{A}{T}\cdot 100\)</td></tr>
+              <tr><td style="padding:.7cqh .6cqw">III · el total</td>
+                  <td style="padding:.7cqh .6cqw">\(A,\;p\)</td>
+                  <td style="padding:.7cqh .6cqw">\({\color{#0D9488}T}\)</td>
+                  <td style="padding:.7cqh .6cqw">\({\color{#0D9488}T}=\dfrac{A\cdot 100}{p}\)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="caja nota frag" style="margin-top:1.1cqh">
+          <span class="caja-lbl">Verificación ✓ · los tres con los mismos números</span>
+          Con \(A=36\), \(T=240\), \(p=15\): tipo I, \(\dfrac{15}{100}\cdot 240=36\) ✓; tipo II, \(\dfrac{36}{240}\cdot100=15\) ✓; tipo III, \(\dfrac{36\cdot100}{15}=240\) ✓.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 13 · EXPLORADOR DEL PORCENTAJE ══════════════════════════════════
+       Estilo: DESLIZADORES. Aquí la idea ES una dependencia continua: cómo
+       responde p al mover A y T de forma independiente. Verlo con dos
+       barras alineadas hace visible que el porcentaje mide una PARTE del
+       total, no un conteo. -->
+  <section class="diapositiva" data-seccion="Porcentaje" data-screen-label="Explorador del porcentaje">
+    <p class="ceja">§ 3 · Porcentaje</p>
+    <h2 class="titulo">Explorador: la misma parte, distinto total</h2>
+    <div class="dos" style="grid-template-columns:1fr auto;gap:2cqw;align-items:start">
+      <div class="controles">
+        <p style="margin:0">Mueve la parte \(A\) y el total \(T\), y observa que el mismo \(A\) produce porcentajes distintos según el total al que se refiere.</p>
+        <div class="ctrl"><label for="pc-A">Parte \(A\)</label><input type="range" id="pc-A" min="0" max="50" step="1" value="15"><span class="val"><i>A</i> = <span id="pc-vA">15</span></span></div>
+        <div class="ctrl"><label for="pc-T">Total \(T\)</label><input type="range" id="pc-T" min="1" max="50" step="1" value="25"><span class="val"><i>T</i> = <span id="pc-vT">25</span></span></div>
+        <div style="border-top:1px solid var(--linea);padding-top:1.4cqh">
+          <div class="eq-text" id="pc-eq"></div>
+          <div class="eq-cap" id="pc-cap"></div>
+        </div>
+        <div class="caja nota" style="margin-top:.4cqh">
+          <span class="caja-lbl">Puntos porcentuales ≠ porcentaje</span>
+          Si una tasa pasa del 20 % al 25 %, sube <strong>5 puntos porcentuales</strong>, pero sube un <strong>25 %</strong> de su valor, porque \(\dfrac{25-20}{20}=0.25\) ✓. Decir «subió 5 %» es incorrecto.
+        </div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd azul"><span class="dot"></span>La misma fracción, leída sobre \(T\) y sobre 100</div>
+        <svg id="pc-svg" class="isvg" viewBox="0 0 380 210" style="height:46cqh;width:auto" data-fscale="1.2" data-inter
+             role="img" aria-label="Dos barras del mismo largo: la de arriba dividida en T partes con A sombreadas, la de abajo dividida en 100 partes con p sombreadas; las porciones sombreadas coinciden en longitud."></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 14 · CUIDADO: EL ESCALADO DEL ÁREA ══════════════════════════════
+       Estilo: DESLIZADORES. La ilusión de linealidad se derrumba viendo el
+       área responder a k de forma continua — y contando las k² copias
+       cuando k es entero. Es el contrapeso indispensable de toda la lección. -->
+  <section class="diapositiva compacta" data-seccion="Cuidados" data-screen-label="El área no escala como los lados">
+    <p class="ceja">§ 4 · Cuidados</p>
+    <h2 class="titulo">Cuando el modelo proporcional <em>no</em> aplica</h2>
+    <div class="dos" style="grid-template-columns:1fr auto;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja mwarn">
+          <span class="caja-lbl">Cuidado · la ilusión de linealidad</span>
+          «Si los lados de una figura se duplican, el área se duplica» es <strong>falso</strong>. El área depende de <em>dos</em> dimensiones: al multiplicar las longitudes por \(k\), el área queda multiplicada por \({\color{#6D28D9}k^2}\) (y el volumen por \(k^3\)). Longitudes y longitudes correspondientes sí son directamente proporcionales; longitudes y áreas <strong>no</strong>.
+        </div>
+        <div class="controles" style="margin-top:1.2cqh">
+          <div class="ctrl"><label for="ar-k">Factor de escala \(k\)</label><input type="range" id="ar-k" min="1" max="4" step="0.5" value="2"><span class="val"><i>k</i> = <span id="ar-vk">2</span></span></div>
+        </div>
+        <div class="sdemo-vals" style="margin-top:1.2cqh">
+          <div class="sdemo-val"><div class="lbl">área original</div><div class="num" id="ar-A0" style="color:#0D9488">12</div></div>
+          <div class="sdemo-val"><div class="lbl">área escalada</div><div class="num" id="ar-A1" style="color:#6D28D9">48</div></div>
+          <div class="sdemo-val"><div class="lbl">razón de áreas</div><div class="num" id="ar-rz" style="color:#6D28D9">4</div></div>
+        </div>
+        <div id="ar-nota"></div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd"><span class="dot"></span>Triángulo de base 6 y altura 4, y su copia escalada</div>
+        <svg id="ar-svg" class="isvg" viewBox="0 0 400 280" style="height:50cqh;width:auto" data-fscale="1.2" data-inter
+             role="img" aria-label="Un triángulo rectángulo de catetos seis y cuatro y su copia con los lados multiplicados por el factor k; cuando k es entero, la copia aparece dividida en k al cuadrado triángulos iguales al original, que pueden contarse."></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 15 · CUIDADO: PORCENTAJES SUCESIVOS ═════════════════════════════
+       Estilo: DESLIZADORES. La pérdida depende de p de forma continua y
+       cuadrática (1 − p²/10000); moverla es la única manera de ver que
+       NUNCA se vuelve al punto de partida, salvo con p = 0. -->
+  <section class="diapositiva compacta" data-seccion="Cuidados" data-screen-label="Los porcentajes no se suman">
+    <p class="ceja">§ 4 · Cuidados</p>
+    <h2 class="titulo">Los porcentajes sucesivos no se suman: se multiplican</h2>
+    <div class="dos" style="grid-template-columns:1fr auto;gap:2cqw;align-items:start">
+      <div>
+        <div class="caja mwarn">
+          <span class="caja-lbl">Cuidado · «subió 20 % y luego bajó 20 %, así que quedó igual»</span>
+          Falso: 100 aumentado en 20 % da 120, y 120 disminuido en 20 % da <strong>96</strong>, no 100 ✓. Cada cambio se aplica sobre un total <em>distinto</em>. Aumentar en \(p\%\) es multiplicar por \(1+\dfrac{p}{100}\); disminuir en \(p\%\), por \(1-\dfrac{p}{100}\); y los cambios sucesivos se componen <strong>multiplicando factores</strong>.
+        </div>
+        <div class="controles" style="margin-top:1.2cqh">
+          <div class="ctrl"><label for="ps-p">Porcentaje \(p\)</label><input type="range" id="ps-p" min="0" max="50" step="5" value="20"><span class="val"><i>p</i> = <span id="ps-vp">20</span> %</span></div>
+        </div>
+        <div class="sdemo-vals" style="margin-top:1.2cqh">
+          <div class="sdemo-val"><div class="lbl">factor acumulado</div><div class="num" id="ps-f" style="color:#6D28D9">0.96</div></div>
+          <div class="sdemo-val"><div class="lbl">precio final</div><div class="num" id="ps-fin" style="color:#6D28D9">96</div></div>
+          <div class="sdemo-val"><div class="lbl">descuento de retorno</div><div class="num" id="ps-ret" style="color:#0D9488">16.67 %</div></div>
+        </div>
+        <div id="ps-nota"></div>
+      </div>
+      <div class="svgbox">
+        <div class="svghd"><span class="dot"></span>Precio 100: subir \(p\,\%\) y luego bajar \(p\,\%\)</div>
+        <svg id="ps-svg" class="isvg" viewBox="0 0 380 230" style="height:46cqh;width:auto" data-fscale="1.2" data-inter
+             role="img" aria-label="Tres barras horizontales: el precio inicial cien, el precio tras el aumento del p por ciento y el precio tras el descuento del mismo p por ciento, con una línea de referencia en el precio inicial que la tercera barra nunca alcanza."></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 16 · EJEMPLO 1 · PLANTEO ════════════════════════════════════════
+       Estilo: formato de curso (ejemplo resuelto por pasos). Fragmentos al
+       .07 por la regla de sección: el estudiante intenta cada paso antes
+       de revelarlo con ↓. -->
+  <section class="diapositiva compacta" data-seccion="Ejemplo 1" data-screen-label="Ejemplo 1 · planteo">
+    <p class="ceja">§ 5 · Ejemplo 1: regla de tres inversa</p>
+    <h2 class="titulo">Planteo y cálculo</h2>
+    <p style="margin-bottom:1.4cqh"><strong>Problema.</strong> Un grupo de 5 obreros construye un muro en 16 días. ¿Cuántos días tardarán 8 obreros en construir el mismo muro, <em>trabajando todos al mismo ritmo</em>?</p>
+    <div class="paso frag"><span class="n">1</span>
+      <div class="paso-tx"><span class="paso-nom">Identificar la relación y justificarla.</span> El muro es el mismo y el ritmo es el mismo, luego el trabajo total —medido en <strong>obrero-día</strong>— no cambia. Ese trabajo total es el <span style="color:#0D9488;font-weight:700">producto</span> (obreros) × (días). Producto constante ⇒ las magnitudes son <strong>inversamente proporcionales</strong>.</div>
+    </div>
+    <div class="paso frag"><span class="n">2</span>
+      <div class="paso-tx"><span class="paso-nom">Escribir la proporción.</span> Con \(({\color{#1D4ED8}x_1},{\color{#DC2626}y_1})=(5,16)\) y \(({\color{#1D4ED8}x_2},{\color{#DC2626}y_2})=(8,X)\), la forma inversa (subíndices cruzados) da \(\;\dfrac{5}{8}=\dfrac{X}{16}\).</div>
+    </div>
+    <div class="paso frag"><span class="n">3</span>
+      <div class="paso-tx"><span class="paso-nom">Despejar.</span> \(5\cdot 16=8\cdot X\) por el teorema fundamental; luego \(80=8X\) y, por la ecuación lineal, \(X=\dfrac{80}{8}=10\).</div>
+    </div>
+    <div class="caja nota frag" style="margin-top:.8cqh">
+      <span class="caja-lbl">Lectura cuidadosa</span>
+      El 16 son los <em>días</em> del primer escenario, no un número de obreros. Rotular cada columna con sus unidades evita el error más común de esta sección.
+    </div>
+  </section>
+
+  <!-- ═══ 17 · EJEMPLO 1 · VERIFICACIÓN ═══════════════════════════════════ -->
+  <section class="diapositiva compacta" data-seccion="Ejemplo 1" data-screen-label="Ejemplo 1 · verificación">
+    <p class="ceja">§ 5 · Ejemplo 1: regla de tres inversa</p>
+    <h2 class="titulo">Verificación y control de sentido</h2>
+    <div class="dos" style="grid-template-columns:1.1fr auto;gap:2cqw;align-items:start">
+      <div>
+        <div class="paso frag"><span class="n">4</span>
+          <div class="paso-tx"><span class="paso-nom">Verificación ✓.</span> El producto se conserva: \(5\cdot16=80\) y \(8\cdot10=80\) ✓. Y la proporción se cumple: \(\dfrac{5}{8}=\dfrac{10}{16}\) ✓. <strong>Respuesta: 10 días.</strong></div>
+        </div>
+        <div class="paso frag"><span class="n">5</span>
+          <div class="paso-tx"><span class="paso-nom">Control de sentido.</span> Más obreros deben tardar <em>menos</em>: \(10&lt;16\) ✓. Si el resultado hubiera salido mayor que 16, algo estaría mal en el planteo.</div>
+        </div>
+        <div class="paso frag"><span class="n">6</span>
+          <div class="paso-tx"><span class="paso-nom">¿Y si se hubiera supuesto directa?</span> Entonces \(\dfrac{5}{8}=\dfrac{16}{X}\), de donde \(5X=128\) y \(X=25.6\) días ✓ — un cálculo <em>correcto</em> de un modelo <em>equivocado</em>: 8 obreros tardarían más que 5. Imposible.</div>
+        </div>
+      </div>
+      <div class="svgbox frag">
+        <div class="svghd"><span class="dot"></span>Los tres resultados, a escala</div>
+        <svg class="svg-estatico" viewBox="0 0 300 165" style="display:block;height:34cqh;width:auto;margin:0 auto" data-fscale="1.15" aria-hidden="true">
+          <text x="8" y="26" font-size="10" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">5 obreros</text>
+          <rect x="84" y="16" width="128" height="20" rx="4" fill="#0D9488" fill-opacity="0.75"/>
+          <text x="218" y="31" font-size="11" fill="#0F766E" font-weight="700" font-family="'STIX Two Text',Georgia,serif">16 días</text>
+          <text x="8" y="66" font-size="10" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">8 obreros</text>
+          <rect x="84" y="56" width="80" height="20" rx="4" fill="#0D9488" fill-opacity="0.75"/>
+          <text x="170" y="71" font-size="11" fill="#0F766E" font-weight="700" font-family="'STIX Two Text',Georgia,serif">10 días ✓</text>
+          <text x="8" y="112" font-size="10" fill="#B91C1C" font-family="'STIX Two Text',Georgia,serif">modelo</text>
+          <text x="8" y="124" font-size="10" fill="#B91C1C" font-family="'STIX Two Text',Georgia,serif">directo</text>
+          <rect x="84" y="102" width="204.8" height="20" rx="4" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="186" y="117" text-anchor="middle" font-size="11" fill="#B91C1C" font-weight="700" font-family="'STIX Two Text',Georgia,serif">25.6 días</text>
+          <line x1="212" y1="12" x2="212" y2="132" stroke="#6B688A" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="150" y="152" text-anchor="middle" font-size="10" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">más obreros no pueden tardar más que 16 días</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 18 · EJEMPLO 2 · PLANTEO ════════════════════════════════════════ -->
+  <section class="diapositiva compacta" data-seccion="Ejemplo 2" data-screen-label="Ejemplo 2 · planteo">
+    <p class="ceja">§ 6 · Ejemplo 2: aumento y descuento sucesivos</p>
+    <h2 class="titulo">Planteo y cálculo</h2>
+    <p style="margin-bottom:1.4cqh"><strong>Problema.</strong> Un artículo cuesta \$120 000. En julio su precio sube un 15 % y en agosto baja un 15 %. ¿Cuál es el precio final?</p>
+    <div class="paso frag"><span class="n">1</span>
+      <div class="paso-tx"><span class="paso-nom">El aumento.</span> Aumentar en \(15\%\) es multiplicar por \(1+\dfrac{15}{100}=1.15\): \(\;120\,000\cdot 1.15=138\,000\).</div>
+    </div>
+    <div class="paso frag"><span class="n">2</span>
+      <div class="paso-tx"><span class="paso-nom">El descuento.</span> Disminuir en \(15\%\) es multiplicar por \(1-\dfrac{15}{100}=0.85\) — y se aplica sobre el precio <strong>de agosto</strong>, que es \(138\,000\), no sobre el original: \(\;138\,000\cdot 0.85=117\,300\).</div>
+    </div>
+    <div class="paso frag"><span class="n">3</span>
+      <div class="paso-tx"><span class="paso-nom">Respuesta.</span> El precio final es \(\$117\,300\). <strong>No</strong> coincide con el inicial: faltan \(\$2\,700\).</div>
+    </div>
+    <div class="caja nota frag" style="margin-top:.8cqh">
+      <span class="caja-lbl">Por qué falla la intuición</span>
+      El \(15\%\) que sube se calcula sobre \(120\,000\) y vale \(18\,000\); el \(15\%\) que baja se calcula sobre \(138\,000\) y vale \(20\,700\). Son porcentajes iguales de <em>totales distintos</em>: por eso no se cancelan.
+    </div>
+  </section>
+
+  <!-- ═══ 19 · EJEMPLO 2 · VERIFICACIÓN Y PREGUNTA INVERSA ════════════════ -->
+  <section class="diapositiva compacta" data-seccion="Ejemplo 2" data-screen-label="Ejemplo 2 · verificación">
+    <p class="ceja">§ 6 · Ejemplo 2: aumento y descuento sucesivos</p>
+    <h2 class="titulo">Verificación y la pregunta inversa</h2>
+    <div class="dos" style="grid-template-columns:1.08fr auto;gap:2cqw;align-items:start">
+      <div>
+        <div class="paso frag"><span class="n">4</span>
+          <div class="paso-tx"><span class="paso-nom">Verificación ✓.</span> El factor acumulado es \(1.15\cdot 0.85=0.9775\), y \(120\,000\cdot 0.9775=117\,300\) ✓: el mismo resultado por otro camino.</div>
+        </div>
+        <div class="paso frag"><span class="n">5</span>
+          <div class="paso-tx"><span class="paso-nom">Pregunta inversa.</span> ¿Qué descuento sobre \(138\,000\) devolvería <em>exactamente</em> \(120\,000\)? Es un porcentaje de tipo II sobre la rebaja necesaria: \(\;d=\dfrac{138\,000-120\,000}{138\,000}=\dfrac{18\,000}{138\,000}=\dfrac{3}{23}\approx 13.04\,\%\).</div>
+        </div>
+        <div class="paso frag"><span class="n">6</span>
+          <div class="paso-tx"><span class="paso-nom">Verificación ✓ y regla general.</span> \(138\,000\cdot\left(1-\dfrac{3}{23}\right)=138\,000\cdot\dfrac{20}{23}=120\,000\) ✓. En general, tras subir un \(p\%\), el descuento que devuelve al precio inicial es \(\dfrac{p}{100+p}=\dfrac{100\,p}{100+p}\,\%\), <strong>nunca</strong> el \(p\,\%\).</div>
+        </div>
+      </div>
+      <div class="svgbox frag">
+        <div class="svghd azul"><span class="dot"></span>La cadena de factores</div>
+        <svg class="svg-estatico" viewBox="0 0 340 150" style="display:block;height:30cqh;width:auto;margin:0 auto" data-fscale="1.15" aria-hidden="true">
+          <rect x="6" y="30" width="86" height="32" rx="8" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.4"/>
+          <text x="49" y="51" text-anchor="middle" font-size="12" fill="#1D4ED8" font-weight="700" font-family="'STIX Two Text',Georgia,serif">120 000</text>
+          <line x1="94" y1="46" x2="122" y2="46" stroke="#6B688A" stroke-width="1.4"/>
+          <polygon points="122,42 122,50 129,46" fill="#6B688A"/>
+          <text x="111" y="36" text-anchor="middle" font-size="10.5" fill="#6D28D9" font-weight="700" font-family="'STIX Two Text',Georgia,serif">×1.15</text>
+          <rect x="131" y="30" width="86" height="32" rx="8" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.4"/>
+          <text x="174" y="51" text-anchor="middle" font-size="12" fill="#6D28D9" font-weight="700" font-family="'STIX Two Text',Georgia,serif">138 000</text>
+          <line x1="219" y1="46" x2="247" y2="46" stroke="#6B688A" stroke-width="1.4"/>
+          <polygon points="247,42 247,50 254,46" fill="#6B688A"/>
+          <text x="236" y="36" text-anchor="middle" font-size="10.5" fill="#6D28D9" font-weight="700" font-family="'STIX Two Text',Georgia,serif">×0.85</text>
+          <rect x="256" y="30" width="80" height="32" rx="8" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.4"/>
+          <text x="296" y="51" text-anchor="middle" font-size="12" fill="#6D28D9" font-weight="700" font-family="'STIX Two Text',Georgia,serif">117 300</text>
+          <path d="M49,68 L49,96 L296,96 L296,68" fill="none" stroke="#0D9488" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="172" y="112" text-anchor="middle" font-size="12" fill="#0D9488" font-weight="700" font-family="'STIX Two Text',Georgia,serif">× 0.9775  (= 1.15 · 0.85)</text>
+          <text x="172" y="134" text-anchor="middle" font-size="10.5" fill="#B91C1C" font-family="'STIX Two Text',Georgia,serif">el factor acumulado es menor que 1: nunca se vuelve al inicio</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 20 · CIERRE ═════════════════════════════════════════════════════
+       Estilo: formato de curso (resumen interactivo). Cada hito se amplía
+       al tocarlo; los cinco retoman los seis objetivos de la portada. -->
+  <section class="diapositiva" data-seccion="Cierre" id="dp-resumen" data-screen-label="Cierre">
+    <p class="ceja">§ 7 · Cierre</p>
+    <h2 class="titulo">En resumen: pregunta siempre qué se conserva</h2>
+    <div class="dos" style="grid-template-columns:1.06fr .94fr;gap:2cqw;align-items:start">
+      <div data-inter>
+        <button type="button" class="rs-item"><span class="rs-n">1</span><span><span class="rs-t" style="color:var(--primario)">Razón y proporción</span>Una razón compara dividiendo; una proporción es una <em>igualdad</em> entre dos razones.</span></button>
+        <button type="button" class="rs-item"><span class="rs-n">2</span><span><span class="rs-t" style="color:var(--primario)">Teorema fundamental</span>Producto de extremos = producto de medios, y vale en los <em>dos</em> sentidos.</span></button>
+        <button type="button" class="rs-item"><span class="rs-n">3</span><span><span class="rs-t" style="color:var(--primario)">Qué se conserva</span>Cociente constante: directa. Producto constante: inversa. Crecer no basta.</span></button>
+        <button type="button" class="rs-item"><span class="rs-n">4</span><span><span class="rs-t" style="color:var(--primario)">La regla de tres</span>No es una receta: es la proporción que se sigue de la constante identificada.</span></button>
+        <button type="button" class="rs-item"><span class="rs-n">5</span><span><span class="rs-t" style="color:var(--primario)">Porcentaje y sus límites</span>Una razón de consecuente 100, siempre relativa a un total; y a veces el modelo no aplica.</span></button>
+        <p class="centrado frag" style="margin-top:1.4cqh"><span class="kf" style="font-size:2.9cqh">\(\;\dfrac{{\color{#DC2626}y}}{{\color{#1D4ED8}x}}={\color{#0D9488}k}\;\)  directa  \(\qquad\)  \(\;{\color{#1D4ED8}x}\,{\color{#DC2626}y}={\color{#0D9488}k}\;\)  inversa\(\;\)</span></p>
+      </div>
+      <div data-inter>
+        <div class="svgbox" id="rs-fig-a">
+          <div class="svghd"><span class="dot"></span>La única pregunta que hay que hacerse</div>
+          <svg class="svg-estatico" viewBox="0 0 250 185" style="display:block;height:32cqh;width:auto;margin:0 auto" data-fscale="1.15" aria-hidden="true">
+            <rect x="66" y="6" width="118" height="28" rx="9" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.5"/>
+            <text x="125" y="25" text-anchor="middle" font-size="12" fill="#6D28D9" font-weight="700" font-family="'STIX Two Text',Georgia,serif">¿qué se conserva?</text>
+            <g stroke="#6B688A" stroke-width="1.3" fill="none">
+              <line x1="125" y1="34" x2="125" y2="44"/>
+              <line x1="52" y1="44" x2="198" y2="44"/>
+              <line x1="52" y1="44" x2="52" y2="58"/>
+              <line x1="198" y1="44" x2="198" y2="58"/>
+              <line x1="125" y1="44" x2="125" y2="118"/>
+            </g>
+            <rect x="8" y="58" width="88" height="46" rx="9" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+            <text x="52" y="76" text-anchor="middle" font-size="10.5" fill="#0F766E" font-family="'STIX Two Text',Georgia,serif">el cociente y / x</text>
+            <text x="52" y="95" text-anchor="middle" font-size="11.5" fill="#0F766E" font-weight="700" font-family="'STIX Two Text',Georgia,serif">DIRECTA</text>
+            <rect x="154" y="58" width="88" height="46" rx="9" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5"/>
+            <text x="198" y="76" text-anchor="middle" font-size="10.5" fill="#0F766E" font-family="'STIX Two Text',Georgia,serif">el producto x · y</text>
+            <text x="198" y="95" text-anchor="middle" font-size="11.5" fill="#0F766E" font-weight="700" font-family="'STIX Two Text',Georgia,serif">INVERSA</text>
+            <rect x="58" y="118" width="134" height="46" rx="9" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5"/>
+            <text x="125" y="136" text-anchor="middle" font-size="10.5" fill="#B91C1C" font-family="'STIX Two Text',Georgia,serif">ninguno de los dos</text>
+            <text x="125" y="155" text-anchor="middle" font-size="11.5" fill="#B91C1C" font-weight="700" font-family="'STIX Two Text',Georgia,serif">EL MODELO NO APLICA</text>
+            <text x="125" y="179" text-anchor="middle" font-size="10" fill="#6B688A" font-family="'STIX Two Text',Georgia,serif">y decirlo también es una respuesta correcta</text>
+          </svg>
+        </div>
+        <div class="rs-det">Toca un ítem para ampliar su explicación.</div>
+        <div class="rs-det" data-fig="a" style="display:none"><strong>Razón:</strong> \(\dfrac{a}{b}\) con \(b\neq 0\) — la condición recae sobre el <em>denominador</em>; el antecedente sí puede ser cero. <strong>Proporción:</strong> \(\dfrac{a}{b}=\dfrac{c}{d}\) con \(b\neq0\) y \(d\neq0\); \(a\) y \(d\) son los extremos, \(b\) y \(c\) los medios. Dos razones cualesquiera <em>no</em> forman proporción: la igualdad debe cumplirse.</div>
+        <div class="rs-det" data-fig="a" style="display:none"><strong>\(\dfrac{a}{b}=\dfrac{c}{d}\iff a\,d=b\,c\)</strong> (con \(b\neq0\), \(d\neq0\)). Por ser una <em>doble</em> implicación sirve dos veces: de izquierda a derecha permite <strong>despejar</strong> el término desconocido; de derecha a izquierda permite <strong>decidir</strong> si dos razones dadas forman proporción — y es justo esa dirección la que produce el cruce de subíndices de la regla de tres inversa.</div>
+        <div class="rs-det" data-fig="a" style="display:none"><strong>Directa:</strong> \(\dfrac{y}{x}=k\), equivalentemente \(y=kx\). <strong>Inversa:</strong> \(x\,y=k\), equivalentemente \(y=\dfrac{k}{x}\). En ambas, \(k\neq 0\). Que una magnitud crezca cuando la otra crece <em>no</em> basta: \(y=x+1\) es creciente y no es de proporcionalidad directa (\(\dfrac{2}{1}=2\) pero \(\dfrac{3}{2}=1.5\)) ✓, y \(y=10-x\) es decreciente y no es inversa (\(1\cdot9=9\) pero \(2\cdot8=16\)) ✓.</div>
+        <div class="rs-det" data-fig="a" style="display:none"><strong>Tres pasos, en orden:</strong> identificar la relación justificándola por lo que se conserva; escribir la proporción que corresponde —\(\dfrac{x_1}{x_2}=\dfrac{y_1}{y_2}\) si es directa, \(\dfrac{x_1}{x_2}=\dfrac{y_2}{y_1}\) si es inversa—; despejar y <em>comprobar</em> que la constante sigue valiendo. El paso decisivo es el primero, no el despeje.</div>
+        <div class="rs-det" data-fig="a" style="display:none"><strong>\(p\% = \dfrac{p}{100}\)</strong> y \(\dfrac{A}{T}=\dfrac{p}{100}\): los tres tipos de problema son tres despejes de esta única ecuación. Los aumentos y descuentos se componen <strong>multiplicando factores</strong>, no sumando porcentajes. Y conviene recordar el límite del modelo: al escalar las longitudes por \(k\), el área se multiplica por \(k^2\), no por \(k\).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 21 · PRÁCTICA (directo e inverso) ═══════════════════════════════
+       Sin soluciones. Fragmentos al .07 por la regla de sección. -->
+  <section class="diapositiva compacta" data-seccion="Práctica" data-screen-label="Práctica · niveles 1 y 2">
+    <p class="ceja">§ 8 · Práctica</p>
+    <h2 class="titulo">Practica tú: aplicar y recuperar</h2>
+    <p style="margin-bottom:1cqh">Los cuatro primeros aplican una definición de frente; los dos últimos piden recuperar un dato de entrada. Resuélvelos en papel y <strong>verifica cada respuesta</strong> comprobando que la constante se conserva.</p>
+    <div class="paso"><span class="n">1</span>
+      <div class="paso-tx"><span class="paso-nom">Términos de una proporción.</span> Halla \(x\) en \(\dfrac{x}{9}=\dfrac{12}{27}\) e identifica cuáles términos son los medios y cuáles los extremos.</div>
+    </div>
+    <div class="paso"><span class="n">2</span>
+      <div class="paso-tx"><span class="paso-nom">Precio por unidad.</span> Cuatro cuadernos iguales cuestan \$18 000. ¿Cuánto cuestan siete? Justifica primero qué se conserva.</div>
+    </div>
+    <div class="paso"><span class="n">3</span>
+      <div class="paso-tx"><span class="paso-nom">Llaves y tanque.</span> Doce llaves iguales llenan un tanque en 5 horas. ¿En cuánto tiempo lo llenan 15 llaves con el mismo caudal cada una?</div>
+    </div>
+    <div class="paso"><span class="n">4</span>
+      <div class="paso-tx"><span class="paso-nom">Porcentaje de tipo II.</span> De 180 aspirantes, 45 fueron admitidos. ¿Qué porcentaje fue admitido?</div>
+    </div>
+    <div class="paso"><span class="n">5</span>
+      <div class="paso-tx"><span class="paso-nom">Recuperar el total.</span> Una cantidad de 36 unidades corresponde al \(15\%\) de un total. ¿Cuál es el total?</div>
+    </div>
+    <div class="paso"><span class="n">6</span>
+      <div class="paso-tx"><span class="paso-nom">Comparar con una razón.</span> Dos cantidades positivas \(a\) y \(b\) cumplen \(\dfrac{a}{b}=\dfrac{2}{7}\). Expresa \(b\) en términos de \(a\), decide cuál de las dos es mayor y señala <em>dónde</em> usas la hipótesis de positividad.</div>
+    </div>
+  </section>
+
+  <!-- ═══ 22 · PRÁCTICA (la trampa) ══════════════════════════════════════
+       Estilo: composición estática, sin soluciones. Se separó de la 23
+       para que ninguna diapositiva de práctica exceda la densidad que la
+       plantilla admite con holgura. -->
+  <section class="diapositiva compacta" data-seccion="Práctica" data-screen-label="Práctica · nivel 3">
+    <p class="ceja">§ 8 · Práctica</p>
+    <h2 class="titulo">Practica tú: los tres que invitan al error</h2>
+    <p style="margin-bottom:1cqh">Estos tres están redactados para invitar al error típico. En todos, empieza por decidir <em>qué cantidad se conserva</em> — y acepta como respuesta legítima que no se conserve ninguna.</p>
+    <div class="paso"><span class="n">7</span>
+      <div class="paso-tx"><span class="paso-nom">Una tabla sospechosa.</span> Una tabla registra los pares \((1,5)\), \((2,7)\), \((3,9)\), \((4,11)\). ¿Son \(x\) e \(y\) directamente proporcionales? ¿Inversamente? Justifica con un <strong>cálculo</strong>, no con una impresión.</div>
+    </div>
+    <div class="paso"><span class="n">8</span>
+      <div class="paso-tx"><span class="paso-nom">Dos terrenos semejantes.</span> Un terreno triangular tiene \(15\;\text{m}^2\) de área. Se compra otro con la misma forma pero con todas sus longitudes <em>tres veces</em> mayores. ¿Cuál es su área?</div>
+    </div>
+    <div class="paso"><span class="n">9</span>
+      <div class="paso-tx"><span class="paso-nom">Sube y baja.</span> Un artículo cuesta \$80 000. Sube un \(25\%\) y, un mes después, baja un \(25\%\). ¿Cuál es el precio final? ¿Coincide con el inicial? Si no, ¿qué descuento habría devuelto exactamente el precio original?</div>
+    </div>
+  </section>
+
+  <!-- ═══ 23 · PRÁCTICA (síntesis) ════════════════════════════════════════
+       El único de varias magnitudes, con espacio suficiente, y la
+       sugerencia metodológica como fragmento de cierre del curso. -->
+  <section class="diapositiva compacta" data-seccion="Práctica" data-screen-label="Práctica · nivel 4">
+    <p class="ceja">§ 8 · Práctica</p>
+    <h2 class="titulo">Practica tú: la síntesis</h2>
+    <div class="paso"><span class="n">10</span>
+      <div class="paso-tx"><span class="paso-nom">Tres magnitudes a la vez.</span> Ocho obreros trabajando 6 horas diarias terminan una obra en 15 días. ¿Cuántos días tardarán 10 obreros trabajando 8 horas diarias, al mismo ritmo? <strong>Identifica explícitamente qué cantidad se conserva.</strong></div>
+    </div>
+    <div class="caja nota frag" style="margin-top:1.4cqh">
+      <span class="caja-lbl">Sugerencia metodológica (pulsa ↓)</span>
+      Antes de escribir cualquier proporción, construye una tabla de dos columnas <strong>rotuladas con sus unidades</strong> y calcula el cociente y el producto de cada fila. Si ninguno de los dos coincide entre filas, el modelo proporcional no aplica y el trabajo consiste en explicar por qué — no en forzar un producto cruzado.
+    </div>
+    <div class="caja mdef frag" style="margin-top:1.2cqh">
+      <span class="caja-lbl">Y para cerrar</span>
+      Vuelve al ejercicio 7 con esa tabla en la mano: verás que ni el cociente ni el producto se conservan, y que la respuesta correcta es exactamente esa. Reconocer cuándo <em>no</em> hay proporcionalidad es tan parte del tema como resolver una regla de tres.
+    </div>
+  </section>
+</div>
+
+<script>
+'use strict';
+/* ═══════════════════════════════════════════════════════════════════════
+   NÚCLEO clase-slides v1.1 — motor de navegación, menú autogenerado,
+   fragmentos, recta de progreso, atajos, gestos, hash, atenuación.
+   v1.1: (a) emite el evento 'diapositiva' en cada cambio (lo usa la
+   animación hero para pausarse fuera de su diapositiva); (b) espacio/Enter
+   sobre botones, enlaces o selects no navega (evita dobles avances).
+   ═══════════════════════════════════════════════════════════════════════ */
+(function(){
+  const esc  = document.getElementById('escenario');
+  const dps  = Array.from(document.querySelectorAll('.diapositiva'));
+  const N    = dps.length;
+  const frags  = dps.map(d => Array.from(d.querySelectorAll('.frag')));
+  const vistos = dps.map(() => 0);
+  let i = 0;
+
+  const menu = document.getElementById('menu');
+  const recta = document.getElementById('recta');
+  const lleno = document.getElementById('recta-lleno');
+  const contador = document.getElementById('contador');
+  const secciones = [];
+  dps.forEach((d, k) => {
+    const s = d.dataset.seccion || '—';
+    if (!secciones.length || secciones[secciones.length - 1].nombre !== s)
+      secciones.push({ nombre: s, inicio: k });
+  });
+  const botones = secciones.map(sec => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = sec.nombre;
+    b.dataset.seccion = sec.nombre;
+    b.addEventListener('click', () => irA(sec.inicio, false));
+    menu.appendChild(b);
+    if (sec.inicio > 0) {
+      const t = document.createElement('div');
+      t.className = 'tick';
+      t.style.left = (sec.inicio / N * 100) + '%';
+      recta.appendChild(t);
+    }
+    return b;
+  });
+
+  function pinta(){
+    dps.forEach((d, k) => {
+      const on = (k === i);
+      d.classList.toggle('activa', on);
+      d.setAttribute('aria-hidden', on ? 'false' : 'true');
+      d.inert = !on;
+    });
+    frags[i].forEach((f, k) => f.classList.toggle('frag-on', k < vistos[i]));
+    const sec = dps[i].dataset.seccion;
+    botones.forEach(b => {
+      const cur = (b.dataset.seccion === sec);
+      b.classList.toggle('actual', cur);
+      if (cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+    esc.classList.toggle('sin-pasos', frags[i].length === 0 && dps[i].id !== 'dp-hero');
+    contador.textContent = (i + 1) + ' / ' + N;
+    lleno.style.width = ((i + 1) / N * 100) + '%';
+    history.replaceState(null, '', '#/' + (i + 1));
+    document.dispatchEvent(new CustomEvent('diapositiva', { detail: { i: i, id: dps[i].id || '' } }));
+  }
+  function irA(n, todosLosFrag){
+    i = Math.max(0, Math.min(N - 1, n));
+    vistos[i] = todosLosFrag ? frags[i].length : 0;
+    pinta();
+  }
+  function sig(){
+    if (vistos[i] < frags[i].length) { vistos[i]++; pinta(); }
+    else if (i < N - 1) { i++; vistos[i] = 0; pinta(); }
+  }
+  function ant(){
+    if (vistos[i] > 0) { vistos[i]--; pinta(); }
+    else if (i > 0) { i--; vistos[i] = frags[i].length; pinta(); }
+  }
+  /* Navegación homogénea: ← → cambian de diapositiva SIN pasar por los
+     fragmentos (eso es ↓ ↑); espacio conserva el avance clásico paso a paso. */
+  function sigDp(){ if (i < N - 1) { i++; vistos[i] = 0; pinta(); } }
+  function antDp(){ if (i > 0) { i--; vistos[i] = frags[i].length; pinta(); } }
+
+  document.getElementById('btn-sig').addEventListener('click', sigDp);
+  document.getElementById('btn-ant').addEventListener('click', antDp);
+  document.getElementById('btn-fs').addEventListener('click', pantallaCompleta);
+  /* Botones ↑ ↓: emiten la misma tecla, así valen también para las fases
+     de la animación hero (su manejador global escucha ArrowUp/ArrowDown). */
+  const teclaVert = k => dispatchEvent(new KeyboardEvent('keydown', { key: k }));
+  document.querySelectorAll('.flecha.aba').forEach(b => b.addEventListener('click', () => teclaVert('ArrowDown')));
+  document.querySelectorAll('.flecha.arr').forEach(b => b.addEventListener('click', () => teclaVert('ArrowUp')));
+  function pantallaCompleta(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(() => {});
+  }
+
+  /* Zoom táctil en pantalla completa. Dentro del Fullscreen API los
+     navegadores móviles desactivan el pellizco nativo, así que se emula:
+     dos dedos acercan/alejan, un dedo desplaza mientras hay zoom, y todo
+     se reinicia al salir. */
+  (() => {
+    const esc = document.getElementById('escenario');
+    let s = 1, tx = 0, ty = 0, pinch = null, pan = null, base = null;
+    window.__zoomActivo = () => s > 1.001 || pinch !== null;
+    const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    const mid  = t => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
+    const mideBase = () => {
+      const r = esc.getBoundingClientRect();
+      base = { L0: r.left - tx, T0: r.top - ty, W: r.width / s, H: r.height / s };
+    };
+    const clampPan = () => {
+      const vw = innerWidth, vh = innerHeight, sw = base.W * s, sh = base.H * s;
+      tx = sw <= vw + 1 ? (vw - sw) / 2 - base.L0 : Math.min(-base.L0, Math.max(vw - sw - base.L0, tx));
+      ty = sh <= vh + 1 ? (vh - sh) / 2 - base.T0 : Math.min(-base.T0, Math.max(vh - sh - base.T0, ty));
+    };
+    const aplica = () => {
+      esc.style.transformOrigin = '0 0';
+      esc.style.transform = s > 1.001 ? `translate(${tx}px,${ty}px) scale(${s})` : '';
+    };
+    document.addEventListener('touchstart', e => {
+      if (!document.fullscreenElement) return;
+      if (e.touches.length === 2) {
+        mideBase();
+        pinch = { d: dist(e.touches), m: mid(e.touches), s, tx, ty };
+        pan = null;
+        e.preventDefault();
+      } else if (e.touches.length === 1 && s > 1.001) {
+        const t = e.target;
+        if (t instanceof Element && t.closest('input, button, a, summary, [data-cp]')) return;
+        mideBase();
+        pan = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx, ty, moved: false };
+      }
+    }, { passive: false, capture: true });
+    document.addEventListener('touchmove', e => {
+      if (!document.fullscreenElement) return;
+      if (pinch && e.touches.length === 2) {
+        e.preventDefault();
+        const ns = Math.min(5, Math.max(1, pinch.s * dist(e.touches) / pinch.d));
+        const m = mid(e.touches), k = ns / pinch.s;
+        tx = m.x - (pinch.m.x - pinch.tx) * k;
+        ty = m.y - (pinch.m.y - pinch.ty) * k;
+        s = ns; clampPan(); aplica();
+      } else if (pan && e.touches.length === 1) {
+        const dx = e.touches[0].clientX - pan.x, dy = e.touches[0].clientY - pan.y;
+        if (!pan.moved && Math.abs(dx) + Math.abs(dy) > 6) pan.moved = true;
+        if (pan.moved) { e.preventDefault(); tx = pan.tx + dx; ty = pan.ty + dy; clampPan(); aplica(); }
+      }
+    }, { passive: false, capture: true });
+    document.addEventListener('touchend', e => {
+      if (e.touches.length < 2) pinch = null;
+      if (e.touches.length === 0) pan = null;
+    }, true);
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) { s = 1; tx = ty = 0; aplica(); }
+    });
+  })();
+
+  addEventListener('keydown', e => {
+    if (e.target instanceof Element && e.target.matches('input, textarea, select')) return;
+    if ((e.key === ' ' || e.key === 'Enter') && e.target instanceof Element && e.target.closest('button, a, summary')) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': e.preventDefault(); sigDp(); break;
+      case ' ': e.preventDefault(); (e.shiftKey ? ant : sig)(); break;
+      case 'ArrowLeft': case 'PageUp': e.preventDefault(); antDp(); break;
+      /* ↓ ↑: avance interno de la diapositiva — revela u oculta fragmentos.
+         En la diapositiva animada (sin fragmentos) actúa el control de fases. */
+      case 'ArrowDown': e.preventDefault(); if (vistos[i] < frags[i].length) { vistos[i]++; pinta(); } break;
+      case 'ArrowUp':   e.preventDefault(); if (vistos[i] > 0) { vistos[i]--; pinta(); } break;
+      case 'Home': e.preventDefault(); irA(0, false); break;
+      case 'End':  e.preventDefault(); irA(N - 1, false); break;
+      case 'f': case 'F': pantallaCompleta(); break;
+    }
+  });
+
+  /* Navegación por swipe eliminada: existen botones y teclado para ello y
+     el gesto interfería con el zoom y el desplazamiento táctil. */
+
+  function deHash(){
+    const m = location.hash.match(/^#\/(\d+)$/);
+    if (m) { const n = parseInt(m[1], 10) - 1; if (n >= 0 && n < N && n !== i) irA(n, false); }
+  }
+  addEventListener('hashchange', deHash);
+
+  let temporizador;
+  function despierta(){
+    esc.classList.remove('quieto');
+    clearTimeout(temporizador);
+    temporizador = setTimeout(() => esc.classList.add('quieto'), 3500);
+  }
+  ['pointermove', 'pointerdown', 'keydown'].forEach(ev => addEventListener(ev, despierta));
+
+  const m0 = location.hash.match(/^#\/(\d+)$/);
+  if (m0) { const n = parseInt(m0[1], 10) - 1; if (n >= 0 && n < N) i = n; }
+  pinta();
+  despierta();
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   UTILIDADES (portadas de la fuente)
+   ═══════════════════════════════════════════════════════════════════════ */
+function svgPt(svg, evt) {
+  const pt = svg.createSVGPoint();
+  pt.x = evt.touches ? evt.touches[0].clientX : evt.clientX;
+  pt.y = evt.touches ? evt.touches[0].clientY : evt.clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+function fmt(n) { return (n % 1 === 0) ? n.toString() : n.toFixed(2).replace(/\.?0+$/, ''); }
+function fmt4(n) { return parseFloat(n.toFixed(4)).toString(); }
+
+/* Notación legible: escala los font-size de los SVG marcados con data-fscale. */
+document.querySelectorAll('svg[data-fscale]').forEach(svg => {
+  const f = parseFloat(svg.dataset.fscale);
+  const apl = () => svg.querySelectorAll('text[font-size], tspan[font-size]').forEach(t => {
+    if (t.__fsOk) return;
+    t.setAttribute('font-size', (parseFloat(t.getAttribute('font-size')) * f).toFixed(2));
+    t.__fsOk = true;
+  });
+  apl();
+  new MutationObserver(apl).observe(svg, { childList: true, subtree: true });
+});
+</script>
+
+<script>
+/* Diapositiva "afirmación · razón": la caja de justificación cambia con el
+   paso activo (último fragmento revelado con ↓, o el que se toque/cliquee). */
+function wirePA(idDp){
+  const dp = document.getElementById(idDp);
+  if (!dp) return;
+  const filas = Array.from(dp.querySelectorAll('.pa-fila'));
+  const razones = Array.from(dp.querySelectorAll('.pa-razon'));
+  const vacia = dp.querySelector('.pa-vacia');
+  function muestra(k){
+    filas.forEach((f, j) => f.classList.toggle('pa-activa', j === k));
+    razones.forEach((r, j) => r.style.display = j === k ? 'block' : 'none');
+    vacia.style.display = k < 0 ? 'block' : 'none';
+  }
+  function ultimaOn(){
+    let k = -1;
+    filas.forEach((f, j) => { if (f.classList.contains('frag-on')) k = j; });
+    return k;
+  }
+  filas.forEach((f, j) => f.addEventListener('click', () => muestra(j)));
+  let firma = '';
+  const mo = new MutationObserver(() => {
+    const f2 = filas.map(f => f.classList.contains('frag-on') ? '1' : '0').join('');
+    if (f2 !== firma) { firma = f2; muestra(ultimaOn()); }
+  });
+  filas.forEach(f => mo.observe(f, { attributes: true, attributeFilter: ['class'] }));
+  muestra(-1);
+}
+wirePA('dp-afirmacion-razon');
+wirePA('dp-siysolosi');
+</script>
+
+<script>
+/* Cierre interactivo (dp-resumen): el detalle —y la figura si hay varias
+   con id rs-fig-*— cambia con el ítem elegido. El primer .rs-det es el
+   texto inicial (se muestra sin selección). */
+(function(){
+  const dp = document.getElementById('dp-resumen');
+  if (!dp) return;
+  const its = Array.from(dp.querySelectorAll('.rs-item'));
+  const dets = Array.from(dp.querySelectorAll('.rs-det'));
+  const figs = {};
+  dp.querySelectorAll('[id^="rs-fig-"]').forEach(f => { figs[f.id.slice(7)] = f; });
+  const claves = Object.keys(figs);
+  function sel(k){
+    its.forEach((b, j) => b.classList.toggle('rs-on', j === k));
+    let fig = null;
+    dets.forEach((d, j) => {
+      const on = (j === k + 1);
+      d.style.display = on ? 'block' : 'none';
+      if (on) fig = d.dataset.fig || null;
+    });
+    claves.forEach(n => { figs[n].style.display = (fig ? n === fig : n === claves[0]) ? 'block' : 'none'; });
+  }
+  its.forEach((b, j) => b.addEventListener('click', () => sel(j)));
+  sel(-1);
+})();
+</script>
+
+<script>
+/* Contador → ir a diapositiva: toca el contador, escribe el número y Enter. */
+(function(){
+  const pie = document.getElementById('contador');
+  if (!pie) return;
+  pie.title = 'Ir a una diapositiva: toca y escribe el número';
+  pie.style.cursor = 'pointer';
+  pie.setAttribute('role','button');
+  pie.tabIndex = 0;
+  function abre(){
+    if (pie.querySelector('input')) return;
+    const total = (pie.textContent.split('/')[1] || '').trim();
+    const prev = pie.innerHTML;
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.inputMode = 'numeric'; inp.className = 'pie-in';
+    inp.setAttribute('aria-label','Número de diapositiva');
+    inp.placeholder = '1–' + total;
+    pie.innerHTML = ''; pie.appendChild(inp); inp.focus();
+    let listo = false;
+    function cierra(ir){
+      if (listo) return; listo = true;
+      const n = parseInt(inp.value, 10);
+      pie.innerHTML = prev;
+      if (ir && n >= 1 && n <= parseInt(total, 10)) location.hash = '#/' + n;
+    }
+    inp.addEventListener('keydown', e => {
+      e.stopPropagation();
+      if (e.key === 'Enter') cierra(true);
+      else if (e.key === 'Escape') cierra(false);
+    });
+    inp.addEventListener('blur', () => cierra(false));
+  }
+  pie.addEventListener('click', abre);
+  pie.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); abre(); } });
+})();
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   ANIMACIÓN HERO (dp. 2) — la idea central de la lección
+   viewBox 420 × 330 · origen de las barras x₀ = 36 · unidad U = 26 px
+   Fases del ciclo (14.6 s):
+     1) aparecen a = 3 y b = 4 y su diferencia                    (3.4 s)
+     2) ambas se multiplican por m; la diferencia cambia con m    (5.6 s)
+     3) aparece el cociente a : b, que NO cambia mientras m sigue (5.6 s)
+   m(u) = 1 + 1.5·(1 − cos 2πu)/2 recorre 1 → 2.5 → 1 en cada fase
+   continua, de modo que el estado inicial y el final coinciden: repetir
+   una fase con ↑↓ no produce ningún salto.
+   Corre SOLO con su diapositiva activa; respeta la pausa del usuario y
+   prefers-reduced-motion.
+   ═══════════════════════════════════════════════════════════════════════ */
+const heroSvg = document.getElementById('hero');
+const HERO_T1 = 3.4, HERO_T2 = 5.6, HERO_T3 = 5.6;
+const HERO_CYCLE = HERO_T1 + HERO_T2 + HERO_T3;
+const HERO_INICIOS = [0, HERO_T1, HERO_T1 + HERO_T2];
+const HERO_DUR     = [HERO_T1, HERO_T2, HERO_T3];
+const HERO_MARCAS  = [HERO_T1 * 0.9, HERO_T1 + HERO_T2 * 0.5, HERO_T1 + HERO_T2 + HERO_T3 * 0.5];
+const HERO_PHASES = [
+  'Comparar <strong>restando</strong>: dos cantidades <span class="mrm" style="color:#1D4ED8"><i>a</i> = 3</span> y <span class="mrm" style="color:#DC2626"><i>b</i> = 4</span>, y la diferencia entre ellas, <span class="mrm" style="color:#6D28D9"><i>b</i> − <i>a</i> = 1</span>.',
+  'Ahora <strong>ambas se multiplican por el mismo factor</strong> <span class="mrm"><i>m</i></span>. La diferencia <span class="mrm" style="color:#6D28D9"><i>b</i> − <i>a</i></span> crece y decrece con él: <em>depende de la escala</em>, así que no sirve para comparar.',
+  'El <strong>cociente</strong> <span class="mrm" style="color:#0D9488"><i>a</i> : <i>b</i></span> no se mueve mientras <span class="mrm"><i>m</i></span> sigue cambiando. Ese número invariante —aquí <span class="mrm" style="color:#0D9488">0.75</span>— es la <strong>razón</strong> de <i>a</i> a <i>b</i>.'
+];
+let heroT = 0, heroRAF = null, heroLast = null;
+let heroUserPaused = false, heroVisible = false, heroLoop = null, heroPhPrev = -1;
+const heroFases = Array.from(document.querySelectorAll('#dp-hero .anim-fase'));
+heroFases.forEach((el, i) => { el.querySelector('.ph-txt').innerHTML = HERO_PHASES[i]; });
+const heroReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function heroEase(u) { return u < .5 ? 4*u*u*u : 1 - Math.pow(-2*u + 2, 3) / 2; }
+
+function heroDraw(t) {
+  if (!heroSvg) return;
+  const x0 = 36, U = 26, A = 3, B = 4, L0 = 200;
+  let fase, m, apDif;
+  if (t < HERO_T1) {
+    fase = 0; m = 1; apDif = heroEase(t / HERO_T1);
+  } else if (t < HERO_T1 + HERO_T2) {
+    fase = 1;
+    const u = (t - HERO_T1) / HERO_T2;
+    m = 1 + 1.5 * (1 - Math.cos(2 * Math.PI * u)) / 2;
+    apDif = 1;
+  } else {
+    fase = 2;
+    const u = (t - HERO_T1 - HERO_T2) / HERO_T3;
+    m = 1 + 1.5 * (1 - Math.cos(2 * Math.PI * u)) / 2;
+    apDif = 1;
+  }
+  /* m se cuantiza a 2 decimales: así 3m y 4m tienen a lo sumo 2 decimales,
+     se muestran EXACTOS y el cociente que se lee en pantalla es exactamente
+     3/4. Sin esta cuantización, redondear para mostrar produciría igualdades
+     falsas del tipo «4 : 5.33 = 0.75». */
+  m = Math.round(m * 100) / 100;
+  const wa = A * m * U, wb = B * m * U, dif = (B - A) * m;
+  let h = '';
+
+  /* Lectura del factor de escala */
+  h += '<text x="24" y="24" font-size="12" fill="#6B688A">factor de escala</text>';
+  h += `<text x="140" y="24" font-size="13" fill="#141A24" font-weight="700"><tspan font-style="italic">m</tspan> = ${fmt(m)}</text>`;
+  h += '<rect x="212" y="13" width="176" height="12" rx="6" fill="#EDE9FE"/>';
+  h += `<rect x="212" y="13" width="${(176 * (m - 1) / 1.5).toFixed(1)}" height="12" rx="6" fill="#7C3AED" opacity=".6"/>`;
+
+  /* Las dos barras */
+  h += `<text x="24" y="93" font-size="13" fill="#1D4ED8" font-weight="700" font-style="italic">a</text>`;
+  h += `<rect x="${x0}" y="72" width="${wa.toFixed(1)}" height="30" rx="6" fill="#1D4ED8"/>`;
+  h += `<text x="${(x0 + wa + 10).toFixed(1)}" y="93" font-size="13" fill="#1D4ED8" font-weight="700">${fmt(A * m)}</text>`;
+  h += `<text x="24" y="143" font-size="13" fill="#DC2626" font-weight="700" font-style="italic">b</text>`;
+  h += `<rect x="${x0}" y="122" width="${wb.toFixed(1)}" height="30" rx="6" fill="#DC2626"/>`;
+  h += `<text x="${(x0 + wb + 10).toFixed(1)}" y="143" font-size="13" fill="#DC2626" font-weight="700">${fmt(B * m)}</text>`;
+
+  /* La resta: el número que NO sobrevive al cambio de escala */
+  if (apDif > 0.02) {
+    const cx = x0 + (wa + wb) / 2;
+    h += `<g opacity="${apDif.toFixed(2)}">`;
+    h += `<g stroke="#B0ACCC" stroke-width="0.9" stroke-dasharray="4,3">
+            <line x1="${(x0+wa).toFixed(1)}" y1="102" x2="${(x0+wa).toFixed(1)}" y2="166"/>
+            <line x1="${(x0+wb).toFixed(1)}" y1="152" x2="${(x0+wb).toFixed(1)}" y2="166"/></g>`;
+    h += `<line x1="${(x0+wa).toFixed(1)}" y1="166" x2="${(x0+wa).toFixed(1)}" y2="180" stroke="#6D28D9" stroke-width="2"/>`;
+    h += `<line x1="${(x0+wb).toFixed(1)}" y1="166" x2="${(x0+wb).toFixed(1)}" y2="180" stroke="#6D28D9" stroke-width="2"/>`;
+    h += `<line x1="${(x0+wa).toFixed(1)}" y1="173" x2="${(x0+wb).toFixed(1)}" y2="173" stroke="#6D28D9" stroke-width="3.2"/>`;
+    h += `<text x="${cx.toFixed(1)}" y="200" text-anchor="middle" font-size="13" fill="#6D28D9" font-weight="700"><tspan font-style="italic">b</tspan> − <tspan font-style="italic">a</tspan> = ${fmt(dif)}</text>`;
+    h += '</g>';
+  }
+  h += `<text x="24" y="221" font-size="11.5" fill="${fase === 0 ? '#6B688A' : '#6D28D9'}">${fase === 0 ? 'la resta compara… ¿o no?' : 'la resta cambia con la escala'}</text>`;
+
+  /* El cociente: el número invariante */
+  if (fase === 2) {
+    h += `<rect x="${x0}" y="248" width="${L0}" height="28" rx="6" fill="none" stroke="#0D9488" stroke-width="1.4" stroke-dasharray="5,3"/>`;
+    h += `<rect x="${x0}" y="248" width="${(A / B * L0).toFixed(1)}" height="28" rx="6" fill="#0D9488"/>`;
+    h += `<text x="${x0 + L0 + 12}" y="268" font-size="13" fill="#0F766E" font-weight="700"><tspan font-style="italic">a</tspan> : <tspan font-style="italic">b</tspan> = 0.75</text>`;
+    h += `<text x="24" y="298" font-size="12.5" fill="#0F766E" font-weight="700">${fmt(A * m)} : ${fmt(B * m)} = 0.75 — inmóvil mientras <tspan font-style="italic">m</tspan> cambia</text>`;
+    h += '<text x="24" y="318" font-size="11.5" fill="#6B688A">a esa invariante la llamamos razón</text>';
+  } else {
+    h += '<text x="24" y="268" font-size="11.5" fill="#B0ACCC">(el cociente aparece en la fase 3)</text>';
+  }
+
+  heroSvg.innerHTML = h;
+  if (fase !== heroPhPrev) {
+    heroFases.forEach((el, i) => el.classList.toggle('fase-on', i === fase));
+    heroPhPrev = fase;
+  }
+}
+
+function heroFrame(ts) {
+  if (heroLast === null) heroLast = ts;
+  let dt = (ts - heroLast) / 1000;
+  heroLast = ts;
+  if (dt > 0.05) dt = 0.05;
+  heroT = heroT + dt;
+  /* Bucle acotado: si el usuario fijó una fase con ↑↓, se repite solo esa.
+     Cada fase empieza y termina en m = 1, así que repetirla con su propio
+     periodo devuelve la figura exactamente donde estaba. */
+  if (heroLoop === null) {
+    heroT = heroT % HERO_CYCLE;
+  } else {
+    const ini = HERO_INICIOS[heroLoop];
+    if (heroT < ini) heroT = ini;
+    else if (heroT >= ini + HERO_DUR[heroLoop]) heroT = ini;
+  }
+  heroDraw(heroT);
+  heroRAF = requestAnimationFrame(heroFrame);
+}
+
+function heroSync() {
+  const corre = heroVisible && !heroUserPaused;
+  if (corre && !heroRAF) { heroLast = null; heroRAF = requestAnimationFrame(heroFrame); }
+  if (!corre && heroRAF) { cancelAnimationFrame(heroRAF); heroRAF = null; }
+}
+
+const heroBtn = document.getElementById('hero-btn');
+function heroSetPaused(v) {
+  heroUserPaused = v;
+  heroBtn.setAttribute('aria-pressed', v ? 'true' : 'false');
+  heroBtn.innerHTML = v ? '►&nbsp;Animar' : '❚❚&nbsp;Pausar';
+  heroSync();
+}
+if (heroBtn) heroBtn.addEventListener('click', () => heroSetPaused(!heroUserPaused));
+
+function heroFase(t) { return t < HERO_T1 ? 0 : (t < HERO_T1 + HERO_T2 ? 1 : 2); }
+function heroBucle(f) {
+  heroLoop = f;
+  const ind = document.getElementById('hero-bucle');
+  if (ind) ind.textContent = (f === null ? '' : '⟲ fase ' + (f + 1));
+}
+function heroPaso(dir) {
+  const destino = (heroFase(heroT) + dir + 3) % 3;
+  /* En marcha: salta al inicio de la fase y la repite en bucle.
+     En pausa: se queda en el fotograma más representativo (m = 2.5). */
+  heroT = heroUserPaused ? HERO_MARCAS[destino] : HERO_INICIOS[destino];
+  heroBucle(destino);
+  heroPhPrev = -1;
+  heroDraw(heroT);
+}
+
+addEventListener('keydown', e => {
+  if (!heroVisible || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.target instanceof Element && e.target.matches('input, textarea, select')) return;
+  if (e.key === 'ArrowDown')      { e.preventDefault(); heroPaso(1); }
+  else if (e.key === 'ArrowUp')   { e.preventDefault(); heroPaso(-1); }
+  else if (e.key === 'p' || e.key === 'P') { e.preventDefault(); heroSetPaused(!heroUserPaused); }
+  else if (e.key === 'c' || e.key === 'C') { e.preventDefault(); heroBucle(null); }
+});
+
+document.addEventListener('diapositiva', e => {
+  heroVisible = (e.detail.id === 'dp-hero');
+  heroSync();
+});
+
+if (heroSvg) {
+  if (heroReduced) {
+    heroUserPaused = true;
+    heroT = HERO_MARCAS[2];              /* fotograma más informativo: cociente visible */
+    heroBtn.innerHTML = '►&nbsp;Animar';
+    heroBtn.setAttribute('aria-pressed', 'true');
+  } else {
+    heroT = 0;
+  }
+  heroDraw(heroT);
+  heroVisible = ((document.querySelector('.diapositiva.activa') || {}).id === 'dp-hero');
+  heroSync();
+}
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   EXPLORADOR DE INVARIANTES (dp. 9) — ¿directa, inversa o ninguna?
+   Los mismos seis valores de x = 1, 2, 3, 4, 6, 9 en las cinco relaciones,
+   elegidos para que todas den valores enteros y positivos y la comparación
+   entre columnas sea limpia. Se calculan en vivo y/x y x·y y se decide la
+   constancia con tolerancia 1e-9.
+   viewBox del diagrama: 300 × 200 · origen (36, 168) · x ∈ [0, 10]
+   ═══════════════════════════════════════════════════════════════════════ */
+(function(){
+  const XS = [1, 2, 3, 4, 6, 9];
+  const REL = {
+    '3x':   { f: x => 3 * x,   rot: 'y = 3x' },
+    '36/x': { f: x => 36 / x,  rot: 'y = 36 / x' },
+    'x+1':  { f: x => x + 1,   rot: 'y = x + 1' },
+    'x2':   { f: x => x * x,   rot: 'y = x²' },
+    '10-x': { f: x => 10 - x,  rot: 'y = 10 − x' }
+  };
+  const sel = document.getElementById('ex-rel');
+  const cajaTabla = document.getElementById('ex-tabla');
+  const svg = document.getElementById('ex-svg');
+  const veredicto = document.getElementById('ex-veredicto');
+  if (!sel || !cajaTabla || !svg || !veredicto) return;
+
+  const cte = arr => arr.every(v => Math.abs(v - arr[0]) < 1e-9);
+  /* Marca «≈» cuando el valor no es exacto con 4 decimales: nunca se
+     presenta un número redondeado como si fuera el valor exacto. */
+  const num = v => (Math.abs(v - parseFloat(v.toFixed(4))) < 1e-12)
+        ? fmt4(v) : '≈ ' + fmt(Math.round(v * 100) / 100);
+
+  function pinta() {
+    const r = REL[sel.value];
+    const ys = XS.map(r.f);
+    const coc = XS.map((x, i) => ys[i] / x);
+    const pro = XS.map((x, i) => x * ys[i]);
+    const esDir = cte(coc), esInv = cte(pro);
+    const crece = ys.every((y, i) => i === 0 || y > ys[i - 1]);
+    const decrece = ys.every((y, i) => i === 0 || y < ys[i - 1]);
+
+    /* ── Tabla viva (sin MathJax: valores actualizados por JS) ── */
+    const th = 'padding:.45cqh .5cqw;border-bottom:1px solid var(--linea);font-size:1.6cqh;' +
+               'text-transform:uppercase;letter-spacing:.06em;color:var(--tinta2);font-weight:700';
+    const td = 'padding:.5cqh .5cqw;border-bottom:1px solid var(--linea);' +
+               "font-family:'STIX Two Text',Georgia,serif;font-size:2.1cqh;text-align:center";
+    const okC = esDir ? 'background:#F0FDFA;color:#0F766E;font-weight:700;' : '';
+    const okP = esInv ? 'background:#F0FDFA;color:#0F766E;font-weight:700;' : '';
+    let t = '<table style="width:100%;border-collapse:collapse">' +
+      `<thead><tr><th style="${th}"><i>x</i></th><th style="${th}"><i>y</i></th>` +
+      `<th style="${th};${esDir ? 'color:#0F766E' : ''}"><i>y</i> / <i>x</i></th>` +
+      `<th style="${th};${esInv ? 'color:#0F766E' : ''}"><i>x</i> · <i>y</i></th></tr></thead><tbody>`;
+    XS.forEach((x, i) => {
+      t += `<tr><td style="${td};color:#1D4ED8;font-weight:600">${fmt(x)}</td>` +
+           `<td style="${td};color:#DC2626;font-weight:600">${fmt(ys[i])}</td>` +
+           `<td style="${td};${okC}">${num(coc[i])}</td>` +
+           `<td style="${td};${okP}">${fmt(pro[i])}</td></tr>`;
+    });
+    t += '</tbody></table>';
+    cajaTabla.innerHTML = t;
+
+    /* ── Diagrama de dispersión ── */
+    const ox = 36, oy = 168, xmax = 10;
+    const sx = (284 - ox) / xmax;
+    const ymax = Math.max.apply(null, ys) * 1.1;
+    const sy = (oy - 26) / ymax;
+    const P = (x, y) => [ox + x * sx, oy - y * sy];
+    let s = '<g stroke="#EDE9FE" stroke-width="0.6">';
+    for (let i = 1; i <= xmax; i++) { const g = ox + i * sx; s += `<line x1="${g.toFixed(1)}" y1="24" x2="${g.toFixed(1)}" y2="${oy}"/>`; }
+    s += '</g>';
+    s += `<line x1="${ox}" y1="${oy}" x2="292" y2="${oy}" stroke="#1C1B2E" stroke-width="1.5"/>`;
+    s += `<polygon points="290,${oy - 4} 290,${oy + 4} 297,${oy}" fill="#1C1B2E"/>`;
+    s += `<text x="292" y="${oy + 15}" font-size="11" fill="#1C1B2E" font-style="italic">x</text>`;
+    s += `<line x1="${ox}" y1="${oy}" x2="${ox}" y2="18" stroke="#1C1B2E" stroke-width="1.5"/>`;
+    s += `<polygon points="${ox - 4},22 ${ox + 4},22 ${ox},15" fill="#1C1B2E"/>`;
+    s += `<text x="${ox}" y="11" text-anchor="middle" font-size="11" fill="#1C1B2E" font-style="italic">y</text>`;
+    for (const i of [1, 2, 3, 4, 6, 9]) {
+      const g = ox + i * sx;
+      s += `<text x="${g.toFixed(1)}" y="${oy + 14}" font-size="9.5" fill="#6B688A" text-anchor="middle">${i}</text>`;
+    }
+    const pts = XS.map((x, i) => P(x, ys[i]));
+    s += `<polyline points="${pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ')}" fill="none" stroke="#7C3AED" stroke-width="1.6" opacity=".45"/>`;
+    if (esDir) s += `<line x1="${ox}" y1="${oy}" x2="${pts[5][0].toFixed(1)}" y2="${pts[5][1].toFixed(1)}" stroke="#0D9488" stroke-width="1.6" stroke-dasharray="5,3"/>`;
+    pts.forEach(p => { s += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="#7C3AED" stroke="white" stroke-width="1.6"/>`; });
+    s += `<text x="286" y="24" text-anchor="end" font-size="12" fill="#4C1D95" font-weight="700">${r.rot}</text>`;
+    svg.innerHTML = s;
+
+    /* ── Veredicto ── */
+    let v = '';
+    if (esDir) {
+      v = `<p class="note-ok">✓ El cociente <i>y</i>/<i>x</i> vale ${fmt(coc[0])} en las seis filas: se conserva. Son <strong>directamente proporcionales</strong>, con <i>k</i> = ${fmt(coc[0])}.</p>`;
+    } else if (esInv) {
+      v = `<p class="note-ok">✓ El producto <i>x</i>·<i>y</i> vale ${fmt(pro[0])} en las seis filas: se conserva. Son <strong>inversamente proporcionales</strong>, con <i>k</i> = ${fmt(pro[0])}.</p>`;
+    } else {
+      v = `<p class="note-warn">⚠ Ni el cociente (${fmt(coc[0])} y luego ${fmt(coc[1])}) ni el producto (${fmt(pro[0])} y luego ${fmt(pro[1])}) se conservan: <strong>el modelo proporcional no aplica</strong>.</p>`;
+      if (crece)   v += '<p class="note-warn">…y sin embargo <i>y</i> <strong>crece</strong> cuando <i>x</i> crece. Crecer no es ser directamente proporcional.</p>';
+      if (decrece) v += '<p class="note-warn">…y sin embargo <i>y</i> <strong>decrece</strong> cuando <i>x</i> crece. Decrecer no es ser inversamente proporcional.</p>';
+    }
+    veredicto.innerHTML = v;
+  }
+
+  sel.addEventListener('change', pinta);
+  pinta();
+})();
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   EXPLORADOR DEL PORCENTAJE (dp. 13)
+   Dos barras del MISMO largo (320 px): la de arriba partida en T partes
+   con A sombreadas, la de abajo partida en 100 con p sombreadas. Como
+   A/T = p/100, las dos porciones sombreadas miden lo mismo — esa
+   coincidencia es la lectura «p de cada 100».
+   viewBox 380 × 210 · x₀ = 30 · ancho útil 268 px (deja sitio a las
+   etiquetas de la derecha dentro del viewBox)
+   ═══════════════════════════════════════════════════════════════════════ */
+(function(){
+  const slA = document.getElementById('pc-A'), slT = document.getElementById('pc-T');
+  const svg = document.getElementById('pc-svg');
+  if (!slA || !slT || !svg) return;
+  const X0 = 30, W = 268;
+  /* «≈» cuando p no es exacto (p. ej. 1 de 3): no se presenta un número
+     redondeado como si fuera el valor exacto. */
+  const num = v => (Math.abs(v - parseFloat(v.toFixed(4))) < 1e-12)
+        ? fmt4(v) : '≈ ' + fmt(Math.round(v * 100) / 100);
+
+  function pinta() {
+    let A = parseFloat(slA.value), T = parseFloat(slT.value);
+    if (A > T) { A = T; slA.value = String(A); }      /* la parte no puede exceder el total */
+    const p = A / T * 100;
+    const frac = A / T;
+    document.getElementById('pc-vA').textContent = fmt(A);
+    document.getElementById('pc-vT').textContent = fmt(T);
+
+    let s = '';
+    /* Barra 1: el total T */
+    s += `<text x="${X0}" y="40" font-size="12" fill="#6B688A">el total: <tspan font-style="italic" fill="#0D9488" font-weight="700">T</tspan><tspan fill="#0D9488" font-weight="700"> = ${fmt(T)}</tspan> partes iguales</text>`;
+    s += `<rect x="${X0}" y="50" width="${(frac * W).toFixed(1)}" height="34" fill="#1D4ED8" fill-opacity="0.82"/>`;
+    s += '<g stroke="#B0ACCC" stroke-width="0.7">';
+    for (let i = 1; i < T; i++) { const g = X0 + i * W / T; s += `<line x1="${g.toFixed(1)}" y1="50" x2="${g.toFixed(1)}" y2="84"/>`; }
+    s += '</g>';
+    s += `<rect x="${X0}" y="50" width="${W}" height="34" fill="none" stroke="#0D9488" stroke-width="1.8"/>`;
+    s += `<text x="${X0 + W + 8}" y="72" font-size="12.5" fill="#1D4ED8" font-weight="700"><tspan font-style="italic">A</tspan> = ${fmt(A)}</text>`;
+
+    /* Barra 2: de cada 100 */
+    s += `<text x="${X0}" y="124" font-size="12" fill="#6B688A">de cada <tspan font-weight="700" fill="#141A24">100</tspan> partes (cada división son 10)</text>`;
+    s += `<rect x="${X0}" y="134" width="${(frac * W).toFixed(1)}" height="34" fill="#0D9488" fill-opacity="0.82"/>`;
+    s += '<g stroke="#B0ACCC" stroke-width="0.7">';
+    for (let i = 1; i < 10; i++) { const g = X0 + i * W / 10; s += `<line x1="${g.toFixed(1)}" y1="134" x2="${g.toFixed(1)}" y2="168"/>`; }
+    s += '</g>';
+    s += `<rect x="${X0}" y="134" width="${W}" height="34" fill="none" stroke="#0D9488" stroke-width="1.8"/>`;
+    s += `<text x="${X0 + W + 8}" y="156" font-size="12.5" fill="#0F766E" font-weight="700"><tspan font-style="italic">p</tspan> = ${num(p)}</text>`;
+
+    /* El corte coincide: esa es toda la idea */
+    const xc = X0 + frac * W;
+    s += `<line x1="${xc.toFixed(1)}" y1="44" x2="${xc.toFixed(1)}" y2="176" stroke="#6D28D9" stroke-width="1.6" stroke-dasharray="5,3"/>`;
+    s += `<text x="${X0}" y="200" font-size="11" fill="#141A24"><tspan fill="#1D4ED8">${fmt(A)}</tspan> de <tspan fill="#0D9488">${fmt(T)}</tspan>  es lo mismo que  <tspan fill="#0F766E" font-weight="700">${num(p)} de cada 100</tspan></text>`;
+    svg.innerHTML = s;
+
+    /* Lecturas vivas fuera del SVG */
+    document.getElementById('pc-eq').innerHTML =
+      `<span style="color:#1D4ED8">${fmt(A)}</span> / <span style="color:#0D9488">${fmt(T)}</span> = ` +
+      `<span style="color:#6D28D9">${num(p)}</span> / 100  ⟹  ` +
+      `<span style="color:#6D28D9;font-weight:700"><i>p</i> = ${num(p)} %</span>`;
+    document.getElementById('pc-cap').innerHTML =
+      `Deja fija la parte <i>A</i> y mueve el total <i>T</i>: el porcentaje cambia sin que cambie ni una unidad de <i>A</i>. ` +
+      `Por ejemplo, 15 de 25 es 60 % y 15 de 60 es 25 %. Un porcentaje no dice cuántos elementos hay, sino qué parte del total representan.`;
+  }
+  slA.addEventListener('input', pinta);
+  slT.addEventListener('input', pinta);
+  pinta();
+})();
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   EXPLORADOR DEL ESCALADO DEL ÁREA (dp. 14)
+   Triángulo rectángulo de catetos 6 y 4 (área 12) y su copia con los
+   lados multiplicados por k. Cuando k es entero, tres familias de rectas
+   —horizontales y = 4j, verticales x = 6i y paralelas a la hipotenusa
+   x/6 + y/4 = j, con i, j = 1 … k−1— parten la copia en exactamente k²
+   triángulos iguales al original, que pueden contarse.
+   viewBox 400 × 280 · origen (34, 252) · escala 13 px por unidad
+   ═══════════════════════════════════════════════════════════════════════ */
+(function(){
+  const sl = document.getElementById('ar-k'), svg = document.getElementById('ar-svg');
+  if (!sl || !svg) return;
+  const OX = 34, OY = 252, SC = 13, B = 6, H = 4;
+  const P = (x, y) => [OX + x * SC, OY - y * SC];
+
+  function pinta() {
+    const k = parseFloat(sl.value);
+    const A0 = B * H / 2, A1 = A0 * k * k;
+    document.getElementById('ar-vk').textContent = fmt(k);
+    document.getElementById('ar-A0').textContent = fmt(A0);
+    document.getElementById('ar-A1').textContent = fmt(A1);
+    document.getElementById('ar-rz').textContent = fmt(k * k);
+
+    const g = P(B * k, 0), v = P(0, H * k), o = P(0, 0);
+    const g0 = P(B, 0), v0 = P(0, H);
+    let s = '';
+    /* Copia escalada */
+    s += `<polygon points="${o[0]},${o[1]} ${g[0].toFixed(1)},${g[1]} ${v[0]},${v[1].toFixed(1)}" fill="#7C3AED" fill-opacity="0.07" stroke="#6D28D9" stroke-width="2.4"/>`;
+    /* Subdivisión en k² copias (solo con k entero) */
+    if (Number.isInteger(k) && k >= 2) {
+      s += '<g stroke="#B9AEDA" stroke-width="0.9">';
+      for (let j = 1; j < k; j++) {
+        const a = P(0, H * j), b = P(B * (k - j), H * j);
+        s += `<line x1="${a[0]}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}"/>`;
+        const c = P(B * j, 0), d = P(B * j, H * (k - j));
+        s += `<line x1="${c[0].toFixed(1)}" y1="${c[1]}" x2="${d[0].toFixed(1)}" y2="${d[1].toFixed(1)}"/>`;
+        const e = P(B * j, 0), f = P(0, H * j);
+        s += `<line x1="${e[0].toFixed(1)}" y1="${e[1]}" x2="${f[0]}" y2="${f[1].toFixed(1)}"/>`;
+      }
+      s += '</g>';
+    }
+    /* Original, siempre encima */
+    s += `<polygon points="${o[0]},${o[1]} ${g0[0]},${g0[1]} ${v0[0]},${v0[1]}" fill="#0D9488" fill-opacity="0.30" stroke="#0D9488" stroke-width="2.2"/>`;
+    /* Ejes de referencia y cotas */
+    s += `<line x1="${OX}" y1="${OY}" x2="392" y2="${OY}" stroke="#1C1B2E" stroke-width="1.3"/>`;
+    s += `<line x1="${OX}" y1="${OY}" x2="${OX}" y2="14" stroke="#1C1B2E" stroke-width="1.3"/>`;
+    s += `<text x="${((OX + g[0]) / 2).toFixed(1)}" y="${OY + 17}" text-anchor="middle" font-size="11.5" fill="#6D28D9" font-weight="700">base = ${fmt(B * k)}</text>`;
+    s += `<text x="${OX - 8}" y="${((OY + v[1]) / 2).toFixed(1)}" text-anchor="middle" font-size="11.5" fill="#6D28D9" font-weight="700" transform="rotate(-90 ${OX - 8} ${((OY + v[1]) / 2).toFixed(1)})">altura = ${fmt(H * k)}</text>`;
+    /* Lecturas dentro de la figura */
+    s += `<text x="230" y="40" font-size="12.5" fill="#0F766E" font-weight="700">original: <tspan font-style="italic">A</tspan> = ${fmt(A0)}</text>`;
+    s += `<text x="230" y="60" font-size="12.5" fill="#6D28D9" font-weight="700">copia: <tspan font-style="italic">A</tspan>′ = ${fmt(A1)}</text>`;
+    s += `<text x="230" y="80" font-size="12.5" fill="#6D28D9" font-weight="700"><tspan font-style="italic">A</tspan>′ / <tspan font-style="italic">A</tspan> = ${fmt(k * k)} = ${fmt(k)}²</text>`;
+    svg.innerHTML = s;
+
+    const nota = document.getElementById('ar-nota');
+    if (k === 1) {
+      nota.innerHTML = '<p class="note-ok">Con <i>k</i> = 1 la copia es el original. Mueve el deslizador y compara la razón de áreas con el factor de escala.</p>';
+    } else if (Number.isInteger(k)) {
+      nota.innerHTML = `<p class="note-warn">⚠ Los lados se multiplicaron por ${fmt(k)}, pero la copia contiene exactamente <strong>${fmt(k * k)}</strong> triángulos iguales al original: el área quedó multiplicada por ${fmt(k)}² = ${fmt(k * k)}, <strong>no</strong> por ${fmt(k)}. Cuéntalos en la figura.</p>`;
+    } else {
+      nota.innerHTML = `<p class="note-warn">⚠ Con <i>k</i> = ${fmt(k)} el área ya vale ${fmt(A1)} = ${fmt(k)}² · ${fmt(A0)}. Lleva <i>k</i> a un valor entero para <em>contar</em> las copias.</p>`;
+    }
+  }
+  sl.addEventListener('input', pinta);
+  pinta();
+})();
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   EXPLORADOR DE PORCENTAJES SUCESIVOS (dp. 15)
+   Precio 100: subir p % y luego bajar p % deja
+   100·(1 + p/100)(1 − p/100) = 100·(1 − p²/10000) = 100 − p²/100,
+   estrictamente menor que 100 salvo p = 0. El descuento que sí devuelve
+   al precio inicial es p/(100 + p), nunca p.
+   viewBox 380 × 230 · x₀ = 44 · escala 2 px por unidad de precio
+   ═══════════════════════════════════════════════════════════════════════ */
+(function(){
+  const sl = document.getElementById('ps-p'), svg = document.getElementById('ps-svg');
+  if (!sl || !svg) return;
+  const X0 = 44, SC = 2, P0 = 100;
+  /* fmt4 conserva los valores exactos (0.9775, 97.75, 2.25…);
+     «≈» marca los que no lo son (el descuento de retorno p/(100+p)). */
+  const num = v => (Math.abs(v - parseFloat(v.toFixed(4))) < 1e-12)
+        ? fmt4(v) : '≈ ' + fmt(Math.round(v * 100) / 100);
+
+  function pinta() {
+    const p = parseFloat(sl.value);
+    const sube = P0 * (1 + p / 100);
+    const fin  = sube * (1 - p / 100);
+    const fac  = (1 + p / 100) * (1 - p / 100);
+    const ret  = p === 0 ? 0 : p / (100 + p) * 100;
+    document.getElementById('ps-vp').textContent = fmt(p);
+    document.getElementById('ps-f').textContent = num(fac);
+    document.getElementById('ps-fin').textContent = num(fin);
+    document.getElementById('ps-ret').textContent = num(ret) + ' %';
+
+    const w0 = P0 * SC, w1 = sube * SC, w2 = fin * SC, xr = X0 + w0;
+    let s = '';
+    s += `<text x="6" y="40" font-size="11" fill="#6B688A">inicial</text>`;
+    s += `<rect x="${X0}" y="44" width="${w0}" height="28" rx="5" fill="#B0ACCC"/>`;
+    s += `<text x="${X0 + w0 + 8}" y="63" font-size="12.5" fill="#5B6472" font-weight="700">100</text>`;
+    s += `<text x="6" y="96" font-size="11" fill="#6D28D9">tras +${fmt(p)} %</text>`;
+    s += `<rect x="${X0}" y="100" width="${w1.toFixed(1)}" height="28" rx="5" fill="#7C3AED"/>`;
+    s += `<text x="${(X0 + w1 + 8).toFixed(1)}" y="119" font-size="12.5" fill="#6D28D9" font-weight="700">${num(sube)}</text>`;
+    s += `<text x="6" y="152" font-size="11" fill="#6D28D9">tras −${fmt(p)} %</text>`;
+    s += `<rect x="${X0}" y="156" width="${w2.toFixed(1)}" height="28" rx="5" fill="#6D28D9" fill-opacity="0.55"/>`;
+    s += `<text x="${(X0 + w2 + 8).toFixed(1)}" y="175" font-size="12.5" fill="#6D28D9" font-weight="700">${num(fin)}</text>`;
+    /* Referencia del precio inicial: la tercera barra nunca la alcanza */
+    s += `<line x1="${xr}" y1="36" x2="${xr}" y2="192" stroke="#5B6472" stroke-width="1.3" stroke-dasharray="5,3"/>`;
+    if (p > 0) {
+      s += `<line x1="${(X0 + w2).toFixed(1)}" y1="170" x2="${xr}" y2="170" stroke="#DC2626" stroke-width="2.6"/>`;
+      s += `<text x="${((X0 + w2 + xr) / 2).toFixed(1)}" y="205" text-anchor="middle" font-size="11.5" fill="#B91C1C" font-weight="700">faltan ${num(P0 - fin)}</text>`;
+    }
+    s += `<text x="6" y="224" font-size="11" fill="#141A24">factor acumulado = (1 + ${fmt(p)}/100)(1 − ${fmt(p)}/100) = <tspan font-weight="700" fill="#6D28D9">${num(fac)}</tspan></text>`;
+    svg.innerHTML = s;
+
+    const nota = document.getElementById('ps-nota');
+    if (p === 0) {
+      nota.innerHTML = '<p class="note-ok">✓ Con <i>p</i> = 0 no hay cambio alguno: es el <em>único</em> caso en que se vuelve al precio inicial.</p>';
+    } else {
+      nota.innerHTML = `<p class="note-warn">⚠ El factor acumulado es 1 − ${fmt(p)}²/10000 = ${num(fac)} &lt; 1, así que el precio final (${num(fin)}) queda <strong>por debajo</strong> del inicial. Para volver a 100 desde ${num(sube)} haría falta un descuento del ${num(ret)} %, no del ${fmt(p)} %.</p>`;
+    }
+  }
+  sl.addEventListener('input', pinta);
+  pinta();
+})();
+</script>
+</body>
+</html>
